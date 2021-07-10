@@ -6,9 +6,6 @@
   <br>
 </h1>
 
-
-
-<iframe src="https://discord.com/widget?id=861485353516531782&theme=dark" width="100" height="50" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
 # BotMan
 
 A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
