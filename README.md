@@ -43,7 +43,7 @@ A properly set-up config.json looks something like this
   "main_prefix": "bm-",
   "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU",
   "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1). \nI am open-source, and the source code for me can be viewed and downloaded here. Feel free to check it out!\nhttps://github.com/Mahas1/BotMan.py/"
+  "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
 }
 ```
 
@@ -51,9 +51,9 @@ A properly set-up config.json looks something like this
 
 You're gonna need to setup an application for proper functioning of the Reddit Cog.
 
-Go to [Reddit](https://www.reddit.com), and make a new account (or use the one you have). I don't think it matters.
+Go to [Reddit](https://www.reddit.com), and make a new account (or use the one you have.)
 
-The first step you need to do is turn on dark mode, because that's what cool people do 😎 (it's sarcasm)
+The first step you need to do is turn on dark mode, because that's what cool people do 😎
 
 Now go to the [Reddit Applications page](https://www.reddit.com/prefs/apps/) 
 
