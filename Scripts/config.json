@@ -1,7 +1,0 @@
-{
-  "prefix_list": ["bm-", "Bm-"],
-  "main_prefix": "bm-",
-  "token": "Token here",
-  "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1). \nI am open-source, and the source code for me can be viewed and downloaded here. Feel free to check it out!\nhttps://github.com/Mahas1/BotMan.py/"
-}
