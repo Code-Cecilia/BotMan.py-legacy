@@ -2,4 +2,3 @@ discord
 asyncpraw
 aiohttp
 requests
-flask
