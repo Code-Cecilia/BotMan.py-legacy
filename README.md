@@ -8,7 +8,7 @@
 
 # BotMan
 
-A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library discord.py [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
+A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
 Don't use my code without crediting. You are free to host it and fork it yourself but don't claim any of my code as yours.
 
 # Usage and installation
