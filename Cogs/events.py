@@ -18,7 +18,7 @@ class Errors(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send("You lack permission to use this command.")
         else:
-            await ctx.message.add_reactions("‼️")
+            await ctx.message.add_reaction("‼️")
             raise error
 
 

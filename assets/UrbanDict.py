@@ -8,7 +8,7 @@ async def define(term):
     async with aiohttp.ClientSession() as session:
         async with session.get(f"http://api.urbandictionary.com/v0/define?term={term}") as response:
             x = (await response.content.read()).decode("utf-8")
-            # Thanks to CorpNewt for the idea, and his help in making this command work
+            # Thanks to @CorpNewt for the idea, and his help in making this command work
             dict_object = json.loads(x)
             thing = dict_object
             list = thing.get('list')
