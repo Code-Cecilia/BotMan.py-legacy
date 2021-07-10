@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import json
 import os
+import time
+from assets.keep_alive import  keep_alive
 
 from pathlib import Path
 
@@ -46,6 +48,8 @@ async def on_ready():
 
 
 if __name__ == '__main__':
+    keep_alive()
+    time.sleep(2)
     failed_modules = []
     for file in os.listdir(cwd + "/Cogs"):
         if file.endswith(".py") and not file.startswith("_"):
