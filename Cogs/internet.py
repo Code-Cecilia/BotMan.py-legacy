@@ -3,6 +3,7 @@ import discord
 import asyncpraw
 from discord.ext import commands
 import json
+import aiohttp
 
 with open('reddit_details.json', 'r') as jsonFile:
     data = json.load(jsonFile)
@@ -11,12 +12,13 @@ client_secret = data.get('client_secret')
 username = data.get('username')
 password = data.get('password')
 
-
 reddit = asyncpraw.Reddit(client_id=client_id, client_secret=client_secret, username=username, password=password,
                           user_agent="pythonpraw")
 
 
-class Reddit(commands.Cog, description='Fun commands using __[PRAW](https://praw.readthedocs.io/en/stable/)__'):
+class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://praw.readthedocs.io/en/stable/)__'
+                                        ' and others\n'
+                                        'Basically gets data from the internet.'):
     def __init__(self, bot):
         self.bot = bot
 
@@ -49,6 +51,26 @@ class Reddit(commands.Cog, description='Fun commands using __[PRAW](https://praw
         embed.set_image(url=final_choice.url)
         embed.set_footer(text=f"By u/{author} | {int(like_ratio)}% upvoted | Powered by Reddit")
         await ctx.send(embed=embed)
+
+    @commands.command(
+        name="funfact",
+        aliases=['randomfact', 'fact'],
+        description="Sends a random fact."
+    )
+    async def fact(self, ctx):
+        """Random fact"""
+        url = f'https://uselessfacts.jsph.pl/random.json?language=en'
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                r = await response.json()
+                fact = r['text']
+                embed = discord.Embed(title=f'Random Fact', colour=discord.Colour.random(),
+                                      timestamp=ctx.message.created_at)
+                embed.set_thumbnail(
+                    url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592/article-fact-or-opinion.jpg")
+                embed.set_footer(text="Useless Facts")
+                embed.add_field(name='***Fun Fact***', value=fact, inline=False)
+                await ctx.send(embed=embed)
 
 
 def setup(bot):
