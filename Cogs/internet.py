@@ -74,4 +74,4 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
 
 
 def setup(bot):
-    bot.add_cog(Reddit(bot))
+    bot.add_cog(WebSurf(bot))
