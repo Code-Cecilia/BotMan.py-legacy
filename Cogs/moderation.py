@@ -91,10 +91,10 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def unmute_func(self, ctx, user: discord.Member):
-        if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
-            with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
+        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
+            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile)
-                print(f'Created file guild{ctx.guild.id}.json in storage/mute_files...')  # create file if not present
+                print(f'Created file guild{ctx.guild.id}.json in configs...')  # create file if not present
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -130,11 +130,11 @@ class Moderation(commands.Cog):
     async def ban(self, ctx, member: discord.Member, *, reason=None):
 
         if reason is None:
-            if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
-                with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
+            if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
+                with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
                     json.dump({}, createFile)
                     print(
-                        f'Created file guild{ctx.guild.id}.json in storage/mute_files...')  # create file if not present
+                        f'Created file guild{ctx.guild.id}.json in configs/...')  # create file if not present
 
             with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
                 data = json.load(jsonFile)

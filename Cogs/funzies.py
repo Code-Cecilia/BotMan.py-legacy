@@ -75,6 +75,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
     def __init__(self, bot):
         self.bot = bot
         self.hello_last = None
+        self.last_lenny = None
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -151,6 +152,20 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             await message.edit(content=f'{msg_content}')
         await asyncio.sleep(1)
         await message.edit(content='**Kaboom!**')
+
+    @commands.command(name='lenny', description='( ͡° ͜ʖ ͡°)')
+    async def lenny(self, ctx):
+        await ctx.message.delete()
+        await ctx.send('( ͡° ͜ʖ ͡°)')
+        self.last_lenny = ctx.author.id
+
+    @commands.command(name='lastlenny', description='Last Lenny user is returned')
+    async def lastlenny(self, ctx):
+        last_user_id = self.last_lenny
+        user = self.bot.get_user(last_user_id)
+        if user is None:
+            return await ctx.send('Nobody. Nobody used the `lenny` command since I got online')
+        await ctx.send(f'{user.display_name} was the last `lenny` user')
 
 
 def setup(bot):
