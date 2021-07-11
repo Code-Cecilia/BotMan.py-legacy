@@ -2,5 +2,3 @@ discord
 asyncpraw
 aiohttp
 requests
-boto3
-
