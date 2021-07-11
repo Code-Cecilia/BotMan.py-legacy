@@ -6,11 +6,11 @@ import time
 
 from pathlib import Path
 
-prefix_list = int(os.environ.get('prefix_list'))
-main_prefix = int(os.environ.get('main_prefix'))
-token = int(os.environ.get('token'))
-status_link = int(os.environ.get('status_link'))
-bot_bio = int(os.environ.get('bot_bio'))
+prefix_list = os.environ.get('prefix_list')
+main_prefix = os.environ.get('main_prefix')
+token = os.environ.get('token')
+status_link = os.environ.get('status_link')
+bot_bio = os.environ.get('bot_bio')
 
 intents = discord.Intents.default()
 intents.typing = False
