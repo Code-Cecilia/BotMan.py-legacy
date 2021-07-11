@@ -45,7 +45,6 @@ async def on_ready():
 
 
 if __name__ == '__main__':
-    time.sleep(2)
     failed_modules = []
     for file in os.listdir(cwd + "/Cogs"):
         if file.endswith(".py") and not file.startswith("_"):
