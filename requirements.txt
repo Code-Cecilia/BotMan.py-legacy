@@ -2,5 +2,5 @@ discord
 asyncpraw
 aiohttp
 requests
-boto.s3.connection
+boto3
 
