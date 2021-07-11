@@ -6,13 +6,13 @@ import time
 
 from pathlib import Path
 
-with open('config.json', 'r') as detailsFile:
-    details_data = json.load(detailsFile)
-    prefix_list = details_data['prefix_list']
-    main_prefix = details_data['main_prefix']
-    token = details_data['token']
-    status_link = details_data['status_link']
-    bot_bio = details_data['bio']
+from boto.s3.connection import S3Connection
+details_data = S3Connection(os.environ['details_data'])
+prefix_list = S3Connection(os.environ['prefix_list'])
+main_prefix = S3Connection(os.environ['main_prefix'])
+token = S3Connection(os.environ['token'])
+status_link = S3Connection(os.environ['status_link'])
+bot_bio = S3Connection(os.environ['bot_bio'])
 
 intents = discord.Intents.default()
 intents.typing = False
