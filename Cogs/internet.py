@@ -2,15 +2,17 @@ import random
 import discord
 import asyncpraw
 from discord.ext import commands
-import json
 import aiohttp
+import os
 
-with open('reddit_details.json', 'r') as jsonFile:
-    data = json.load(jsonFile)
-client_id = data.get('client_id')
-client_secret = data.get('client_secret')
-username = data.get('username')
-password = data.get('password')
+client_id = os.environ.get('client_id')
+client_secret = os.environ.get('client_secret')
+username = os.environ.get('username')
+password = os.environ.get('password')
+
+
+
+
 
 reddit = asyncpraw.Reddit(client_id=client_id, client_secret=client_secret, username=username, password=password,
                           user_agent="pythonpraw")

@@ -6,13 +6,11 @@ import time
 
 from pathlib import Path
 
-with open('config.json', 'r') as detailsFile:
-    details_data = json.load(detailsFile)
-    prefix_list = details_data['prefix_list']
-    main_prefix = details_data['main_prefix']
-    token = details_data['token']
-    status_link = details_data['status_link']
-    bot_bio = details_data['bio']
+prefix_list = os.environ.get('prefix_list')
+main_prefix = os.environ.get('main_prefix')
+token = os.environ.get('token')
+status_link = os.environ.get('status_link')
+bot_bio = os.environ.get('bot_bio')
 
 intents = discord.Intents.default()
 intents.typing = False
