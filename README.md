@@ -1,3 +1,4 @@
+# THIS BOT EDIT AND FORKED, THE ORIGINAL BOT IT'S IN https://github.com/Code-Cecilia/BotMan.py Repo
 <h1 align="center">
   <br>
   <a href=""><img src="https://cdn.discordapp.com/attachments/861485353520726016/863401815516905512/discord_pfp_transparent.png" alt="Guren"></a>
