@@ -6,7 +6,6 @@ import time
 
 from pathlib import Path
 
-details_data = int(os.environ.get('details_data'))
 prefix_list = int(os.environ.get('prefix_list'))
 main_prefix = int(os.environ.get('main_prefix'))
 token = int(os.environ.get('token'))
