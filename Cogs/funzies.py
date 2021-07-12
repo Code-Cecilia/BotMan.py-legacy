@@ -46,7 +46,7 @@ def hug_func(author, user, bot):
         return 'Even though I\'m digital, I do appreciate hugs :)'
 
     elif not author == user:
-        return random.choice(rand_ass.hug_react).format(author.display_name, user.display_name)
+        return random.choice(rand_ass.hug_react()).format(author.display_name, user.display_name)
     else:
         return 'You try to hug yourself, I feel you. Mind if I give you a hug?'
 
