@@ -13,10 +13,10 @@ class Info(commands.Cog, description='Returns information about specific aspects
 
     @commands.command(name='ping', description='Returns the latency in milliseconds.')
     async def ping_command(self, ctx):
-        before = time.monotonic()
-        message = await ctx.reply("Pong!")
-        ping_time = (time.monotonic() - before) * 1000
-        await message.edit(content=f"Pong! `Latency: {int(ping_time)}ms`")
+        latency = float(self.bot.latency) * 1000
+        latency = round(latency, 0)
+
+        await ctx.send(f'Pong! `Latency: {latency}ms`')
 
     @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
                                                                             'the bot currently has.')
@@ -144,6 +144,29 @@ class Info(commands.Cog, description='Returns information about specific aspects
         embed.add_field(name='Date of creation', value=creation_date, inline=True)
         embed.add_field(name='Time of creation', value=creation_time, inline=True)
         embed.set_footer(text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
+        await ctx.send(embed=embed)
+
+    @commands.command(name='botinfo', aliases=['clientinfo', 'botstats'], description='Returns information about the bot.')
+    async def stats(self, ctx):
+        dpyVersion = f"Version {discord.__version__}"
+        serverCount = len(self.bot.guilds)
+        memberCount = len(set(self.bot.get_all_members()))
+        latency = float(self.bot.latency) * 1000
+        latency = f"{round(latency, 0)} ms"
+        source = "__[Github](https://github.com/Code-Cecilia/BotMan.py)__"
+        guren = f"__[Guren Ichinose](https://github.com/Code-Cecilia/Guren)__"
+        embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=discord.Color.random(),
+                              timestamp=ctx.message.created_at)
+        embed.set_thumbnail(url=self.bot.user.avatar_url)
+        embed.add_field(name='Discord.Py', value=dpyVersion, inline=True)
+        embed.add_field(name='Total Guilds', value=serverCount, inline=True)
+        embed.add_field(name='Total Users', value=memberCount)
+        embed.add_field(name='Latency', value=str(latency), inline=True)
+        embed.add_field(name='Bot Developer:', value="<@775176626773950474>", inline=True)
+        embed.add_field(name="Source", value=source, inline=True)
+        embed.add_field(name="Sibling Bot", value=guren, inline=True)
+        embed.add_field(name="A short note about me", value="I like cookies.", inline=False)
+        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(name='define', description='Pulls a description from Urban Dictionary of the term entered as '
