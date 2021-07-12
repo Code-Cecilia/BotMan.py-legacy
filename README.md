@@ -48,6 +48,12 @@ A properly set-up config.json looks something like this
 }
 ```
 
+You also need to enable Privileged gateway intents in the `Bot` section of your application's page
+
+![image](https://user-images.githubusercontent.com/82939599/125238018-3eec9b00-e304-11eb-9fd8-efcac130d250.png)
+
+The bot doesn't use prescence intents as of now, so feel free to disable it if you want. You need to enable the `Server Members Intent`, though.
+
 # Setting up Reddit details
 
 You're gonna need to setup an application for proper functioning of the Reddit Cog.
