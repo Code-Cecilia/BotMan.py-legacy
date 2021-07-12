@@ -1,3 +1,11 @@
+<h1 align="center">
+  <br>
+  <a href=""><img src="https://cdn.discordapp.com/attachments/861485353520726016/863401815516905512/discord_pfp_transparent.png" alt="Guren"></a>
+  <br>
+  BotMan - A Discord bot
+  <br>
+</h1>
+
 # BotMan
 
 A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
