@@ -7,8 +7,8 @@ import asyncio
 
 from assets import quotes
 
-eat_reactions = ['''_{0}_, you try to eat _{1}_, but you can\'t do it.'
-So you, leave with the taste of failure hanging in your mouth''',
+eat_reactions = ['''_{0}_, you try to eat _{1}_, but you can\'t do it.
+So you leave, with the taste of failure hanging in your mouth.''',
                  '_{0}_, you try to gobble up _{1}_. They prove to be a tight fit, but you manage to eat them.',
                  '_{0}_, you advance toward _{1}_, but you turn back and run, because they want to eat you too.',
                  '_{0}_, you finish eating _{1}_, and have a long nap, the sign of a good meal.']
