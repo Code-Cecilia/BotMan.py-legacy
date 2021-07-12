@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
 
-import time
-
 from assets import UrbanDict, count_lines, time_calc
 
 
@@ -15,7 +13,6 @@ class Info(commands.Cog, description='Returns information about specific aspects
     async def ping_command(self, ctx):
         latency = float(self.bot.latency) * 1000
         latency = round(latency, 0)
-
         await ctx.send(f'Pong! `Latency: {latency}ms`')
 
     @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
