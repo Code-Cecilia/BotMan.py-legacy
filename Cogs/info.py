@@ -13,10 +13,8 @@ class Info(commands.Cog, description='Returns information about specific aspects
 
     @commands.command(name='ping', description='Returns the latency in milliseconds.')
     async def ping_command(self, ctx):
-        before = time.monotonic()
-        message = await ctx.reply("Pong!")
-        ping_time = (time.monotonic() - before) * 1000
-        await message.edit(content=f"Pong! `Latency: {int(ping_time)}ms`")
+        latency = float(self.bot.latency) * 1000
+        latency = round(latency, 0)
 
     @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
                                                                             'the bot currently has.')
