@@ -1,3 +1,4 @@
+# THIS BOT EDIT AND FORKED, THE ORIGINAL BOT IT'S IN https://github.com/Code-Cecilia/BotMan.py Repo
 <h1 align="center">
   <br>
   <a href=""><img src="https://cdn.discordapp.com/attachments/861485353520726016/863401815516905512/discord_pfp_transparent.png" alt="Guren"></a>
@@ -46,6 +47,12 @@ A properly set-up config.json looks something like this
   "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
 }
 ```
+
+You also need to enable Privileged gateway intents in the `Bot` section of your application's page
+
+![image](https://user-images.githubusercontent.com/82939599/125238018-3eec9b00-e304-11eb-9fd8-efcac130d250.png)
+
+The bot doesn't use prescence intents as of now, so feel free to disable it if you want. You need to enable the `Server Members Intent`, though.
 
 # Setting up Reddit details
 
