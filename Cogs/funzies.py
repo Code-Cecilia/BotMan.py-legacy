@@ -6,27 +6,7 @@ import os
 import asyncio
 
 from assets import quotes
-
-eat_reactions = ['''_{0}_, you try to eat _{1}_, but you can\'t do it.
-So you leave, with the taste of failure hanging in your mouth.''',
-                 '_{0}_, you try to gobble up _{1}_. They prove to be a tight fit, but you manage to eat them.',
-                 '_{0}_, you advance toward _{1}_, but you turn back and run, because they want to eat you too.',
-                 '_{0}_, you finish eating _{1}_, and have a long nap, the sign of a good meal.']
-
-pet_reactions = ['_{0}_, you pet _{1}_, as they smile from your petting.',
-                 '_{0}_, you try to pet _{1}_, but they run away, scared of your affection.',
-                 '_{0}_, you pet _{1}_. They are happy and now they want to pet you too.']
-
-drink_reactions = ['_{0}_, you pierce {1} with a straw, as they cry out in pain.',
-                   '_{0}_, you try to drink _{1}_, but you realize they aren\'t liquid.',
-                   '_{0}_, you try to drink _{1}_, but they have a mirror. So now you\'re drinking yourself.']
-
-hug_reactions = ['_{0}_, you try to hug _{1}_, but they run away because they don\'t understand your affection.',
-                 '_{0}_, you hug _{1}_. and they smile, because they didn\'t know they needed it.',
-                 '_{0}_, you hug _{1}_, and they hug you back, the sign of a good friendship.',
-                 '_{0}_, you try to hug _{1}_, but they pull out a knife because they think you were gonna mug them.', ]
-
-fart_reactions = ['*farting noises*', 'Toot', '*Blerrrtttt*', '**no.**', '_ew_']
+from assets import random_assets as rand_ass
 
 
 def eat_func(author, user, bot):
@@ -34,7 +14,7 @@ def eat_func(author, user, bot):
         return '''For the record, I **DO NOT** appreciate being eaten.
 Even though I am digital and you would probably get electrocuted.'''
     elif not author == user:
-        return random.choice(eat_reactions).format(author.display_name, user.display_name)
+        return random.choice(rand_ass.eat_react()).format(author.display_name, user.display_name)
     else:
         return 'You try to eat yourself, but fail miserably'
 
@@ -43,7 +23,7 @@ def pet_func(author, user, bot):
     if user.id == bot.user.id:
         return 'Well, what can I say? I do like people petting me :)'
     elif not author == user:
-        return random.choice(pet_reactions).format(author.display_name, user.display_name)
+        return random.choice(rand_ass.pet_react()).format(author.display_name, user.display_name)
     else:
         return 'You pet yourself. I feel you, mate'
 
@@ -52,21 +32,21 @@ def drink_func(author, user, bot):
     if user.id == bot.user.id:
         return 'You try to drink me, but you can\'t, because I\'m digital!'
     elif not author == user:
-        return random.choice(drink_reactions).format(author.display_name, user.display_name)
+        return random.choice(rand_ass.drink_react()).format(author.display_name, user.display_name)
     else:
         return 'You pierce yourself with a straw. Not surprisingly, it hurts.'
 
 
 def fart_reaction():
-    return random.choice(fart_reactions)
+    return random.choice(rand_ass.fart_react())
 
 
-def hug_func(author, user, bot, actual_user):
-    if actual_user.id == bot.user.id:
+def hug_func(author, user, bot):
+    if user.id == bot.user.id:
         return 'Even though I\'m digital, I do appreciate hugs :)'
 
     elif not author == user:
-        return random.choice(hug_reactions).format(author.display_name, user.display_name)
+        return random.choice(rand_ass.hug_react).format(author.display_name, user.display_name)
     else:
         return 'You try to hug yourself, I feel you. Mind if I give you a hug?'
 
