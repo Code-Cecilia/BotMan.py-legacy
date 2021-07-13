@@ -37,7 +37,16 @@ Get to the [developer page](https://discord.com/developers/applications) and mak
 
  Now that you have copied your token, paste it in `config.json` in its corresponding entry.
 
- ### Note: If you're going to host the bot in Repl.it, change the value of the `replit` key in config.json to "True"
+# Getting the API key from the Random Stuff API
+
+RSA (Random Stuff API) is what we use for BotChat in this bot. For this to work, we need to get an API Key.
+
+You can get one [Here](https://api-info.pgamerx.com/register) by signing up with discord. It adds you to a server, and sends you a PM with the API key.
+
+When you get it, set the value of `rsa_api_key` to the API key you recieved.
+
+
+ ### Note: If you're going to host the bot in Repl.it, check the bottom of this page for extended information.
 
 A properly set-up config.json looks something like this
 
@@ -46,7 +55,8 @@ A properly set-up config.json looks something like this
   "prefix_list": ["bm-", "Bm-", "$"],
   "main_prefix": "bm-",
   "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU",
-  "replit": "True",
+  "replit": "True", 
+  "rsa_api_key": "XXXXXXXXXX",
   "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
 }

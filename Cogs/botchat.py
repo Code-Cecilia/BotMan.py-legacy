@@ -4,7 +4,12 @@ import discord
 from discord.ext import commands
 from prsaw import RandomStuff
 
-rs = RandomStuff(async_mode=True, api_key="U2ZFucXg51HT")
+with open('config.json', 'r') as configFile:
+    data = json.load(configFile)
+
+api_key = data.get('rsa_api_key')
+
+rs = RandomStuff(async_mode=True, api_key=api_key)
 
 
 class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?\n'
