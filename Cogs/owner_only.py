@@ -32,11 +32,11 @@ class OwnerOnly(commands.Cog):
         if not cog:
             async with ctx.typing():
                 embed = discord.Embed(title="Reloading all cogs!", color=0x808080, timestamp=ctx.message.created_at)
-                for ext in os.listdir("./cogs/"):
+                for ext in os.listdir("./Cogs/"):
                     if ext.endswith(".py") and not ext.startswith("_"):
                         try:
-                            self.bot.unload_extension(f"cogs.{ext[:-3]}")
-                            self.bot.load_extension(f"cogs.{ext[:-3]}")
+                            self.bot.unload_extension(f"Cogs.{ext[:-3]}")
+                            self.bot.load_extension(f"Cogs.{ext[:-3]}")
                             embed.add_field(
                                 name=f"Reloaded: `{ext}`",
                                 value='\uFEFF',
@@ -60,8 +60,8 @@ class OwnerOnly(commands.Cog):
 
                 elif ext.endswith(".py") and not ext.startswith("_"):
                     try:
-                        self.bot.unload_extension(f"cogs.{ext[:-3]}")
-                        self.bot.load_extension(f"cogs.{ext[:-3]}")
+                        self.bot.unload_extension(f"Cogs.{ext[:-3]}")
+                        self.bot.load_extension(f"Cogs.{ext[:-3]}")
                         embed.add_field(name=f"Reloaded: `{ext}`",value='\uFEFF',inline=False)
                     except Exception:
                         desired_trace = traceback.format_exc()
