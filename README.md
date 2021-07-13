@@ -2,7 +2,7 @@
   <br>
   <a href=""><img src="https://cdn.discordapp.com/attachments/861485353520726016/863401815516905512/discord_pfp_transparent.png" alt="Guren"></a>
   <br>
-  BotMan - A Discord bot
+  BotMan - A Discord bot for Botchat, Moderation, Utilities, and other fun stuff.
   <br>
 </h1>
 
@@ -108,6 +108,38 @@ A properly set-up `reddit_details.json` looks something like this.
 And that should be it.
 You can run `main.py` to run the bot. I'm working on a startup file, so bear with me till I finish it.
 
+# Instructions for Repl.it
+
+If you're going to host your bot on repl.it, these steps can be followed for features like 24/7 functioning without paying.
+
+ - Change the `replit` entry in the `config.json` to "True" - This can help you enable 24/7 functioning of your bot **without the premium plan**. (pretty cool, huh?)
+
+ - Delete `requirements.txt` from the Repl's project files. It kind-of hindered the start function for me, and I don't know why.
+You can add it later when the first boot is done, and the dependencies are installed automatically and the lock file is in place.
+   
+ - If you follow the above point, you'll find a few Cogs fail to load. If that is the case, install the dependencies one by one via the shell. Requests, AsyncPraw, and Prsaw need to be installed separately, as of the time I am writing this.
+
+If you want the bot to function 24/7, you can follow these steps to enable this for free.
+
+ - When you run your repl, you'll see a web view pop up. (top-right in most cases). You need to copy the URL of this page.
+ - Make an account in [UptimeRobot](https://uptimerobot.com/)
+ - add a new monitor with these credentials
+
+        Monitor type: HTTP(S)
+        Friendly Name : Whatever you want
+        URL : The URL we copied earlier
+        Monitoring Interval : I'd recommend setting it to 30 minutes, but you can go as low as 5 minutes for this.
+    You don't need to change any other settings. Click on `Create Monitor` to create the monitor.
+    
+ ### So how does this work?
+    
+Good question.
+
+Free Repls shut down (More like sleep) after 60 minutes of inactivity. So we ping the bot every [x] minutes to prevent the bot from shutting down.
+
+That's pretty much it.
+ You can select an alert email while making the UptimeRobot Monitor to notify you if the bot goes offline, but I don't really know how far it works, since I haven't tried it yet.
+
 # Credits
 
 [CorpNewt](https://github.com/corpnewt) for [CorpBot.py](https://github.com/corpnewt/CorpBot.py), from which I ~~stole~~ got the ideas of quite a few commands from.
@@ -116,8 +148,8 @@ You can run `main.py` to run the bot. I'm working on a startup file, so bear wit
 
 [Discord.py](https://github.com/Rapptz/discord.py) for obvious reasons
 
-[DhinakG](https://github.com/dhinakg), [Dids](https://github.com/Dids) for helping me with a few commands over in the r/Hackintosh Paradise discord server. 
 
-I don't remember all of the people who helped me with this, sadly. I'd be more than glad to include if you in the credits. My discord is `mahasvan.exe#0001`. Please message me, I'll be sure to include you guys. You've been a **GREAT** help.
+And a **LOT** of friends who helped make this bot what it is today. Thanks, guys!
+
 
 
