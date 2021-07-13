@@ -5,6 +5,7 @@ import os
 import time
 
 from pathlib import Path
+from assets.keep_alive import keep_alive
 
 with open('config.json', 'r') as detailsFile:
     details_data = json.load(detailsFile)
@@ -13,6 +14,12 @@ with open('config.json', 'r') as detailsFile:
     token = details_data['token']
     status_link = details_data['status_link']
     bot_bio = details_data['bio']
+    is_replit = details_data['replit']
+
+replit_bool = False
+if is_replit.lower() in ['true', 'yes', 'sure', 'why not']:
+    replit_bool = True
+
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -63,4 +70,6 @@ if __name__ == '__main__':
         for x in failed_modules:
             print(x)
     print('====================')
+    if replit_bool:
+        keep_alive()
     bot.run(token)
