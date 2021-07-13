@@ -44,7 +44,14 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
 
         embed.add_field(name='Set the default Member role for this server',
                         value=f'`{prefix}setmemberrole [role]`\nExample: `{prefix}setmemberrole Member`'
-                              f' (Member must be an actual role).',
+                              f' (Member must be an actual role).\n'
+                              f'If you want to turn off AutoRole, make a role, assign the member role to that role, and delete the role',
+                        inline=False)
+
+        embed.add_field(name='Set the default channel for BotChat.',
+                        value=f'`{prefix}setbotchatchannel [channel]`\nExample: `{prefix}setbotchatchannel #botchat`'
+                              f' (`channel` must be an actual channel).\n'
+                              f'If you want to turn off botchat, make a channel, assign botchat to that channel, and delete the channel.',
                         inline=False)
 
         embed.set_footer(text=f'Command requested by {ctx.author.name}')
