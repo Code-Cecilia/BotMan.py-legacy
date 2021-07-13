@@ -2,3 +2,4 @@ discord
 asyncpraw
 aiohttp
 requests
+prsaw
