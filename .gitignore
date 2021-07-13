@@ -31,8 +31,10 @@ ENV/
 env.bak/
 venv.bak/
 
-# ignoring storage folders
+# ignoring storage folders and config files
 storage
 links
 mute_files
 configs
+config.json
+reddit_details.json
