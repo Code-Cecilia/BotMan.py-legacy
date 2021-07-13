@@ -15,6 +15,7 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
         self.bot = bot
 
     @commands.command(name="setbotchatchannel", description="Sets the channel for botchat")
+    @commands.has_permissions(administrator=True)
     async def set_botchat_channel(self, ctx, channel: discord.TextChannel):
         channel_id = channel.id
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):  # create file if not exists
