@@ -35,6 +35,8 @@ Get to the [developer page](https://discord.com/developers/applications) and mak
 
  Now that you have copied your token, paste it in `config.json` in its corresponding entry.
 
+ ### Note: If you're going to host the bot in Repl.it, change the value of the `replit` key in config.json to "True"
+
 A properly set-up config.json looks something like this
 
 ```json
@@ -42,6 +44,7 @@ A properly set-up config.json looks something like this
   "prefix_list": ["bm-", "Bm-", "$"],
   "main_prefix": "bm-",
   "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU",
+  "replit": "True",
   "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
 }
