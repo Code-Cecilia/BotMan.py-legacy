@@ -31,7 +31,7 @@ class OwnerOnly(commands.Cog):
     async def reload(self, ctx, cog=None):
         if not cog:
             async with ctx.typing():
-                embed = discord.Embed(title="Reloading all cogs!", color=0x808080, timestamp=ctx.message.created_at)
+                embed = discord.Embed(title="Reloading all cogs!", color=discord.Color.random(), timestamp=ctx.message.created_at)
                 for ext in os.listdir("./Cogs/"):
                     if ext.endswith(".py") and not ext.startswith("_"):
                         try:
