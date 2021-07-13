@@ -54,6 +54,13 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
                 response = response.get('message')
                 await botchat_channel.send(response)
 
+    @commands.command(name='chat', aliases=['botchat'], description='One-time chat command.')
+    async def one_time_chat(self, ctx, *, message):
+        response = await rs.get_ai_response(message=message.content, language='english')  # returns a list
+        response = response[0]  # getting the first entry, which is a dict
+        response = response.get('message')  # getting the message, which is inside the dict
+        await ctx.send(response)  # sending the response
+
 
 def setup(bot):
     bot.add_cog(BotChat(bot))
