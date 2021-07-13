@@ -11,6 +11,8 @@
 A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
 Don't use my code without crediting. You are free to host it and fork it yourself but don't claim any of my code as yours.
 
+
+## If all you want is a stable instance of the bot, I'd recommend using my instance - [Link](https://discord.com/oauth2/authorize?client_id=845225811152732179&permissions=4294836215&scope=bot)
 # Usage and installation
 
 Download the repo as zip or do the following below in a terminal window:
