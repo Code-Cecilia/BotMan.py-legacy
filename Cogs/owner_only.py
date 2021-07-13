@@ -2,6 +2,9 @@ import os
 import sys
 
 from discord.ext import commands
+import discord
+import asyncio
+import traceback
 
 
 class OwnerOnly(commands.Cog):
