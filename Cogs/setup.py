@@ -65,7 +65,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
         channel_id = channel.id
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
             with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-                json.dump({}, jsonFile)
+                json.dump({}, jsonFile, indent=4)
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -73,7 +73,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
         data['welcome_channel'] = channel_id
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-            json.dump(data, jsonFile)
+            json.dump(data, jsonFile, indent=3)
 
         await ctx.send(f'Welcome channel set to {channel.mention} successfully.')
 
@@ -86,7 +86,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
     async def set_kick_reason(self, ctx, *, reason):
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
             with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-                json.dump({}, jsonFile)
+                json.dump({}, jsonFile, indent=4)
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -94,7 +94,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
         data['default_kick_ban_reason'] = str(reason)
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-            json.dump(data, jsonFile)
+            json.dump(data, jsonFile, indent=4)
 
         await ctx.send(f'Default kick/ban reason set to **{reason}** successfully.')
 
@@ -106,7 +106,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
     async def set_member_role(self, ctx, role: discord.Role):
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
             with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-                json.dump({}, jsonFile)
+                json.dump({}, jsonFile, indent=4)
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -114,7 +114,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
         data['member_role'] = role.id
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-            json.dump(data, jsonFile)
+            json.dump(data, jsonFile, indent=3)
 
         await ctx.send(f'Member role set to **{role.name}** successfully.')
 
@@ -126,7 +126,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
     async def set_mute_role(self, ctx, role: discord.Role):
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
             with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-                json.dump({}, jsonFile)
+                json.dump({}, jsonFile, indent=4)
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -134,7 +134,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
         data['mute_role'] = role.id
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-            json.dump(data, jsonFile)
+            json.dump(data, jsonFile, indent=4)
 
         await ctx.send(f'Mute role set to **{role.name}** successfully.')
 

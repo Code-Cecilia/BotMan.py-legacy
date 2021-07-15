@@ -38,12 +38,8 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def hardmute_func(self, ctx, user: discord.Member, time_period=None):
-        has_mute_role = misc_checks.check_muted_role(ctx)
-        if not has_mute_role:
-            await ctx.send(f'It seems {user.display_name} does not have the mute role.\n'
-                           f'If something wrong, an administrator can setup the mute role using the `setup` command.')
-            return
-        if await misc_checks.is_author(ctx, user):
+
+        if misc_checks.is_author(ctx, user):
             return await ctx.send('You cannot mute yourself. Sorry lol')
 
         if misc_checks.is_client(self.bot, user):
@@ -58,14 +54,14 @@ class Moderation(commands.Cog):
 
         if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
             with open(f'./storage/mute_files/guild{ctx.guild.id}.json') as createFile:
-                json.dump({}, createFile)
+                json.dump({}, createFile, indent=4)
                 print(f'Created file guild{ctx.guild.id}.json in storage/mute_files...')  # create file if not present
 
         with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
             data = json.load(mute_file)
-            data[user.id] = list(rolelist)
-        with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
-            json.dump(data, mute_file)
+        data[user.id] = list(rolelist)
+        with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as mute_file:
+            json.dump(data, mute_file, indent=4)
 
         for x in rolelist:
             role = get(ctx.guild.roles, id=int(x))
@@ -83,6 +79,8 @@ class Moderation(commands.Cog):
             await asyncio.sleep(time_calc.get_time(time_period))
             if mute_role not in user.roles:
                 await Moderation.unmute_func(ctx, user)
+        else:
+            await ctx.send(f'{user.display_name} has been hard-muted.')
 
     @commands.command(name='unmute', description='Unmutes the user mentioned if muted previously.\n'
                                                  'It also attempts to add roles from before they were hard-muted '
@@ -93,7 +91,7 @@ class Moderation(commands.Cog):
     async def unmute_func(self, ctx, user: discord.Member):
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
             with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
-                json.dump({}, createFile)
+                json.dump({}, createFile, indent=4)
                 print(f'Created file guild{ctx.guild.id}.json in configs...')  # create file if not present
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
@@ -116,10 +114,10 @@ class Moderation(commands.Cog):
         await user.remove_roles(mute_role)
         await ctx.send(f'{user.display_name} has been unmuted.')
 
-        data.pop(user.id)  # since they're unmuted, we don't need the role list
+        data.pop(str(user.id))  # since they're unmuted, we don't need the role list
 
         with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as mute_file:
-            json.dump(data, mute_file)
+            json.dump(data, mute_file, indent=4)
 
     # ban user
     @commands.command(name='ban', description='Does this really need a description?\n'
@@ -132,7 +130,7 @@ class Moderation(commands.Cog):
         if reason is None:
             if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
                 with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
-                    json.dump({}, createFile)
+                    json.dump({}, createFile, indent=4)
                     print(
                         f'Created file guild{ctx.guild.id}.json in configs/...')  # create file if not present
 
@@ -161,7 +159,7 @@ class Moderation(commands.Cog):
         if reason is None:
             if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
                 with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
-                    json.dump({}, createFile)
+                    json.dump({}, createFile, indent=4)
                     print(
                         f'Created file guild{ctx.guild.id}.json in storage/mute_files...')  # create file if not present
 

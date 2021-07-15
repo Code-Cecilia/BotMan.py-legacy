@@ -24,12 +24,12 @@ class Welcome(commands.Cog):
                          f"My help command can be accessed through `{main_prefix}help`."
                          f"G'day!")
         with open(f'configs/guild{guild.id}.json', 'a+') as createFile:
-            json.dump({}, createFile)
+            json.dump({}, createFile, indent=4)
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        with open(f'./configs/guild{member.guild.id}.json', 'r') as detailsFile:
-            data = json.load(detailsFile)
+        with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
             welcome_channel_id = dict(data).get('welcome_channel')
             member_role_id = data.get('member_role')
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
@@ -41,8 +41,8 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        with open(f'./configs/guild{member.guild.id}.json', 'r') as detailsFile:
-            data = json.load(detailsFile)
+        with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
             welcome_channel_id = dict(data).get('welcome_channel')
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
         await welcome_channel.send(f'{member.mention} has left **{member.guild.name}**. Until Next time!')

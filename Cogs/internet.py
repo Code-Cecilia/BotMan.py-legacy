@@ -66,8 +66,8 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
                 fact = r['text']
                 embed = discord.Embed(title=f'Random Fact', colour=discord.Colour.random(),
                                       timestamp=ctx.message.created_at)
-                embed.set_thumbnail(
-                    url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592/article-fact-or-opinion.jpg")
+                embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592"
+                                        "/article-fact-or-opinion.jpg")
                 embed.set_footer(text="Useless Facts")
                 embed.add_field(name='***Fun Fact***', value=fact, inline=False)
                 await ctx.send(embed=embed)
