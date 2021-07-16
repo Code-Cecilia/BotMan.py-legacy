@@ -32,6 +32,7 @@ env.bak/
 venv.bak/
 
 # ignoring storage folders and config files
+.idea
 storage
 links
 mute_files
