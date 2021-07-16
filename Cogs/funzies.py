@@ -100,7 +100,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
 
     @commands.command()
     async def inspire(self, ctx):
-        await ctx.send(quotes.get_quote())
+        await ctx.send(await quotes.get_quote())
 
     @commands.command(name='hello', description='Says hello, and remembers nothing after that. I\'m kidding, '
                                                 'it knows who last said hello to it.')

@@ -2,6 +2,7 @@
   "prefix_list": ["bm-", "Bm-"],
   "main_prefix": "bm-",
   "token": "Token here",
+  "owner_id": "Owner ID here",
   "replit": "False",
   "rsa_api_key": "XXXXXXXXXX",
   "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",

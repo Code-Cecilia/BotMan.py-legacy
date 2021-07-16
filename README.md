@@ -8,8 +8,8 @@
 
 # BotMan
 
-A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#)
-Don't use my code without crediting. You are free to host it and fork it yourself but don't claim any of my code as yours.
+A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#).
+Don't use my code without giving credit. You are free to host it and fork it yourself but don't claim any of this code as yours.
 
 
 ## If all you want is a stable instance of the bot, I'd recommend using my instance - [Link](https://discord.com/oauth2/authorize?client_id=845225811152732179&permissions=4294836215&scope=bot)
@@ -54,13 +54,22 @@ A properly set-up config.json looks something like this
 {
   "prefix_list": ["bm-", "Bm-", "$"],
   "main_prefix": "bm-",
-  "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU",
+  "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU", 
+  "owner_id": "775176626773950474",
   "replit": "True", 
   "rsa_api_key": "XXXXXXXXXX",
   "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
 }
 ```
+
+PS: `owner_id` is the ID of the owner (ie. you.). This is used for various owner-only commands
+ 
+ - reload
+ - reboot
+ - shutdown
+
+These are some of the owner-only commands that come to my mind.
 
 You also need to enable Privileged gateway intents in the `Bot` section of your application's page
 

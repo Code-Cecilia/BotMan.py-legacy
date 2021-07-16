@@ -15,6 +15,7 @@ with open('config.json', 'r') as detailsFile:
     status_link = details_data['status_link']
     bot_bio = details_data['bio']
     is_replit = details_data['replit']
+    owner_id = int(details_data['owner_id'])
 
 replit_bool = False
 if is_replit.lower() in ['true', 'yes', 'sure', 'why not']:
@@ -28,7 +29,7 @@ intents.members = True
 activity = discord.Streaming(name=f'{main_prefix}help', url=status_link)
 
 
-class NewHelpName(commands.MinimalHelpCommand):
+class NewHelpName(commands.MinimalHelpCommand):  # we're making a new help command
     async def send_pages(self):
         destination = self.get_destination()
         for page in self.paginator.pages:
@@ -42,9 +43,9 @@ cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 bot = commands.Bot(command_prefix=prefix_list,
                    intents=intents,
-                   help_command=NewHelpName(),
+                   help_command=NewHelpName(),  # custom help command
                    activity=activity,
-                   owner_id=775176626773950474)
+                   owner_id=owner_id)  # owner's ID as in the config file
 bot.cwd = cwd
 
 
@@ -56,14 +57,14 @@ async def on_ready():
 if __name__ == '__main__':
     failed_modules = []
     for file in os.listdir(cwd + "/Cogs"):
-        if file.endswith(".py") and not file.startswith("_"):
+        if file.endswith(".py") and not file.startswith("_"):  # loading the cog
             print(f'Loading {file}...')
             try:
                 bot.load_extension(f"Cogs.{file[:-3]}")  # loading the cogs
                 print(f'        |--- Success')
             except:
-                print(f'        |--- Failed')
-                failed_modules.append(file)
+                print(f'        |--- Failed')  # if failed, print as failed
+                failed_modules.append(file)  # append the file to the list of cogs which failed to load
     if len(failed_modules) != 0:
         print('====================')
         print('These cogs failed to load:')
@@ -71,5 +72,5 @@ if __name__ == '__main__':
             print(x)
     print('====================')
     if replit_bool:
-        keep_alive()
-    bot.run(token)
+        keep_alive()  # run the replit-specific code (refer assets/keep_alive.py)
+    bot.run(token)  # actually running the bot

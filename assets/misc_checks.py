@@ -1,6 +1,8 @@
 import json
 
 import discord
+
+
 def check_muted_role(ctx):
     with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
         data = json.load(jsonFile)
