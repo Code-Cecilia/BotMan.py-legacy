@@ -15,6 +15,13 @@ Don't use my code without giving credit. You are free to host it and fork it you
 ## If all you want is a stable instance of the bot, I'd recommend using my instance - [Link](https://discord.com/oauth2/authorize?client_id=845225811152732179&permissions=4294836215&scope=bot)
 # Usage and installation
 
+###What we're gonna do
+ - Download the repo's files
+ - Get the Discord Bot Application's token (while setting the appropriate OAuth permissions)
+ - Fill in the Reddit App details
+ - Get the API key from RSA
+ - Fill in details in `config.json` and `reddit_details.json`
+
 Download the repo as zip or do the following below in a terminal window:
 
 ```bash
@@ -25,13 +32,18 @@ git clone https://github.com/Code-Cecilia/BotMan.py
 ```bash
 python3 -m pip install -r requirements.txt
 ```
-Get to the [developer page](https://discord.com/developers/applications) and make a new application.
+Get to the [Discord Developer Portal](https://discord.com/developers/applications) and make a new application.
 
 ![new application](./images/new_application.png)
 
 ![name the app](./images/name_app.png)
 
 ![add bot](./images/add_bot.png)
+You also need to enable Privileged gateway intents in the `Bot` section of your application's page
+
+![image](https://user-images.githubusercontent.com/82939599/125238018-3eec9b00-e304-11eb-9fd8-efcac130d250.png)
+
+The bot doesn't use prescence intents as of now, so feel free to disable it if you want. You need to enable the `Server Members Intent`, though.
 
 ![copy token](./images/copy_token.png)
 
@@ -44,9 +56,6 @@ RSA (Random Stuff API) is what we use for BotChat in this bot. For this to work,
 You can get one [Here](https://api-info.pgamerx.com/register) by signing up with discord. It adds you to a server, and sends you a PM with the API key.
 
 When you get it, set the value of `rsa_api_key` to the API key you recieved.
-
-
- ### Note: If you're going to host the bot in Repl.it, check the bottom of this page for extended information.
 
 A properly set-up config.json looks something like this
 
@@ -63,23 +72,19 @@ A properly set-up config.json looks something like this
 }
 ```
 
-PS: `owner_id` is the ID of the owner (ie. you.). This is used for various owner-only commands
+`owner_id` is the ID of the owner (ie. you.). This is used for various owner-only commands
  
  - reload
  - reboot
  - shutdown
 
-These are some of the owner-only commands that come to my mind.
+These are some of the owner-only commands available.
 
-You also need to enable Privileged gateway intents in the `Bot` section of your application's page
-
-![image](https://user-images.githubusercontent.com/82939599/125238018-3eec9b00-e304-11eb-9fd8-efcac130d250.png)
-
-The bot doesn't use prescence intents as of now, so feel free to disable it if you want. You need to enable the `Server Members Intent`, though.
+ ### Note: If you're going to host the bot in Repl.it, check the bottom of this page for extended information.
 
 # Setting up Reddit details
 
-You're gonna need to setup an application for proper functioning of the Reddit Cog.
+You're gonna need to setup an application for proper functioning of the commands that use Reddit (nocontext, meme).
 
 Go to [Reddit](https://www.reddit.com), and make a new account (or use the one you have.)
 
@@ -91,13 +96,15 @@ If you already have an app, you'd see something like this
 
 ![reddit app page](./images/make_reddit_app.png)
 
+You'd probably feel disappointed, cause the dark mode doesn't reflect in this page. (I know. I feel disappointed too.)
+
 If you don't have an app already, you'd see something like "Create an app"
 
 What you need to do now, is to enter these details
 
- - Name - Enter a name for your application
+ - Name - Input any name for your application
  - Choose the `script` checkbox
- - set `about url` and `redirect url` as `https://localhost:8080` (if you know what you're doing, feel free to mess around.)
+ - set `about url` and `redirect url` as `https://localhost:8080` (It's what I do. If you know what you're doing, feel free to mess around.)
  - Click on `Create app`
 
 ![filling in the details](./images/filling_reddit_app_details.png)
@@ -108,7 +115,7 @@ You can get the Client ID and Client Secret from these entries
 
 ![client id and secret](./images/getting_id_secret.png)
 
-Fill in the details for your reddit appication in `reddit_details.json`.
+Fill in the details for your reddit application in `reddit_details.json`.
  - `client_id` is the Client ID we got from the application (the one under the application name in the above screenshot)
  - `client_secret` is the Client Secret we got from the entry called `secret`
  - `username` is the username of the Reddit account you used to make the application
@@ -161,6 +168,17 @@ Free Repls shut down (More like sleep) after 60 minutes of inactivity. So we pin
 That's pretty much it.
  You can select an alert email while making the UptimeRobot Monitor to notify you if the bot goes offline, but I don't really know how far it works, since I haven't tried it yet.
 
+# Running the bot
+
+1. Open up Command Prompt, Terminal, or what you have in your OS
+
+2. (Very important) `cd` into the directory of the project. (if this is not done, it might break everything that uses the OS module, and maybe a few others)
+
+3. run this command
+```
+python3 main.py
+```
+4. Enjoy.
 # Credits
 
 [CorpNewt](https://github.com/corpnewt) for [CorpBot.py](https://github.com/corpnewt/CorpBot.py), from which I ~~stole~~ got the ideas of quite a few commands from.
