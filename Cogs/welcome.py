@@ -26,6 +26,14 @@ class Welcome(commands.Cog):
         with open(f'configs/guild{guild.id}.json', 'a+') as createFile:
             json.dump({}, createFile, indent=4)
 
+        with open('./storage/prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+
+        prefixes[str(guild.id)] = ['bm-', 'Bm-']
+
+        with open('./storage/prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent=4)
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:

@@ -54,6 +54,10 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
                               f'If you want to turn off botchat, make a channel, assign botchat to that channel, and delete the channel.',
                         inline=False)
 
+        embed.add_field(name='Set a custom prefix for this server.',
+                        value=f'`{prefix}setprefix [prefix]`',
+                        inline=False)
+
         embed.set_footer(text=f'Command requested by {ctx.author.name}')
         await ctx.send(embed=embed)
 
@@ -153,6 +157,18 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
             # setting permissions for each channel
         await ctx.send(f'Created role **{mutedRole}** and set permissions accordingly.')
         await Setup.set_mute_role(self, ctx, mutedRole)
+
+    @commands.command(name='changeprefix', aliases=['setprefix'], description='Sets the server-specific prefix')
+    @commands.has_permissions(administrator=True)
+    async def change_prefix_func(self, ctx, prefix):
+        with open('./storage/prefixes.json', 'r') as f:
+            data = json.load(f)
+
+        data[str(ctx.guild.id)] = prefix
+
+        with open('./storage/prefixes.json', 'w') as f:
+            json.dump(data, f, indent=4)
+        await ctx.send(f'The prefix for this server has changed to {prefix}')
 
 
 def setup(bot):

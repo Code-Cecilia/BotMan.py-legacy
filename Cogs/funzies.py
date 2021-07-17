@@ -64,6 +64,17 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             reaction = random.choice(random_reactions.reactions_random)
             await message.add_reaction(reaction)
 
+            with open('./storage/prefixes.json', 'r') as f:
+                prefixes = json.load(f)
+                prefix_server = prefixes.get(str(message.guild.id))
+
+                if prefix_server is None:
+                    prefix_server = "bm-"
+
+                pre = prefix_server
+
+                await message.channel.send(f'The prefix for this server is : `{pre}`')
+
     @commands.command(name='eat', description='Eats the person, I guess')
     async def eat_func_actual(self, ctx, user: discord.Member):
         await ctx.send(eat_func(ctx.author, user, self.bot))

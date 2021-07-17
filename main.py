@@ -21,12 +21,22 @@ replit_bool = False
 if is_replit.lower() in ['true', 'yes', 'sure', 'why not']:
     replit_bool = True
 
-
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
 intents.members = True
 activity = discord.Streaming(name=f'{main_prefix}help', url=status_link)
+
+
+def get_prefix(client, message):
+    with open('./storage/prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+        prefix_server = prefixes.get(str(message.guild.id))
+
+        if prefix_server is None:
+            prefix_server = "bm-"
+
+        return prefix_server
 
 
 class NewHelpName(commands.MinimalHelpCommand):  # we're making a new help command
@@ -41,7 +51,7 @@ class NewHelpName(commands.MinimalHelpCommand):  # we're making a new help comma
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
-bot = commands.Bot(command_prefix=prefix_list,
+bot = commands.Bot(command_prefix=get_prefix,
                    intents=intents,
                    help_command=NewHelpName(),  # custom help command
                    activity=activity,
