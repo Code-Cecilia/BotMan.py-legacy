@@ -7,6 +7,7 @@ import asyncio
 
 from assets import quotes
 from assets import random_assets as rand_ass
+from assets import random_reactions
 
 
 def eat_func(author, user, bot):
@@ -59,8 +60,9 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if self.bot.user.mentioned_in(message):  # check for mentions, and react with the heart emoji
-            await message.add_reaction('👋️')
+        if self.bot.user.mentioned_in(message):  # check for mentions, and react with a random emoji
+            reaction = random.choice(random_reactions.reactions_random)
+            await message.add_reaction(reaction)
 
     @commands.command(name='eat', description='Eats the person, I guess')
     async def eat_func_actual(self, ctx, user: discord.Member):
