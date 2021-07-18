@@ -20,6 +20,7 @@ Don't use my code without giving credit. You are free to host it and fork it you
  - Get the Discord Bot Application's token (while setting the appropriate OAuth permissions)
  - Fill in the Reddit App details
  - Get the API key from RSA
+ - Get the currency API key from ExchangeRatesAPI
  - Fill in details in `config.json` and `reddit_details.json`
 
 Download the repo as zip or do the following below in a terminal window:
@@ -57,6 +58,14 @@ You can get one [Here](https://api-info.pgamerx.com/register) by signing up with
 
 When you get it, set the value of `rsa_api_key` to the API key you recieved.
 
+# Getting the currency API key from ExchangeRatesAPI
+
+ExchangeRatesAPI is what this bot uses for working with currency.
+You can get an API key [Here](https://exchangeratesapi.io/).
+
+When you get the API key, copy and paste it into the `currency_api_key` entry in the `config.json` file.
+
+
 A properly set-up config.json looks something like this
 
 ```json
@@ -67,6 +76,7 @@ A properly set-up config.json looks something like this
   "owner_id": "775176626773950474",
   "replit": "True", 
   "rsa_api_key": "XXXXXXXXXX",
+  "currency_api_key": "XXXXXXXXXX",
   "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
 }
@@ -80,7 +90,7 @@ A properly set-up config.json looks something like this
 
 These are some of the owner-only commands available.
 
- ### Note: If you're going to host the bot in Repl.it, check the bottom of this page for extended information.
+ ### Note: If you're going to host the bot in Repl.it, check the bottom of this page for extended information on the `replit` entry.
 
 # Setting up Reddit details
 
