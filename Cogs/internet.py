@@ -7,6 +7,7 @@ import aiohttp
 
 from assets import quotes
 from assets import UrbanDict
+from assets import money_convert
 
 with open('reddit_details.json', 'r') as jsonFile:
     data = json.load(jsonFile)
@@ -104,6 +105,15 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
         embed.add_field(name="Example", value=example, inline=False)
         embed.add_field(name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
         await ctx.send(embed=embed)
+
+    @commands.command(name='convert', description='Converts an integer value from one currency to another.\n'
+                                                 f'Usage example: `bm-convert 100 USD EUR`\n'
+                                                 f'For currency codes, check '
+                                                 f'__[here](https://www.iban.com/currency-codes)__')
+    async def get_currency(self, ctx, value: float, from_currency: str.upper, to_currency: str.upper):
+        async with ctx.typing():
+            final_string = await money_convert.get_converted_currency(value, from_currency, to_currency)
+            await ctx.send(final_string)
 
 
 def setup(bot):
