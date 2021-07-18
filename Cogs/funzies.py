@@ -11,48 +11,6 @@ from assets import random_assets as rand_ass
 from assets import random_reactions
 
 
-def eat_func(author, user, bot):
-    if user.id == bot.user.id:
-        return '''For the record, I **DO NOT** appreciate being eaten.
-Even though I am digital and you would probably get electrocuted.'''
-    elif not author == user:
-        return random.choice(rand_ass.eat_react()).format(author.display_name, user.display_name)
-    else:
-        return 'You try to eat yourself, but fail miserably'
-
-
-def pet_func(author, user, bot):
-    if user.id == bot.user.id:
-        return 'Well, what can I say? I do like people petting me :)'
-    elif not author == user:
-        return random.choice(rand_ass.pet_react()).format(author.display_name, user.display_name)
-    else:
-        return 'You pet yourself. I feel you, mate'
-
-
-def drink_func(author, user, bot):
-    if user.id == bot.user.id:
-        return 'You try to drink me, but you can\'t, because I\'m digital!'
-    elif not author == user:
-        return random.choice(rand_ass.drink_react()).format(author.display_name, user.display_name)
-    else:
-        return 'You pierce yourself with a straw. Not surprisingly, it hurts.'
-
-
-def fart_reaction():
-    return random.choice(rand_ass.fart_react())
-
-
-def hug_func(author, user, bot):
-    if user.id == bot.user.id:
-        return 'Even though I\'m digital, I do appreciate hugs :)'
-
-    elif not author == user:
-        return random.choice(rand_ass.hug_react()).format(author.display_name, user.display_name)
-    else:
-        return 'You try to hug yourself, I feel you. Mind if I give you a hug?'
-
-
 class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
     def __init__(self, bot):
         self.bot = bot
@@ -78,23 +36,23 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
 
     @commands.command(name='eat', description='Eats the person, I guess')
     async def eat_func_actual(self, ctx, user: discord.Member):
-        await ctx.send(eat_func(ctx.author, user, self.bot))
+        await ctx.send(rand_ass.eat_func(ctx.author, user, self.bot))
 
     @commands.command(name='drink', description='Beware, you might spill the user you\'re trying to drink.')
     async def drink_func(self, ctx, user: discord.Member):
-        await ctx.send(drink_func(ctx.author, user, self.bot))
+        await ctx.send(rand_ass.drink_func(ctx.author, user, self.bot))
 
     @commands.command(name='hug', description='Try hugging yourself.')
     async def hug_func(self, ctx, user: discord.Member):
-        await ctx.send(hug_func(ctx.author, user, self.bot))
+        await ctx.send(rand_ass.hug_func(ctx.author, user, self.bot))
 
     @commands.command(name='pet', description='Pets whoever you mention. Exceptions may exist.')
     async def pet_func(self, ctx, user: discord.Member):
-        await ctx.send(pet_func(ctx.author, user, self.bot))
+        await ctx.send(rand_ass.pet_func(ctx.author, user, self.bot))
 
     @commands.command(name='fart', description='Does this really need a description?')
     async def fart_func(self, ctx):
-        await ctx.send(fart_reaction())
+        await ctx.send(rand_ass.fart_reaction())
 
     @commands.command(name='art', description='You might think this uses a machine learning algorithm, '
                                               'but no.\nIt just gets a random image from '
@@ -133,8 +91,8 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
     async def emoji_command(self, ctx, emoji_name):
         for x in ctx.guild.emojis:
             if emoji_name == x.name:
-                return await ctx.reply(str(x))
-        await ctx.send(f'No Guild-only emoji called {emoji_name} found.')
+                return await ctx.send(str(x))
+        await ctx.send(f'No guild-only emoji called **{emoji_name}** found.')
 
     @commands.command(name='selfdestruct', description='**DO NOT USE THIS COMMAND**')
     async def selfdestruct_command(self, ctx):
@@ -149,9 +107,9 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
 
     @commands.command(name='lenny', description='( ͡° ͜ʖ ͡°)')
     async def lenny(self, ctx):
-        await ctx.message.delete()
         await ctx.send('( ͡° ͜ʖ ͡°)')
         self.last_lenny = ctx.author.id
+        await ctx.message.delete()
 
     @commands.command(name='lastlenny', description='Last Lenny user is returned')
     async def lastlenny(self, ctx):
