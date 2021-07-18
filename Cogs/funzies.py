@@ -17,23 +17,6 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         self.hello_last = None
         self.last_lenny = None
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if self.bot.user.mentioned_in(message):  # check for mentions, and react with a random emoji
-            reaction = random.choice(random_reactions.reactions_random)
-            await message.add_reaction(reaction)
-
-            with open('./storage/prefixes.json', 'r') as f:
-                prefixes = json.load(f)
-                prefix_server = prefixes.get(str(message.guild.id))
-
-                if prefix_server is None:
-                    prefix_server = "bm-"
-
-                pre = prefix_server
-
-                await message.channel.send(f'The prefix for this server is : `{pre}`')
-
     @commands.command(name='eat', description='Eats the person, I guess')
     async def eat_func_actual(self, ctx, user: discord.Member):
         await ctx.send(rand_ass.eat_func(ctx.author, user, self.bot))
@@ -53,26 +36,6 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
     @commands.command(name='fart', description='Does this really need a description?')
     async def fart_func(self, ctx):
         await ctx.send(rand_ass.fart_reaction())
-
-    @commands.command(name='art', description='You might think this uses a machine learning algorithm, '
-                                              'but no.\nIt just gets a random image from '
-                                              '__[this website](https://thisartworkdoesnotexist.com)__')
-    async def art_command(self, ctx):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://thisartworkdoesnotexist.com/") as response:
-                f = await response.content.read()
-        if not os.path.exists('./storage/art.png'):
-            with open('./storage/art.png', 'w') as imageFile:
-                print('created file art.png inside the storage folder')  # create file if not present
-        with open('./storage/art.png', 'wb') as fl:
-            fl.write(f)  # f is already in binary, so don't need to decode
-            fl = open('./storage/art.png', 'rb')
-            pic = discord.File(fl)
-        await ctx.send(file=pic)
-
-    @commands.command()
-    async def inspire(self, ctx):
-        await ctx.send(await quotes.get_quote())
 
     @commands.command(name='hello', description='Says hello, and remembers nothing after that. I\'m kidding, '
                                                 'it knows who last said hello to it.')

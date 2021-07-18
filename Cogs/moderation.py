@@ -9,7 +9,7 @@ import os
 from assets import time_calc, misc_checks
 
 
-class Moderation(commands.Cog):
+class Moderation(commands.Cog, description="Moderation commands. I don\'t think this needs a description."):
     def __init__(self, bot):
         self.bot = bot
 
@@ -17,9 +17,27 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def mute_func(self, ctx, user: discord.Member, time_period=None):
+
+        if misc_checks.is_author(ctx, user):
+            return await ctx.send('You cannot mute yourself. Sorry lol')
+
+        if misc_checks.is_client(self.bot, user):
+            return await ctx.send('I can\'t mute myself, sorry.')
+
+        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
+            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
+                json.dump({}, createFile, indent=4)
+                print(f'Created file guild{ctx.guild.id}.json in configs...')
+
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
         mute_role_id = data.get('mute_role')
+
+        if mute_role_id is None:
+            return await ctx.send('It seems you have not set the mute role. '
+                                  'Please ask an administrator to set a role as the mute role, '
+                                  'or make one by using the `setmuterole` or `createmuterole` commands.')
+
         mute_role = get(ctx.guild.roles, id=int(mute_role_id))  # get the actual mute role from the role's ID
         await user.add_roles(mute_role)  # add the mute role
 
@@ -45,17 +63,25 @@ class Moderation(commands.Cog):
         if misc_checks.is_client(self.bot, user):
             return await ctx.send('I can\'t mute myself, sorry.')
 
+        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
+            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
+                json.dump({}, createFile, indent=4)
+
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
         mute_role_id = int(data.get('mute_role'))
+
+        if mute_role_id is None:
+            return await ctx.send('It seems you have not set the mute role. '
+                                  'Please ask an administrator to set a role as the mute role, '
+                                  'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         mute_role = get(ctx.guild.roles, id=mute_role_id)
         rolelist = [r.id for r in user.roles if r != ctx.guild.default_role]
 
         if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
-            with open(f'./storage/mute_files/guild{ctx.guild.id}.json') as createFile:
+            with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile, indent=4)
-                print(f'Created file guild{ctx.guild.id}.json in storage/mute_files...')  # create file if not present
 
         with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
             data = json.load(mute_file)
@@ -96,9 +122,17 @@ class Moderation(commands.Cog):
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
+
+        if data.get('mute_role') is None:
+            return await ctx.send('It seems you have not set the mute role. '
+                                  'Please ask an administrator to set a role as the mute role, '
+                                  'or make one by using the `setmuterole` or `createmuterole` commands.')
+
         mute_role_id = int(data.get('mute_role'))
 
         mute_role = get(ctx.guild.roles, id=mute_role_id)
+
+        await user.remove_roles(mute_role)
 
         with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
             data = json.load(mute_file)

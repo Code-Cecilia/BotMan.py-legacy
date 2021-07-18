@@ -1,13 +1,40 @@
 import discord
 from discord.ext import commands
+import random
+import json
 
-from assets import UrbanDict, count_lines, time_calc
+from assets import UrbanDict, count_lines, time_calc, random_reactions
 
 
 class Info(commands.Cog, description='Returns information about specific aspects of the server, bot, or a user.\n'
                                      r'Maybe does even more, idk. ¯\_(ツ)_/¯'):
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if self.bot.user.mentioned_in(message):  # check for mentions, and react with a random emoji
+            reaction = random.choice(random_reactions.reactions_random)
+            await message.add_reaction(reaction)
+
+            with open('./storage/prefixes.json', 'r') as f:
+                prefixes = json.load(f)
+                prefix_server = prefixes.get(str(message.guild.id))
+
+                if prefix_server is None:
+                    prefix_server = "bm-"
+
+                pre = prefix_server
+
+                if isinstance(pre, list):
+                    pre = pre[0]
+                    """if the prefix object is a list, we specify it as the first entry 
+                    (this happens when the server doesnt have a custom prefix.
+                    we get ['bm-', 'Bm-'] as the output in that case)"""
+
+                await message.channel.send(f'Hello! I am {self.bot.user.display_name},\n'
+                                           f'The prefix for this server is : `{pre}`, '
+                                           f'and my help command can be accessed using `{pre}help`.')
 
     @commands.command(name='ping', description='Returns the latency in milliseconds.')
     async def ping_command(self, ctx):
@@ -96,9 +123,10 @@ class Info(commands.Cog, description='Returns information about specific aspects
 
         await ctx.send(embed=embed)
 
-    @commands.command(name='userinfo', aliases=['user'], description='Returns basic information about the user mentioned as argument.')
+    @commands.command(name='userinfo', aliases=['user', 'whois'],
+                      description='Returns basic information about the user mentioned as argument.')
     @commands.guild_only()
-    async def user_info(self ,ctx, user: discord.Member):
+    async def user_info(self, ctx, user: discord.Member):
         name = user.display_name
         color = user.color
         id = user.id
@@ -143,7 +171,8 @@ class Info(commands.Cog, description='Returns information about specific aspects
         embed.set_footer(text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command(name='botinfo', aliases=['clientinfo', 'botstats'], description='Returns information about the bot.')
+    @commands.command(name='botinfo', aliases=['clientinfo', 'botstats'],
+                      description='Returns information about the bot.')
     async def stats(self, ctx):
         dpyVersion = f"Version {discord.__version__}"
         serverCount = len(self.bot.guilds)
@@ -164,21 +193,6 @@ class Info(commands.Cog, description='Returns information about specific aspects
         embed.add_field(name="Sibling Bot", value=guren, inline=True)
         embed.add_field(name="A short note about me", value="I like cookies.", inline=False)
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)
-
-    @commands.command(name='define', description='Pulls a description from Urban Dictionary of the term entered as '
-                                                 'argument.\n '
-                                                 'Take caution, as sometimes it can be a bit... too accurate.')
-    async def define_from_urban(self, ctx, *, term):
-        try:
-            word, definition, likes, dislikes, example, author = await UrbanDict.define(term)
-        except:
-            await ctx.send(f'Could not load definition for **{term}**.')
-            return
-        embed = discord.Embed(title=word, description=definition, color=discord.Color.random())
-        embed.set_footer(text=f'Powered by UrbanDictionary | Author - {author}')
-        embed.add_field(name="Example", value=example, inline=False)
-        embed.add_field(name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
         await ctx.send(embed=embed)
 
 

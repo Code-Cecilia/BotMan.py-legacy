@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 import json
+import os
 
 with open('config.json', 'r') as detailsFile:
     details_data = json.load(detailsFile)
@@ -19,12 +20,16 @@ class Welcome(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         owner = guild.owner
-        await owner.send(f"Hello, I am {self.bot.user.name}! I was invited to {guild.name} just now."
-                         f"I wanted to inform you that my prefix is `{main_prefix}`."
-                         f"My help command can be accessed through `{main_prefix}help`."
-                         f"G'day!")
-        with open(f'configs/guild{guild.id}.json', 'a+') as createFile:
-            json.dump({}, createFile, indent=4)
+        try:
+            await owner.send(f"Hello, I am {self.bot.user.name}! I was invited to {guild.name} just now.\n"
+                             f"I wanted to let you know that my prefix is `{main_prefix}`, and "
+                             f"my help command can be accessed through `{main_prefix}help`.\n"
+                             f"Have a good day ahead!")
+        except:
+            print('couldn\'t send message to owner')
+        if not os.path.exists(f'configs/guild{guild.id}.json'):
+            with open(f'configs/guild{guild.id}.json', 'a+') as createFile:
+                json.dump({}, createFile, indent=4)
 
         with open('./storage/prefixes.json', 'r') as f:
             prefixes = json.load(f)
@@ -33,6 +38,30 @@ class Welcome(commands.Cog):
 
         with open('./storage/prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
+
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        owner = guild.owner
+        try:
+            await owner.send(f"Hello, it seems I have been removed from {guild.name}.\n"
+                             f"Your server's config files will be deleted, along with the mute files, and custom prefix.\n"
+                             f"Thank you for having me in your server for this long.\n"
+                             f"Until next time!")
+        except:
+            print(f'couldn\'t send message to owner of {guild.owner}')
+        if os.path.exists(f'configs/guild{guild.id}.json'):
+            os.remove(f'./configs/guild{guild.id}.json')
+
+        if os.path.exists(f'./storage/mute_files/guild{guild.id}.json'):
+            os.remove(f'./storage/mute_files/guild{guild.id}.json')
+
+        with open('prefixes.json', 'r') as prefixFile:
+            data = json.load(prefixFile)
+        if str(guild.id) in data.keys():
+            data.pop(str(guild.id))
+
+        with open('prefixes.json', 'w') as prefixFile:
+            json.dump(data, prefixFile)
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -49,6 +78,8 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
+        if member == self.bot.user:
+            return
         with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
             welcome_channel_id = dict(data).get('welcome_channel')

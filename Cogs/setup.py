@@ -160,6 +160,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
 
     @commands.command(name='changeprefix', aliases=['setprefix'], description='Sets the server-specific prefix')
     @commands.has_permissions(administrator=True)
+    @commands.guild_only()
     async def change_prefix_func(self, ctx, prefix):
         with open('./storage/prefixes.json', 'r') as f:
             data = json.load(f)
