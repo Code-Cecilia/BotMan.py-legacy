@@ -15,7 +15,7 @@ Don't use my code without giving credit. You are free to host it and fork it you
 ## If all you want is a stable instance of the bot, I'd recommend using my instance - [Link](https://discord.com/oauth2/authorize?client_id=845225811152732179&permissions=4294836215&scope=bot)
 # Usage and installation
 
-###What we're gonna do
+### What we're gonna do
  - Download the repo's files
  - Get the Discord Bot Application's token (while setting the appropriate OAuth permissions)
  - Fill in the Reddit App details
