@@ -14,6 +14,8 @@ class Info(commands.Cog, description='Returns information about specific aspects
     @commands.Cog.listener()
     async def on_message(self, message):
         if self.bot.user.mentioned_in(message):  # check for mentions, and react with a random emoji
+            if message.content not in ['<@845225811152732179>', '<@!845225811152732179>']:
+                return
             reaction = random.choice(random_reactions.reactions_random)
             await message.add_reaction(reaction)
 
