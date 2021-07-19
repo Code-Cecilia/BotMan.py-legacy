@@ -82,6 +82,13 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             return await ctx.send('Nobody. Nobody used the `lenny` command since I got online')
         await ctx.send(f'{user.display_name} was the last `lenny` user')
 
+    @commands.command(name='editmagic', aliases=['edit', 'messagemagic'],
+                      description="Try it. I\'m not gonna spoil anything for you.")
+    async def edit_fun(self, ctx):
+        message = await ctx.send('Wanna see something cool?')
+        await asyncio.sleep(1)
+        await message.edit(content='Look, I \u202b this message \u202B')
+
 
 def setup(bot):
     bot.add_cog(Funzies(bot))
