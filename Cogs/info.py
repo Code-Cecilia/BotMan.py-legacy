@@ -16,10 +16,10 @@ class Info(commands.Cog, description='Returns information about specific aspects
     async def on_message(self, message):
         # check for mentions, and react with a random emoji
         if self.bot.user.mentioned_in(message):
-            if message.content not in ['<@845225811152732179>', '<@!845225811152732179>']:
-                return
             reaction = random.choice(random_reactions.reactions_random)
             await message.add_reaction(reaction)
+            if message.content not in [f'<@{self.bot.user.id}>', f'<@!{self.bot.user.id}>']:
+                return
 
             with open('./storage/prefixes.json', 'r') as f:
                 prefixes = json.load(f)
