@@ -3,41 +3,20 @@ from discord.ext import commands
 import json
 import os
 
+from assets import get_link
+
 
 class Links(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='link', description='Sends a value to the corresponding link name, given as argument.\n'
-                                               'PS: Ignore the last argument `IgnoreThis`')
-    async def get_links(self, ctx, link_name, IgnoreThis=False):
-        with open('./assets/global_links.json') as jsonFile:
-            links_list_global = json.load(jsonFile)  # getting global links
+    @commands.command(name='link', description='Sends a value to the corresponding link name, given as argument.\n')
+    async def get_links(self, ctx, link_name):
+        link_value = get_link.get_link(ctx, link_name)
+        link_final_return = f"__**{link_name}**__\n{link_value}"
 
-        if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):
-            with open(f'./links/guild{ctx.guild.id}.json', 'w') as writeFile:
-                print(f'./links/guild{ctx.guild.id}.json has been created')
-                json.dump({}, writeFile)
-        with open(f'./links/guild{ctx.guild.id}.json', 'r') as readFile:
-            # getting guild-specific links
-            guild_specific_links = json.load(readFile)
-
-        # final links list, guild-specific links override global ones
-        links_list_global.update(guild_specific_links)
-
-        link_value = links_list_global.get(link_name)
-        if link_value is None:
-            link_value = "No Value Found\nCheck your spelling and/or capitalization. " \
-                         "If this link does not exist, ask the server's administrators to make one."
-
-        embed = discord.Embed(title=link_name.title(
-        ), description=link_value, color=discord.Color.random())
-
-        if IgnoreThis is True:
-            # since we call the function for linkslist command, we dont want the embed in that case
-            return link_value
-        await ctx.send(embed=embed)
+        await ctx.send(link_final_return)
 
     @commands.command(name='addlink', description='Add a guild-only link,'
                                                   ' which can be accessed anywhere in this server.')
@@ -96,12 +75,15 @@ class Links(commands.Cog):
         global_list_embed = ""
         guild_links_embed = ""
         for x in links_list_global_keys:
-            link_value = await Links.get_links(self, ctx, x, True)
+            link_value = get_link.get_link(ctx, x)
             global_list_embed += f"__[{x}]({link_value})__\n"
 
         for x in guild_specific_links_keys:
-            link_value = await Links.get_links(self, ctx, x, True)
+            link_value = get_link.get_link(ctx, x)
             guild_links_embed += f"__[{x}]({link_value})__\n"
+
+        global_list_embed += '\uFEFF'
+        guild_links_embed += '\uFEFF'
 
         embed = discord.Embed(title="List of links", color=discord.Color.random(
         ), timestamp=ctx.message.created_at)
