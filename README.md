@@ -23,6 +23,7 @@ Don't use my code without giving credit. You are free to host it and fork it you
  - Get the API key from RSA
  - Get the currency API key from ExchangeRatesAPI
  - Fill in details in `config.json` and `reddit_details.json`
+ - Actually run the bot
 
 Download the repo as zip or do the following below in a terminal window:
 
