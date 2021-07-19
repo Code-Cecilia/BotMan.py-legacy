@@ -1,11 +1,12 @@
 <h1 align="center">
   <br>
-  <a href=""><img src="https://cdn.discordapp.com/attachments/861485353520726016/863401815516905512/discord_pfp_transparent.png" alt="Guren"></a>
   <br>
   BotMan - A Discord bot for Botchat, Moderation, Utilities, and other fun stuff.
   <br>
 </h1>
 
+![BotMan Wallpaer Logo thing](./images/botman_logo.png)
+###### If for some reason you wanted a low-effort BotMan wallpaper, you're welcome.
 # BotMan
 
 A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#).
