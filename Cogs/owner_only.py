@@ -40,9 +40,11 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                         try:
                             self.bot.unload_extension(f"Cogs.{ext[:-3]}")
                             self.bot.load_extension(f"Cogs.{ext[:-3]}")
-                            embed.add_field(name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
+                            embed.add_field(
+                                name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
                         except Exception as e:
-                            embed.add_field(name=f"Failed to reload: `{ext}`", value=e, inline=False)
+                            embed.add_field(
+                                name=f"Failed to reload: `{ext}`", value=e, inline=False)
                         await asyncio.sleep(0.5)
                 await ctx.send(embed=embed)
         else:
@@ -51,16 +53,19 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                     title="Reloading cogs!", color=discord.Color.random(), timestamp=ctx.message.created_at)
                 ext = f"{cog.lower()}.py"
                 if not os.path.exists(f"./cogs/{ext}"):
-                    embed.add_field(name=f"Failed to reload: `{ext}`", value="This cog does not exist.", inline=False)
+                    embed.add_field(
+                        name=f"Failed to reload: `{ext}`", value="This cog does not exist.", inline=False)
 
                 elif ext.endswith(".py") and not ext.startswith("_"):
                     try:
                         self.bot.unload_extension(f"Cogs.{ext[:-3]}")
                         self.bot.load_extension(f"Cogs.{ext[:-3]}")
-                        embed.add_field(name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
+                        embed.add_field(
+                            name=f"Reloaded: `{ext}`", value='\uFEFF', inline=False)
                     except Exception:
                         desired_trace = traceback.format_exc()
-                        embed.add_field(name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)
+                        embed.add_field(
+                            name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)
                 await ctx.send(embed=embed)
 
 
