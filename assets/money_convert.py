@@ -21,7 +21,8 @@ async def get_converted_currency(value, from_currency, to_currency):
     if rates_dict.get(from_currency) is None or rates_dict.get(to_currency) is None:
         return "One or more currency codes are invalid. Please check the help command for more info."
 
-    from_currency_ratio = float(rates_dict.get(from_currency)) / float(base_value)
+    from_currency_ratio = float(rates_dict.get(
+        from_currency)) / float(base_value)
     to_currency_ratio = float(rates_dict.get(to_currency)) / float(base_value)
     value_to_multiply = from_currency_ratio / to_currency_ratio
 

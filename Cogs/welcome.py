@@ -72,9 +72,11 @@ class Welcome(commands.Cog):
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
         await welcome_channel.send(f'{member.mention} has joined **{member.guild.name}**! Say hi!')
         if not member.bot:
-            await member.add_roles(get(member.guild.roles, id=int(member_role_id)))  # add the member role
+            # add the member role
+            await member.add_roles(get(member.guild.roles, id=int(member_role_id)))
         else:
-            await welcome_channel.send('Oh, it\'s a bot')  # doesnt add the member role
+            # doesnt add the member role
+            await welcome_channel.send('Oh, it\'s a bot')
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):

@@ -51,9 +51,11 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
         final_choice = random.choice(sub_list)
         author = final_choice.author
         like_ratio = float(final_choice.upvote_ratio) * 100
-        embed = discord.Embed(title=final_choice.title, color=discord.Color.random())
+        embed = discord.Embed(title=final_choice.title,
+                              color=discord.Color.random())
         embed.set_image(url=final_choice.url)
-        embed.set_footer(text=f"By u/{author} | {int(like_ratio)}% upvoted | Powered by Reddit")
+        embed.set_footer(
+            text=f"By u/{author} | {int(like_ratio)}% upvoted | Powered by Reddit")
         await ctx.send(embed=embed)
 
     @commands.command(name="funfact", aliases=['randomfact', 'fact'], description="Sends a random fact.")
@@ -68,7 +70,8 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
                 embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/669973636156751897/734100544918126592"
                                         "/article-fact-or-opinion.jpg")
                 embed.set_footer(text="Useless Facts")
-                embed.add_field(name='***Fun Fact***', value=fact, inline=False)
+                embed.add_field(name='***Fun Fact***',
+                                value=fact, inline=False)
                 await ctx.send(embed=embed)
 
     @commands.command(name='inspire', description='Sends a random quote.')
@@ -84,7 +87,8 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
                 f = await response.content.read()
         if not os.path.exists('./storage/art.png'):
             with open('./storage/art.png', 'w') as imageFile:
-                print('created file art.png inside the storage folder')  # create file if not present
+                # create file if not present
+                print('created file art.png inside the storage folder')
         with open('./storage/art.png', 'wb') as fl:
             fl.write(f)  # f is already in binary, so don't need to decode
             fl = open('./storage/art.png', 'rb')
@@ -100,16 +104,19 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
         except:
             await ctx.send(f'Could not load definition for **{term}**.')
             return
-        embed = discord.Embed(title=word, description=definition, color=discord.Color.random())
-        embed.set_footer(text=f'Powered by UrbanDictionary | Author - {author}')
+        embed = discord.Embed(
+            title=word, description=definition, color=discord.Color.random())
+        embed.set_footer(
+            text=f'Powered by UrbanDictionary | Author - {author}')
         embed.add_field(name="Example", value=example, inline=False)
-        embed.add_field(name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
+        embed.add_field(
+            name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
         await ctx.send(embed=embed)
 
     @commands.command(name='convert', description='Converts an integer value from one currency to another.\n'
-                                                 f'Usage example: `bm-convert 100 USD EUR`\n'
-                                                 f'For currency codes, check '
-                                                 f'__[here](https://www.iban.com/currency-codes)__')
+                      f'Usage example: `bm-convert 100 USD EUR`\n'
+                      f'For currency codes, check '
+                      f'__[here](https://www.iban.com/currency-codes)__')
     async def get_currency(self, ctx, value: float, from_currency: str.upper, to_currency: str.upper):
         async with ctx.typing():
             final_string = await money_convert.get_converted_currency(value, from_currency, to_currency)

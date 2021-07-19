@@ -43,7 +43,8 @@ class NewHelpName(commands.MinimalHelpCommand):  # we're making a new help comma
     async def send_pages(self):
         destination = self.get_destination()
         for page in self.paginator.pages:
-            embed = discord.Embed(description=page, color=discord.Color.random())
+            embed = discord.Embed(
+                description=page, color=discord.Color.random())
             embed.set_thumbnail(url=bot.user.avatar_url)
             embed.set_footer(text='')
             await destination.send(embed=embed)
@@ -74,7 +75,8 @@ if __name__ == '__main__':
                 print(f'        |--- Success')
             except:
                 print(f'        |--- Failed')  # if failed, print as failed
-                failed_modules.append(file)  # append the file to the list of cogs which failed to load
+                # append the file to the list of cogs which failed to load
+                failed_modules.append(file)
     if len(failed_modules) != 0:
         print('====================')
         print('These cogs failed to load:')
