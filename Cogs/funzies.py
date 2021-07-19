@@ -84,6 +84,10 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         await asyncio.sleep(1)
         await message.edit(content='Look, I \u202b this message \u202B')
 
+    @commands.command(name='empty', aliases=['emptymessage', 'emptywtf'], description='Try it. That\'s all.')
+    async def empty_message(self, ctx):
+        await ctx.send("\uFEFF")
+
 
 def setup(bot):
     bot.add_cog(Funzies(bot))
