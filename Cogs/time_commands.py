@@ -48,8 +48,7 @@ class Time(commands.Cog):
                                                     r'`^[+\-]?\d+:\d+$`')
     async def set_offset(self, ctx, offset):
         pattern = r'^[+\-]?\d+:\d+$'
-        # matches the pattern, and if it fails, returns an error message
-        if not re.match(pattern, offset):
+        if not re.match(pattern, offset):  # matches the pattern, and if it fails, returns an error message
             return await ctx.send('Improper offset format. Please read the help command for more info.')
 
         if not os.path.exists('./storage/time.json'):  # create file if not exists

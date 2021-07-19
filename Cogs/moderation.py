@@ -38,15 +38,13 @@ class Moderation(commands.Cog, description="Moderation commands. I don\'t think 
                                   'Please ask an administrator to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
-        # get the actual mute role from the role's ID
-        mute_role = get(ctx.guild.roles, id=int(mute_role_id))
+        mute_role = get(ctx.guild.roles, id=int(mute_role_id))  # get the actual mute role from the role's ID
         await user.add_roles(mute_role)  # add the mute role
 
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
             await ctx.send(f'{user.display_name} has been muted for {final_time_text}.')
-            # sleep for specified time, then remove the muted role
-            await asyncio.sleep(time_calc.get_time(time_period))
+            await asyncio.sleep(time_calc.get_time(time_period))  # sleep for specified time, then remove the muted role
             await user.remove_roles(mute_role)
             await ctx.send(f'{user.display_name} has been unmuted.')
         else:
@@ -120,8 +118,7 @@ class Moderation(commands.Cog, description="Moderation commands. I don\'t think 
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
             with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile, indent=4)
-                # create file if not present
-                print(f'Created file guild{ctx.guild.id}.json in configs...')
+                print(f'Created file guild{ctx.guild.id}.json in configs...')  # create file if not present
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
@@ -151,8 +148,7 @@ class Moderation(commands.Cog, description="Moderation commands. I don\'t think 
         await user.remove_roles(mute_role)
         await ctx.send(f'{user.display_name} has been unmuted.')
 
-        # since they're unmuted, we don't need the role list
-        data.pop(str(user.id))
+        data.pop(str(user.id))  # since they're unmuted, we don't need the role list
 
         with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as mute_file:
             json.dump(data, mute_file, indent=4)
@@ -174,8 +170,7 @@ class Moderation(commands.Cog, description="Moderation commands. I don\'t think 
 
             with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
                 data = json.load(jsonFile)
-            default_kickBan_reason = data.get(
-                'default_kick_ban_reason')  # get the default reason
+            default_kickBan_reason = data.get('default_kick_ban_reason')  # get the default reason
             reason = default_kickBan_reason
 
         message_to_user = f'You have been banned from **{ctx.guild.name}** for **{reason}**'
@@ -204,8 +199,7 @@ class Moderation(commands.Cog, description="Moderation commands. I don\'t think 
 
             with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
                 data = json.load(jsonFile)
-            default_kickBan_reason = data.get(
-                'default_kick_ban_reason')  # get the default reason
+            default_kickBan_reason = data.get('default_kick_ban_reason')  # get the default reason
             reason = default_kickBan_reason
 
             message_to_user = f'You have been kicked from **{ctx.guild.name}** for **{reason}**'

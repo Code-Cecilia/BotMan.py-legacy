@@ -20,31 +20,26 @@ class Links(commands.Cog):
                 print(f'./links/guild{ctx.guild.id}.json has been created')
                 json.dump({}, writeFile)
         with open(f'./links/guild{ctx.guild.id}.json', 'r') as readFile:
-            # getting guild-specific links
-            guild_specific_links = json.load(readFile)
+            guild_specific_links = json.load(readFile)  # getting guild-specific links
 
-        # final links list, guild-specific links override global ones
-        links_list_global.update(guild_specific_links)
+        links_list_global.update(guild_specific_links)  # final links list, guild-specific links override global ones
 
         link_value = links_list_global.get(link_name)
         if link_value is None:
             link_value = "No Value Found\nCheck your spelling and/or capitalization. " \
                          "If this link does not exist, ask the server's administrators to make one."
 
-        embed = discord.Embed(title=link_name.title(
-        ), description=link_value, color=discord.Color.random())
+        embed = discord.Embed(title=link_name.title(), description=link_value, color=discord.Color.random())
 
         if IgnoreThis is True:
-            # since we call the function for linkslist command, we dont want the embed in that case
-            return link_value
+            return link_value  # since we call the function for linkslist command, we dont want the embed in that case
         await ctx.send(embed=embed)
 
     @commands.command(name='addlink', description='Add a guild-only link,'
                                                   ' which can be accessed anywhere in this server.')
     @commands.has_permissions(administrator=True)
     async def add_link(self, ctx, link_name, link_url):
-        # add the file if not present
-        if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):
+        if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):  # add the file if not present
             with open(f'./links/guild{ctx.guild.id}.json', 'w') as jsonFile:
                 json.dump({}, jsonFile)
                 print(f'./links/guild{ctx.guild.id}.json has been created')
@@ -61,8 +56,7 @@ class Links(commands.Cog):
     @commands.command(name='remlink', description='Removed the guild-only link whose name is mentioned as argument')
     @commands.has_permissions(administrator=True)
     async def remove_link(self, ctx, link_name):
-        # add the file if not present
-        if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):
+        if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):  # add the file if not present
             with open(f'./links/guild{ctx.guild.id}.json', 'w') as jsonFile:
                 json.dump({}, jsonFile)
                 print(f'./links/guild{ctx.guild.id}.json has been created')
@@ -79,8 +73,7 @@ class Links(commands.Cog):
 
     @commands.command(name='linklist', aliases=['linkslist'], description='Lists all global and guild-specific links.')
     async def list_links(self, ctx):
-        # add the file if not present
-        if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):
+        if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):  # add the file if not present
             with open(f'./links/guild{ctx.guild.id}.json', 'w') as jsonFile:
                 json.dump({}, jsonFile)
                 print(f'./links/guild{ctx.guild.id}.json has been created')
@@ -90,8 +83,7 @@ class Links(commands.Cog):
             links_list_global_keys = links_list_global.keys()  # getting global links
         with open(f'./links/guild{ctx.guild.id}.json', 'r') as readFile:
             guild_specific_links = json.load(readFile)
-            # getting guild-specific links
-            guild_specific_links_keys = guild_specific_links.keys()
+            guild_specific_links_keys = guild_specific_links.keys()  # getting guild-specific links
 
         global_list_embed = ""
         guild_links_embed = ""
@@ -103,14 +95,10 @@ class Links(commands.Cog):
             link_value = await Links.get_links(self, ctx, x, True)
             guild_links_embed += f"__[{x}]({link_value})__\n"
 
-        embed = discord.Embed(title="List of links", color=discord.Color.random(
-        ), timestamp=ctx.message.created_at)
-        embed.add_field(name='Global Links',
-                        value=global_list_embed, inline=False)
-        embed.add_field(name="Guild-specific Links",
-                        value=guild_links_embed, inline=False)
-        embed.set_footer(
-            text=f'Command requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
+        embed = discord.Embed(title="List of links", color=discord.Color.random(), timestamp=ctx.message.created_at)
+        embed.add_field(name='Global Links', value=global_list_embed, inline=False)
+        embed.add_field(name="Guild-specific Links", value=guild_links_embed, inline=False)
+        embed.set_footer(text=f'Command requested by {ctx.author.display_name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 

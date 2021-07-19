@@ -1,9 +1,14 @@
-import asyncio
-
 import discord
 from discord.ext import commands
+import random
+import aiohttp
+import os
+import asyncio
+import json
 
+from assets import quotes
 from assets import random_assets as rand_ass
+from assets import random_reactions
 
 
 class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
