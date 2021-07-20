@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import json
 import os
-import time
 
 from pathlib import Path
 from assets.keep_alive import keep_alive
@@ -13,7 +12,6 @@ with open('config.json', 'r') as detailsFile:
     main_prefix = details_data['main_prefix']
     token = details_data['token']
     status_link = details_data['status_link']
-    bot_bio = details_data['bio']
     is_replit = details_data['replit']
     owner_id = int(details_data['owner_id'])
 
@@ -31,7 +29,10 @@ activity = discord.Streaming(name=f'{main_prefix}help', url=status_link)
 def get_prefix(client, message):
     with open('./storage/prefixes.json', 'r') as f:
         prefixes = json.load(f)
-        prefix_server = prefixes.get(str(message.guild.id))
+        try:
+            prefix_server = prefixes.get(str(message.guild.id))
+        except AttributeError:  # direct messages dont have a message.guild
+            return 'bm-'
 
         if prefix_server is None:
             prefix_server = "bm-"

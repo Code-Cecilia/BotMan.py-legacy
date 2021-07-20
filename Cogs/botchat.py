@@ -20,6 +20,7 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
         self.bot = bot
 
     @commands.command(name="setbotchatchannel", description="Sets the channel for botchat")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def set_botchat_channel(self, ctx, channel: discord.TextChannel):
         channel_id = channel.id
@@ -38,15 +39,19 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
         await ctx.send(f"Set botchat channel as {channel} succesfully!")
 
     @commands.Cog.listener()
+    @commands.guild_only()
     async def on_message(self, message):
 
         if message.author == self.bot.user:
             return
 
         # create file if not exists
-        if not os.path.exists(f'./configs/guild{message.guild.id}.json'):
-            with open(f'./configs/guild{message.guild.id}.json', 'w') as jsonFile:
-                json.dump({}, jsonFile)
+        try:
+            if not os.path.exists(f'./configs/guild{message.guild.id}.json'):
+                with open(f'./configs/guild{message.guild.id}.json', 'w') as jsonFile:
+                    json.dump({}, jsonFile)
+        except AttributeError:
+            return None
 
         with open(f'./configs/guild{message.guild.id}.json') as jsonFIle:
             data = json.load(jsonFIle)
