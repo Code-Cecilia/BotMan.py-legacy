@@ -4,6 +4,7 @@ import asyncpraw
 from discord.ext import commands
 import json
 import aiohttp
+import os
 
 from assets import quotes
 from assets import UrbanDict

@@ -1,4 +1,7 @@
+import json
 import re
+
+import discord
 
 
 def format_time(time: str):
@@ -21,3 +24,28 @@ def check_if_offset_or_api(string: str):
         return True
     else:
         return False
+
+
+async def check_time(user: discord.Member):
+    with open("./storage/time_files/time_offset.json", 'r') as jsonFile:
+        data_offset = json.load(jsonFile)
+
+    with open("./storage/time_files/time_tz.json", 'r') as jsonFile:
+        data_tz = json.load(jsonFile)
+
+    pattern = r'^[+\-]+\d+:\d+$'
+
+    offset_user = data_offset.get(str(user.id))
+    tz_user = data_tz.get(str(user.id))
+
+    if re.match(pattern, str(offset_user)):
+        offset_bool = True
+    else:
+        offset_bool = False
+
+    if tz_user is not None:
+        timezone_bool = True
+    else:
+        timezone_bool = False
+
+    return offset_bool, timezone_bool
