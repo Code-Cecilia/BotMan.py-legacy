@@ -50,7 +50,7 @@ def eat_func(author, user, bot):
         return '''For the record, I **DO NOT** appreciate being eaten.
 Even though I am digital and you would probably get electrocuted.'''
     elif not author == user:
-        return random.choice(hug_reactions).format(author.display_name, user.display_name)
+        return random.choice(eat_reactions).format(author.display_name, user.display_name)
     else:
         return 'You try to eat yourself, but fail miserably'
 
@@ -80,7 +80,6 @@ def fart_reaction():
 def hug_func(author, user, bot):
     if user.id == bot.user.id:
         return 'Even though I\'m digital, I do appreciate hugs :)'
-
     elif not author == user:
         return random.choice(hug_reactions).format(author.display_name, user.display_name)
     else:
