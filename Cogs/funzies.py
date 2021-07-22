@@ -1,4 +1,5 @@
 import asyncio
+import random
 
 import discord
 from discord.ext import commands
@@ -87,6 +88,13 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
     @commands.command(name='empty', aliases=['emptymessage', 'emptywtf'], description='Try it. That\'s all.')
     async def empty_message(self, ctx):
         await ctx.send("\uFEFF")
+
+    @commands.command(name='choose', aliases=['choice'], description='Chooses an option from a list of choices.\n'
+                                                                     'For multi-word options, '
+                                                                     'enclose in "double quotes"')
+    async def choose(self, ctx, *options):
+        result = random.choice(options)
+        await ctx.send(result)
 
 
 def setup(bot):
