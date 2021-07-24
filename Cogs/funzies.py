@@ -98,6 +98,31 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         result = refine_text.remove_mentions(result)
         await ctx.send(result)
 
+    @commands.command(name='whatdidtheysay', aliases=['whatdidhesay', 'whatdidshesay', 'whatdidisay'],
+                      description='Sends the whole message content of the message link passed as argument.\n'
+                                 f'usage: `bm-whatdidtheysay https://discord.com/channels/18....`')
+    async def send_content(self, ctx, *, link_to_message):
+        link_to_message = link_to_message.split('/')
+        server_id = int(link_to_message[-3])
+        channel_id = int(link_to_message[-2])
+        msg_id = int(link_to_message[-1])
+
+        server = self.bot.get_guild(server_id)
+        channel = server.get_channel(int(channel_id))
+        message = await channel.fetch_message(int(msg_id))
+        content = message.content
+        content = content.replace("```", "` ` `")
+        author = message.author
+        created_at = message.created_at
+        color = author.color
+        if str(color) == '#000000':
+            color = discord.Color.random()
+        embed = discord.Embed(title=f"{author.display_name} sent in #{channel.name}",
+                              timestamp=created_at, color=color)
+        embed.add_field(name="Message", value=f"`{content}`", inline=False)
+        embed.set_footer(text=f"Server: {server.name}")
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Funzies(bot))

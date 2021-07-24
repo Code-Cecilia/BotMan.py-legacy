@@ -74,13 +74,21 @@ class Links(commands.Cog):
 
         global_list_embed = ""
         guild_links_embed = ""
+        global_link_list = []
+        guild_link_list = []
         for x in links_list_global_keys:
-            link_value = get_link.get_link(ctx, x)
-            global_list_embed += f"__[{x}]({link_value})__\n"
+            global_link_list.append(x)
+        global_link_list.sort()
 
         for x in guild_specific_links_keys:
-            link_value = get_link.get_link(ctx, x)
-            guild_links_embed += f"__[{x}]({link_value})__\n"
+            guild_link_list.append(x)
+        guild_link_list.sort()
+
+        for x in global_link_list:
+            global_list_embed += f"{x}\n"
+
+        for x in guild_link_list:
+            guild_links_embed += f"{x}\n"
 
         global_list_embed += '\uFEFF'
         guild_links_embed += '\uFEFF'
