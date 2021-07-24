@@ -24,8 +24,9 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                                                  'Now off you go. Nothing to see here.')
     @commands.is_owner()
     async def reboot(self, ctx):
-        await ctx.send('Rebooting...')
-        os.execv(sys.executable, ['python'] + sys.argv)
+        async with ctx.typing():
+            await ctx.send('Rebooting...')
+            os.execv(sys.executable, ['python'] + sys.argv)
 
     @commands.command(name='reload', description="Reload all/one of the bot's cogs.\n"
                                                  "This is Owner-only, so don't have any funny ideas.", )
