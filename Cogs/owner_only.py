@@ -71,7 +71,7 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                         name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)
             await ctx.send(embed=embed)
 
-    @commands.command(name='load', description='Loads a Cog.')
+    @commands.command(name='load', description='lLoads a cog. Mention the python file\'s name as `cog_file_name`')
     @commands.is_owner()
     async def load_cog(self, ctx, cog_file_name):
         embed = discord.Embed(title=f"Loading Cog {cog_file_name}.py!", color=discord.Color.random(),
@@ -86,7 +86,7 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                     name=f"Failed to load: `{cog_file_name}.py`", value=str(e), inline=False)
             await ctx.send(embed=embed)
 
-    @commands.command(name='unload')
+    @commands.command(name='unload', description="Unloads a cog. Mention the python file\'s name as `cog_file_name`")
     @commands.is_owner()
     async def unload_cog(self, ctx, cog_file_name):
         embed = discord.Embed(title=f"Unloading Cog {cog_file_name}.py!", color=discord.Color.random(),
