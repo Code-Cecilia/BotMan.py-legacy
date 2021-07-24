@@ -111,7 +111,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         try:
             channel = server.get_channel(int(channel_id))
         except AttributeError:
-            return await ctx.send("COuld not find a message from that link! "
+            return await ctx.send("Could not find a message from that link! "
                                   "Maybe I am not in the server the message is from.")
         try:
             message = await channel.fetch_message(int(msg_id))
