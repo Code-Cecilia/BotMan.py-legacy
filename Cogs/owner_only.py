@@ -72,6 +72,7 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
             await ctx.send(embed=embed)
 
     @commands.command(name='load', description='Loads a Cog.')
+    @commands.is_owner()
     async def load_cog(self, ctx, cog_file_name):
         embed = discord.Embed(title=f"Loading Cog {cog_file_name}.py!", color=discord.Color.random(),
                               timestamp=ctx.message.created_at)
@@ -86,6 +87,7 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
             await ctx.send(embed=embed)
 
     @commands.command(name='unload')
+    @commands.is_owner()
     async def unload_cog(self, ctx, cog_file_name):
         embed = discord.Embed(title=f"Unloading Cog {cog_file_name}.py!", color=discord.Color.random(),
                               timestamp=ctx.message.created_at)
