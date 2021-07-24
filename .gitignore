@@ -34,8 +34,8 @@ venv.bak/
 # ignoring storage folders and config files
 .idea
 storage
+storage/mute_files
 links
-mute_files
 configs
 config.json
 reddit_details.json
