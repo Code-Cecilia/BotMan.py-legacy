@@ -100,6 +100,16 @@ class Time(commands.Cog):
 
         await ctx.send(f'Timezone set as {timezone} successfully.')
 
+        with open('./storage/time_files/time_offset.json', 'r') as timeFile:
+            offset_data = json.load(timeFile)
+
+        offset_data.pop(str(ctx.author.id))
+
+        with open('./storage/time_files/time_offset.json', 'w') as timeFile:
+            json.dump(offset_data, timeFile, indent=4)
+
+        await ctx.send('Removed offset entry because you\'re using the location format now.')
+
     @commands.command(name='setoffset', description='Sets the user\'s time offset.\n'
                                                     'Format for offset: `-2:30` and `+2:30`\n'
                                                     '**Nerd note**: the regex for the offset is '
@@ -123,6 +133,15 @@ class Time(commands.Cog):
             json.dump(time_data, timeFile)
 
         await ctx.send(f'Time offset set as {offset} successfully.')
+
+        with open('./storage/time_files/time_tz.json', 'r') as timeFile:
+            tz_data = json.load(timeFile)
+        tz_data.pop(str(ctx.author.id))
+        # delete the api tz entry
+        with open('./storage/time_files/time_tz.json', 'w') as timeFile:
+            json.dump(tz_data, timeFile, indent=4)
+
+        await ctx.send("Removed the location entry because you\'re using the offset format now.")
 
     @commands.command(name='tzlist', aliases=['listtz', 'timezones'],
                       description='Gets the list of timezones available')
