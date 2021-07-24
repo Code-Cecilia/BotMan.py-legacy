@@ -4,11 +4,12 @@ import discord
 from discord.ext import commands
 from prsaw import RandomStuff
 
+from assets import refine_text
+
 with open('config.json', 'r') as configFile:
     data = json.load(configFile)
 
 api_key = data.get('rsa_api_key')
-
 rs = RandomStuff(async_mode=True, api_key=api_key)
 
 
@@ -61,14 +62,16 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
                 botchat_channel_id = data.get('botchat_channel')
             botchat_channel = self.bot.get_channel(botchat_channel_id)
             if message.channel == botchat_channel:
-                response = await rs.get_ai_response(message=message.content, language='english')
+                message_refined = refine_text.remove_mentions(str(message.content))  # remove everyone and here mentions
+                response = await rs.get_ai_response(message=message_refined, language='english')
                 response = response[0]
                 response = response.get('message')
                 await botchat_channel.send(response)
 
     @commands.command(name='chat', aliases=['botchat'], description='One-time chat command.')
     async def one_time_chat(self, ctx, *, message):
-        response = await rs.get_ai_response(message=message)  # returns a list
+        message_refined = refine_text.remove_mentions(message)
+        response = await rs.get_ai_response(message=message_refined)  # returns a list
         response = response[0]  # getting the first entry, which is a dict
         # getting the message, which is inside the dict
         response = response.get('message')

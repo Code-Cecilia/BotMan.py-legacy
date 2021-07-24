@@ -5,6 +5,7 @@ import discord
 from discord.ext import commands
 
 from assets import random_assets as rand_ass
+from assets import refine_text
 
 
 class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
@@ -94,6 +95,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
                                                                      'enclose in "double quotes"')
     async def choose(self, ctx, *options):
         result = random.choice(options)
+        result = refine_text.remove_mentions(result)
         await ctx.send(result)
 
 
