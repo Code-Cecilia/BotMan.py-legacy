@@ -108,8 +108,15 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         msg_id = int(link_to_message[-1])
 
         server = self.bot.get_guild(server_id)
-        channel = server.get_channel(int(channel_id))
-        message = await channel.fetch_message(int(msg_id))
+        try:
+            channel = server.get_channel(int(channel_id))
+        except AttributeError:
+            return await ctx.send("COuld not find a message from that link! "
+                                  "Maybe I am not in the server the message is from.")
+        try:
+            message = await channel.fetch_message(int(msg_id))
+        except:
+            return await ctx.send(f"Could not find message in {channel.mention}!")
         content = message.content
         content = content.replace("```", "` ` `")
         author = message.author
