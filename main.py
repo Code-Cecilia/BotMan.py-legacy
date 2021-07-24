@@ -24,9 +24,10 @@ intents.typing = False
 intents.presences = False
 intents.members = True
 activity = discord.Streaming(name=f'{main_prefix}help', url=status_link)
+description = "The coolest python bot ever 😎"
 
 
-def get_prefix(client, message):
+def get_prefix(bot, message):
     with open('./storage/prefixes.json', 'r') as f:
         prefixes = json.load(f)
         try:
@@ -57,6 +58,7 @@ bot = commands.Bot(command_prefix=get_prefix,
                    intents=intents,
                    help_command=NewHelpName(),  # custom help command
                    activity=activity,
+                   description=description,
                    owner_id=owner_id)  # owner's ID as in the config file
 bot.cwd = cwd
 
