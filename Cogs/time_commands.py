@@ -168,6 +168,48 @@ class Time(commands.Cog):
             await author.send(embed=embed)
             await asyncio.sleep(1)
 
+    @commands.command(name="timeinfo", description="Gets the time information for a specific location.\n"
+                                                   "Argument passed in must one of the "
+                                                   "locations in the `tzlist` command.")
+    async def get_time_info(self, ctx, location: str.lower):
+        timezone_link = f"{time_link}{location}"
+        async with aiohttp.ClientSession() as session:
+            async with session.get(timezone_link) as response:
+                response_dict = (await response.content.read()).decode('utf-8')
+                response_dict = json.loads(response_dict)
+        if response_dict.get('error') == "unknown location":
+            return await ctx.send(
+                'Unknown timezone name. Check the `tzlist` command for a list of valid timezones.\n'
+                'PS: It\'s gonna be a long message, the `tzlist` command.')
+
+        if response_dict.get('datetime') is None:
+            return await ctx.send(f'Couldn\'t get time data for **{location}**. '
+                                  f'Check the `tzlist` command for a list of valid timezones.\n'
+                                  f'PS: It\'s gonna be a long message, the `tzlist` command.')
+
+        time = response_dict.get('datetime')[11:19]
+        date = response_dict.get('datetime')[:10]
+        actual_timezone = response_dict.get('timezone')
+        day_of_week = response_dict.get("day_of_week")
+        day_of_year = response_dict.get("day_of_year")
+        offset = response_dict.get("utc_offset")
+        week = response_dict.get("week_number")
+        abbreviation = response_dict.get("abbreviation")
+        utc_datetime = response_dict.get("datetime")
+
+        embed = discord.Embed(title=f"Time info for {actual_timezone}",
+                              description=f"Abbreviation: **{abbreviation}** | UTC Offset: **{offset}**",
+                              color=discord.Color.random())
+        embed.add_field(name="Time", value=time, inline=True)
+        embed.add_field(name="Date", value=date, inline=True)
+        embed.add_field(name="Weeks since Jan 1", value=week, inline=True)
+        embed.add_field(name="Day of the week", value=day_of_week, inline=True)
+        embed.add_field(name="Day of the year", value=day_of_year, inline=True)
+        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/250869033669230592/869049832071888916/tenor.gif")
+        embed.set_footer(text=f"UTC format: {utc_datetime}")
+
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Time(bot))
