@@ -32,10 +32,10 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
-        data['botchat_channel'] = channel_id
+        data['botchat_channel'] = channel_id  # set botchat channel
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'w') as jsonFile:
-            json.dump(data, jsonFile, indent=4)
+            json.dump(data, jsonFile, indent=4)  # dump the file
 
         await ctx.send(f"Set botchat channel as {channel} succesfully!")
 
@@ -43,7 +43,7 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
     @commands.guild_only()
     async def on_message(self, message):
 
-        if message.author == self.bot.user:
+        if message.author == self.bot.user:  # ignore if author of message is the bot user
             return
 
         # create file if not exists
@@ -57,16 +57,16 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
         with open(f'./configs/guild{message.guild.id}.json') as jsonFIle:
             data = json.load(jsonFIle)
             if data.get('botchat_channel') is not None:
-                botchat_channel_id = int(data.get('botchat_channel'))
+                botchat_channel_id = int(data.get('botchat_channel'))  # getting the botchat channel id
             else:
                 botchat_channel_id = data.get('botchat_channel')
-            botchat_channel = self.bot.get_channel(botchat_channel_id)
+            botchat_channel = self.bot.get_channel(botchat_channel_id)  # getting the botchat channel
             if message.channel == botchat_channel:
                 message_refined = refine_text.remove_mentions(str(message.content))  # remove everyone and here mentions
                 response = await rs.get_ai_response(message=message_refined, language='english')
                 response = response[0]
                 response = response.get('message')
-                await botchat_channel.send(response)
+                await botchat_channel.send(response)  # sending the response
 
     @commands.command(name='chat', aliases=['botchat'], description='One-time chat command.')
     async def one_time_chat(self, ctx, *, message):

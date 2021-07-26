@@ -16,7 +16,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
     async def on_message(self, message):
         # check for mentions, and react with a random emoji
         if self.bot.user.mentioned_in(message):
-            reaction = random.choice(random_reactions.reactions_random)
+            reaction = random.choice(random_reactions.reactions_random)  # add a reaction
             await message.add_reaction(reaction)
             if message.content not in [f'<@{self.bot.user.id}>', f'<@!{self.bot.user.id}>']:
                 return
@@ -36,7 +36,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
                     (this happens when the server doesnt have a custom prefix.
                     we get ['bm-', 'Bm-'] as the output in that case)"""
 
-                await message.channel.send(f'Hello! I am {self.bot.user.display_name},\n'
+                await message.channel.send(f'Hello! I am {self.bot.user.name},\n'
                                            f'The prefix for this server is : `{pre}`, '
                                            f'and my help command can be accessed using `{pre}help`.')
 
@@ -50,7 +50,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
                                                                             'the bot currently has.')
     async def countlines_func(self, ctx):
         lines = count_lines.countlines('./')
-        final_str = f"I am made of {lines} lines of python code. Pretty cool, imo."
+        final_str = f"I am made of {lines} lines of python code. What can I say except 😎?"
         await ctx.send(final_str)
 
     @commands.command(name='userid', description='Returns the User\'s ID mentioned. '
@@ -66,7 +66,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
         if user is None:
             user = ctx.author
         embed = discord.Embed(
-            title=f'Avatar of {user.name}'
+            title=f'Avatar of {user.display_name}'
         ).set_image(url=user.avatar_url)
         await ctx.send(embed=embed)
 
@@ -223,6 +223,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
                         value=f"__[Link to invite](https://discord.com/oauth2/authorize"
                               f"?client_id={self.bot.user.id}&permissions=4294836215&scope=bot)__",
                         inline=True)
+        embed.add_field(name="Talk to my maker!", value="__[Mahasvan](https://discord.com/users/775176626773950474)__", inline=True)
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 

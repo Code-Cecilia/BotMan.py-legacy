@@ -98,9 +98,9 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         result = refine_text.remove_mentions(result)
         await ctx.send(result)
 
-    @commands.command(name='whatdidtheysay', aliases=['whatdidhesay', 'whatdidshesay', 'whatdidisay'],
+    @commands.command(name='whatdidtheysay', aliases=['whatdidhesay', 'whatdidshesay', 'whatdidisay', 'whatdidyousay'],
                       description='Sends the whole message content of the message link passed as argument.\n'
-                                 f'usage: `bm-whatdidtheysay https://discord.com/channels/18....`')
+                                 f'usage: `bm-whatdidtheysay https://discord.com/channels/....`')
     async def send_content(self, ctx, *, link_to_message):
         link_to_message = link_to_message.split('/')
         server_id = int(link_to_message[-3])
@@ -118,7 +118,6 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         except:
             return await ctx.send(f"Could not find message in {channel.mention}!")
         content = message.content
-        content = content.replace("```", "` ` `")
         author = message.author
         created_at = message.created_at
         color = author.color
@@ -126,8 +125,8 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             color = discord.Color.random()
         embed = discord.Embed(title=f"{author.display_name} sent in #{channel.name}",
                               timestamp=created_at, color=color)
-        embed.add_field(name="Message", value=f"`{content}`", inline=False)
-        embed.set_footer(text=f"Server: {server.name}")
+        embed.add_field(name="Message", value=f"```\n{content}\n```", inline=False)
+        embed.set_footer(text=f"Server: {server.name} | Channel: {channel.name}")
         await ctx.send(embed=embed)
 
 
