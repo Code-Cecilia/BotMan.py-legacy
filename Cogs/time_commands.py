@@ -158,6 +158,7 @@ class Time(commands.Cog):
 
         try:
             await author.send('Here\'s a list of timezones to choose from.')
+            await ctx.message.add_reaction("📭")
         except:
             return await ctx.send('Could not send PM to you. '
                                   'Please check your settings to allow me to send messages to you.')

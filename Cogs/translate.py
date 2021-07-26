@@ -58,6 +58,7 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
         chunk_list = list(list_funcs.chunks(list(self.lang_code_dict.keys()), 27))
         try:
             await ctx.author.send("List of language codes")
+            await ctx.message.add_reaction("📭")
         except:
             return await ctx.reply('Could not send message to you. Please enable PMs and try again.')
         n = 0
