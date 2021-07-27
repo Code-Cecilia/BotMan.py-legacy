@@ -54,7 +54,7 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
 
         embed = discord.Embed(title=f"{ctx.author.display_name}, your translation is:", color=discord.Color.random())
         embed.description = result.text
-        embed.set_footer(text=f"{final_string} | Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.set_footer(text=f"{final_string} | Requested by {ctx.author}")
         await ctx.send(embed=embed)
 
     @commands.command(name='langcodes', aliases=['languagecodes', 'listlanguagecodes', 'listlangcodes'],
