@@ -180,8 +180,10 @@ class Info(commands.Cog, description='Returns information about specific aspects
             str(emoji.created_at))
         emoji_id = emoji.id
         emoji_url = emoji.url
-        creator = emoji_actual.user.mention  # emoji.user.mention cannot be used - it returns None
-
+        try:
+            creator = emoji_actual.user.mention  # emoji.user.mention cannot be used - it returns None
+        except AttributeError:
+            creator = "Missing Permissions to access this data."
         embed = discord.Embed(
             title=emoji_name, description=f'ID: {emoji_id}', color=discord.Color.random())
         embed.set_thumbnail(url=emoji_url)
