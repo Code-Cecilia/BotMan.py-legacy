@@ -16,7 +16,6 @@ class Gaems(commands.Cog, description="A collection of games. "
                       description="Play games, have fun. It's a simple life.")
     async def guess_the_number(self, ctx):
         number = random.choice(number_list)
-        print(number)
         await ctx.send(f"Welcome to **Guess The Number**, _{ctx.author.display_name}_!\n"
                        f"The rules are simple.\n"
                        f"I will think of a number from 1 to 10, and you have to find it within 3 tries.\n"
