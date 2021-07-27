@@ -9,7 +9,7 @@ import os
 from assets import time_calc, misc_checks
 
 
-class Moderation(commands.Cog, description="Moderation commands. I don\'t think this needs a description."):
+class Moderation(commands.Cog, description="Moderation commands. Use with caution."):
     def __init__(self, bot):
         self.bot = bot
 
@@ -221,7 +221,8 @@ class Moderation(commands.Cog, description="Moderation commands. I don\'t think 
 
     # unban user.
     @commands.command(name='unban', descriptiob='Unbans a member who is mentioned as argument.\n'
-                                                'Correct format of mentioning the member is `User#0000` **ONLY**.')
+                                                'Correct format of mentioning the member is `User#1234` **ONLY**.\n'
+                                                'You need the `Administrator` permission to access this command.')
     @commands.has_permissions(administrator=True)
     async def unban(self, ctx, *, member):
         banned_users = await ctx.guild.bans()
@@ -229,10 +230,9 @@ class Moderation(commands.Cog, description="Moderation commands. I don\'t think 
 
         for ban_entry in banned_users:
             user = ban_entry.user
-
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
-                await ctx.send(f'Unbanned {user}')
+                await ctx.send(f'Unbanned {user}!')
 
 
 def setup(bot):

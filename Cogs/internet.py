@@ -21,8 +21,7 @@ reddit = asyncpraw.Reddit(client_id=client_id, client_secret=client_secret, user
                           user_agent="pythonpraw")
 
 
-class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://praw.readthedocs.io/en/stable/)__'
-                                        ' and others\n'
+class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, UrbanDict, MoneyExchangeAPI and more!\n'
                                         'Basically gets data from the internet.'):
     def __init__(self, bot):
         self.bot = bot
@@ -107,11 +106,11 @@ class WebSurf(commands.Cog, description='Fun commands using __[PRAW](https://pra
             return
         embed = discord.Embed(
             title=word, description=definition, color=discord.Color.random())
-        embed.set_footer(
-            text=f'Powered by UrbanDictionary | Author - {author}')
         embed.add_field(name="Example", value=example, inline=False)
         embed.add_field(
             name='Likes', value=f"👍 {likes} | 👎 {dislikes}", inline=True)
+        embed.set_footer(
+            text=f'Powered by UrbanDictionary | Author - {author}')
         await ctx.send(embed=embed)
 
     @commands.command(name='convert', description='Converts an integer value from one currency to another.\n'

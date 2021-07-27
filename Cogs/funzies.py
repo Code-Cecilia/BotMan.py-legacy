@@ -100,7 +100,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
 
     @commands.command(name='whatdidtheysay', aliases=['whatdidhesay', 'whatdidshesay', 'whatdidisay', 'whatdidyousay'],
                       description='Sends the whole message content of the message link passed as argument.\n'
-                                 f'usage: `bm-whatdidtheysay https://discord.com/channels/....`')
+                                  f'usage: `bm-whatdidtheysay https://discord.com/channels/....`')
     async def send_content(self, ctx, *, link_to_message):
         link_to_message = link_to_message.split('/')
         server_id = int(link_to_message[-3])

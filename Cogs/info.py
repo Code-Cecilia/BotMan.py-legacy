@@ -213,17 +213,16 @@ class Info(commands.Cog, description='Returns information about specific aspects
         embed.add_field(name='Total Guilds', value=str(serverCount), inline=True)
         embed.add_field(name='Total Users', value=str(memberCount), inline=True)
         embed.add_field(name='Latency', value=str(latency), inline=True)
-        embed.add_field(name='Bot Developer:',
-                        value="<@775176626773950474>", inline=True)
+        embed.add_field(name='Talk to my maker!',
+                        value="__[Mahasvan](https://discord.com/users/775176626773950474)__", inline=True)
         embed.add_field(name="Source", value=source, inline=True)
         embed.add_field(name="Sibling Bot", value=guren, inline=True)
         embed.add_field(name="Found an issue?",
-                        value="__[Report Here](https://github.com/Code-Cecilia/BotMan.py/issues)__", inline=True)
+                        value="__[Report Here!](https://github.com/Code-Cecilia/BotMan.py/issues)__", inline=True)
         embed.add_field(name='Invite Me!',
                         value=f"__[Link to invite](https://discord.com/oauth2/authorize"
                               f"?client_id={self.bot.user.id}&permissions=4294836215&scope=bot)__",
                         inline=True)
-        embed.add_field(name="Talk to my maker!", value="__[Mahasvan](https://discord.com/users/775176626773950474)__", inline=True)
         embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 

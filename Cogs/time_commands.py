@@ -18,7 +18,7 @@ class Time(commands.Cog):
         self.bot = bot
 
     @commands.command(name='time', description='Gets the time from a location, or using the offset. '
-                                               'Use the `settz` and `setoffset` commands for setting it up.')
+                                               'Use the `settz` and `setoffset` commands for setting this up.')
     async def time_user(self, ctx, user: discord.Member = None):
         if user is None:
             user = ctx.author
@@ -29,7 +29,7 @@ class Time(commands.Cog):
             return await ctx.send(f"{user.display_name} has not set their timezone. "
                                   f"They can do so with the `settz` or `setoffset` commands.")
 
-        if is_tz:
+        if is_tz:  # check if user has set their timezone, and get the data
             with open('./storage/time_files/time_tz.json', 'r') as timeFile:
                 data = json.load(timeFile)
                 user_timezone = data.get(str(user.id))
@@ -44,13 +44,11 @@ class Time(commands.Cog):
                     response_dict = json.loads(response_dict)
             if response_dict.get('error') == "unknown location":
                 return await ctx.send(
-                    'Unknown timezone name. Check the `tzlist` command for a list of valid timezones.\n'
-                    'PS: It\'s gonna be a long message, the `tzlist` command.')
+                    "Unknown timezone name. Check the `tzlist` command for a list of valid timezones.\n")
 
             if response_dict.get('datetime') is None:
                 return await ctx.send(f'Couldn\'t get time data for **{user_timezone}**. '
-                                      f'Check the `tzlist` command for a list of valid timezones.\n'
-                                      f'PS: It\'s gonna be a long message, the `tzlist` command.')
+                                      f"Check the `tzlist` command for a list of valid timezones.\n")
 
             time = response_dict.get('datetime')[11:16]
             actual_timezone = response_dict.get('timezone')
@@ -59,8 +57,10 @@ class Time(commands.Cog):
 
             final_string = f"`{actual_timezone}`, where **{user.display_name}** is, it's **{time_formatted}**."
             return await ctx.send(final_string)
+            # since we have the "return" statement, none of the below code
+            # in this command will get executed if is_tz is true.
 
-        if is_offset:
+        if is_offset:  # check for offset and get the data
             with open('./storage/time_files/time_offset.json', 'r') as timeFile:
                 time_data = json.load(timeFile)
 
@@ -77,14 +77,12 @@ class Time(commands.Cog):
             async with session.get(timezone_link) as response:
                 response_dict = (await response.content.read()).decode('utf-8')
                 response_dict = json.loads(response_dict)
-        if response_dict.get('error') == "unknown location":
-            return await ctx.send('Unknown timezone name. Check the `tzlist` command for a list of timezones.\n'
-                                  'PS: It\'s gonna be a long message, the `tzlist` command.')
+        if response_dict.get('error') == "unknown location":  # invalid timezones have this entry in the json response
+            return await ctx.send('Unknown timezone name. Check the `tzlist` command for a list of timezones.\n')
 
         if response_dict.get('datetime') is None:
             return await ctx.send(f'Couldn\'t get time data for **{timezone}**. '
-                                  f'Check the `tzlist` command for a list of valid timezones.\n'
-                                  f'PS: It\'s gonna be a long message, the `tzlist` command.')
+                                  f'Check the `tzlist` command for a list of valid timezones.\n')
 
         if not os.path.exists('./storage/time_tz.json'):  # create file if not exists
             with open('./storage/time_files/time_tz.json', 'w') as jsonFile:
@@ -98,12 +96,13 @@ class Time(commands.Cog):
         with open('./storage/time_files/time_tz.json', 'w') as timeFile:
             json.dump(time_data, timeFile)
 
-        await ctx.send(f'Timezone set as {timezone} successfully.')
+        await ctx.send(f'Timezone set as {timezone.title()} successfully.')
 
         with open('./storage/time_files/time_offset.json', 'r') as timeFile:
             offset_data = json.load(timeFile)
 
         offset_data.pop(str(ctx.author.id))
+        # when user sets time location, the offset value is deleted
 
         with open('./storage/time_files/time_offset.json', 'w') as timeFile:
             json.dump(offset_data, timeFile, indent=4)
@@ -137,7 +136,7 @@ class Time(commands.Cog):
         with open('./storage/time_files/time_tz.json', 'r') as timeFile:
             tz_data = json.load(timeFile)
         tz_data.pop(str(ctx.author.id))
-        # delete the api tz entry
+        # delete the time location value because offset is set
         with open('./storage/time_files/time_tz.json', 'w') as timeFile:
             json.dump(tz_data, timeFile, indent=4)
 
@@ -146,7 +145,6 @@ class Time(commands.Cog):
     @commands.command(name='tzlist', aliases=['listtz', 'timezones'],
                       description='Gets the list of timezones available')
     async def get_tz_list(self, ctx):
-
         author = ctx.author
 
         async with aiohttp.ClientSession() as session:
@@ -169,7 +167,7 @@ class Time(commands.Cog):
             await author.send(embed=embed)
             await asyncio.sleep(1)
 
-    @commands.command(name="timeinfo", description="Gets the time information for a specific location.\n"
+    @commands.command(name="timeinfo", description="Gets a list of time information for a specific location.\n"
                                                    "Argument passed in must one of the "
                                                    "locations in the `tzlist` command.")
     async def get_time_info(self, ctx, location: str.lower):
@@ -180,13 +178,11 @@ class Time(commands.Cog):
                 response_dict = json.loads(response_dict)
         if response_dict.get('error') == "unknown location":
             return await ctx.send(
-                'Unknown timezone name. Check the `tzlist` command for a list of valid timezones.\n'
-                'PS: It\'s gonna be a long message, the `tzlist` command.')
+                'Unknown timezone name. Check the `tzlist` command for a list of valid timezones.\n')
 
         if response_dict.get('datetime') is None:
             return await ctx.send(f'Couldn\'t get time data for **{location}**. '
-                                  f'Check the `tzlist` command for a list of valid timezones.\n'
-                                  f'PS: It\'s gonna be a long message, the `tzlist` command.')
+                                  f'Check the `tzlist` command for a list of valid timezones.\n')
 
         time = response_dict.get('datetime')[11:19]
         date = response_dict.get('datetime')[:10]
