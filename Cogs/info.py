@@ -6,6 +6,12 @@ from discord.ext import commands
 
 from assets import count_lines, time_calc, random_reactions
 
+countlines_responses = ["I am made of _{0}_ lines of python code. Pretty cool, huh?",
+                        r"My owner has written _{0}_ lines of code in my brain. I a-a-am ... _glitches out_",
+                        "I have _{0}_ lines of python code as my insides. That's pretty cool to me, you know...",
+                        "Oh no! How did _{0}_ lines of python code get inside me? _I'm scared..._",
+                        "I am made of _{0}_ lines of python code. What can I say except 😎"]
+
 
 class Info(commands.Cog, description='Returns information about specific aspects of the server, bot, or a user.\n'
                                      r'Maybe does even more, idk. ¯\_(ツ)_/¯'):
@@ -50,7 +56,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
                                                                             'the bot currently has.')
     async def countlines_func(self, ctx):
         lines = count_lines.countlines('./')
-        final_str = f"I am made of {lines} lines of python code. What can I say except 😎?"
+        final_str = random.choice(countlines_responses).format(lines)
         await ctx.send(final_str)
 
     @commands.command(name='userid', description='Returns the User\'s ID mentioned. '
