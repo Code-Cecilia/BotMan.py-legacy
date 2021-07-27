@@ -171,6 +171,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
 
     @commands.command(name='emojiinfo', description='Returns information about the emoji, passed as argument')
     async def emoji_info(self, ctx, emoji: discord.Emoji):
+        emoji_actual = await ctx.guild.fetch_emoji(int(emoji.id))  # used for the emoji creator coroutine
         emoji = ctx.author if not emoji else emoji
         emoji_name = emoji.name
         guild = emoji.guild
@@ -179,7 +180,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
             str(emoji.created_at))
         emoji_id = emoji.id
         emoji_url = emoji.url
-        creator = emoji.user
+        creator = emoji_actual.user.mention  # emoji.user.mention cannot be used - it returns None
 
         embed = discord.Embed(
             title=emoji_name, description=f'ID: {emoji_id}', color=discord.Color.random())
