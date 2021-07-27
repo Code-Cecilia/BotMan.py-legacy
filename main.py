@@ -8,22 +8,19 @@ from assets.keep_alive import keep_alive
 
 with open('config.json', 'r') as detailsFile:
     details_data = json.load(detailsFile)
-    prefix_list = details_data['prefix_list']
-    main_prefix = details_data['main_prefix']
+    prefix = details_data['prefix']
     token = details_data['token']
-    status_link = details_data['status_link']
-    is_replit = details_data['replit']
     owner_id = int(details_data['owner_id'])
 
-replit_bool = False
-if is_replit.lower() in ['true', 'yes', 'sure', 'why not']:
-    replit_bool = True
+replit = False
+
+status_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
 intents.members = True
-activity = discord.Streaming(name=f'{main_prefix}help', url=status_link)
+activity = discord.Streaming(name=f'{prefix}help', url=status_link)
 description = "The coolest python bot ever 😎"
 
 
@@ -32,13 +29,14 @@ def get_prefix(bot, message):
         prefixes = json.load(f)
         try:
             prefix_server = prefixes.get(str(message.guild.id))
+
         except AttributeError:  # direct messages dont have a message.guild
             return 'bm-'
 
         if prefix_server is None:
             prefix_server = "bm-"
-
-        return prefix_server
+        data = prefix_server
+        return commands.when_mentioned_or(data)(bot, message)
 
 
 class NewHelpName(commands.MinimalHelpCommand):  # we're making a new help command
@@ -86,6 +84,6 @@ if __name__ == '__main__':
         for x in failed_modules:
             print(x)
     print('====================')
-    if replit_bool:
+    if replit:
         keep_alive()  # run the replit-specific code (refer assets/keep_alive.py)
     bot.run(token)  # actually running the bot

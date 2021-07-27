@@ -7,7 +7,7 @@ import os
 
 with open('config.json') as configFile:
     configs = json.load(configFile)
-    prefix = configs.get('prefix_list')[0]
+    prefix = configs.get('prefix')
 
 
 class Setup(commands.Cog, description='Used to set up the bot for welcome messages, mute/unmute etc.'):

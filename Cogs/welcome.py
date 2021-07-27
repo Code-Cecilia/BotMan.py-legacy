@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 from discord.utils import get
 import json
@@ -6,11 +5,7 @@ import os
 
 with open('config.json', 'r') as detailsFile:
     details_data = json.load(detailsFile)
-    prefix_list = details_data['prefix_list']
-    main_prefix = details_data['main_prefix']
-    token = details_data['token']
-    status_link = details_data['status_link']
-    bot_bio = details_data['bio']
+    main_prefix = details_data.get('prefix')
 
 
 class Welcome(commands.Cog):

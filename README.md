@@ -72,15 +72,11 @@ A properly set-up config.json looks something like this
 
 ```json
 {
-  "prefix_list": ["bm-", "Bm-", "$"],
-  "main_prefix": "bm-",
+  "prefix": "bm-",
   "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU", 
   "owner_id": "775176626773950474",
-  "replit": "True", 
   "rsa_api_key": "XXXXXXXXXX",
-  "currency_api_key": "XXXXXXXXXX",
-  "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
+  "currency_api_key": "XXXXXXXXXX"
 }
 ```
 
@@ -92,7 +88,7 @@ A properly set-up config.json looks something like this
 
 These are some of the owner-only commands available.
 
- ### Note: If you're going to host the bot in Repl.it, check the bottom of this page for extended information on the `replit` entry.
+ ### Note: If you're going to host the bot in Repl.it, check the bottom of this page for extended information.
 
 # Setting up Reddit details
 
@@ -152,12 +148,29 @@ You can run `main.py` to run the bot. I'm working on a startup file, so bear wit
 
 If you're going to host your bot on repl.it, these steps can be followed for features like 24/7 functioning without paying.
 
- - Change the `replit` entry in the `config.json` to "True" - This can help you enable 24/7 functioning of your bot **without the premium plan**. (pretty cool, huh?)
+ - Change the `replit` variable in `main.py` from `False` to `True`.
 
- - Delete `requirements.txt` from the Repl's project files. It kind-of hindered the start function for me, and I don't know why.
+```python
+...
+    status_link = details_data['status_link']
+
+    owner_id = int(details_data['owner_id'])
+
+replit = True <-- change
+
+intents = discord.Intents.default()
+...
+```
+
+ This enables 24/7 functioning of your bot **without the premium plan**. (pretty cool, huh?)
+
+ - Delete `requirements.txt` from the Repl's project files, or rename it to somethign else for the first startup.
+    It kind-of hindered the first setup for me, and I don't know why.
 You can add it later when the first boot is done, and the dependencies are installed automatically and the lock file is in place.
    
- - If you follow the above point, you'll find a few Cogs fail to load. If that is the case, install the dependencies one by one via the shell. Requests, AsyncPraw, and Prsaw need to be installed separately, as of the time I am writing this.
+ - If you follow the above point, you'll probably find a few Cogs fail to load. If that is the case, install the dependencies one by one via the shell. Requests, AsyncPraw, and Prsaw need to be installed separately, as of the time I am writing this.
+ 
+- If Replit errors out while installing the dependencies from the lock file, remove what modules that conflict. 
 
 If you want the bot to function 24/7, you can follow these steps to enable this for free.
 
