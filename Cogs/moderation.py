@@ -163,7 +163,14 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                                               'Reason is optional. Defaults to the server\'s default Kick/Ban reason '
                                               'if no reason if given.')
     @commands.has_permissions(ban_members=True)
+    @commands.guild_only()
     async def ban(self, ctx, member: discord.Member, *, reason=None):
+
+        if misc_checks.is_author(ctx, member):
+            return await ctx.send('You cannot ban yourself. Sorry lol')
+
+        if misc_checks.is_client(self.bot, member):
+            return await ctx.send('I can\'t ban myself, sorry.')
 
         if reason is None:
             if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
@@ -194,7 +201,15 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                                                'and it defaults to the server\'s default Kick/Ban reason '
                                                'when no reason is given.')
     @commands.has_permissions(kick_members=True)
+    @commands.guild_only()
     async def kick(self, ctx, member: discord.Member, *, reason=None):
+
+        if misc_checks.is_author(ctx, member):
+            return await ctx.send('You cannot kick yourself. Sorry lol')
+
+        if misc_checks.is_client(self.bot, member):
+            return await ctx.send('I can\'t mute kick, sorry.')
+
         if reason is None:
             if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
                 with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
@@ -224,7 +239,9 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                                                 'Correct format of mentioning the member is `User#1234` **ONLY**.\n'
                                                 'You need the `Administrator` permission to access this command.')
     @commands.has_permissions(administrator=True)
+    @commands.guild_only()
     async def unban(self, ctx, *, member):
+
         banned_users = await ctx.guild.bans()
         member_name, member_discriminator = member.split("#")
 
