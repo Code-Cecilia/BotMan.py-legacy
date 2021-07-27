@@ -6,12 +6,14 @@ from discord.ext import commands
 number_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", '10']
 
 
-class Gaems(commands.Cog):
+class Gaems(commands.Cog, description="A collection of games. "
+                                      "They _are_ good games, but don't expect something like **Cyberpunk 2077**..."):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="guessthenumber", aliases=["luckychoice", "numberfinder"])
+    @commands.command(name="guessthenumber", aliases=["luckychoice", "numberfinder"],
+                      description="Play games, have fun. It's a simple life.")
     async def guess_the_number(self, ctx):
         number = random.choice(number_list)
         print(number)
