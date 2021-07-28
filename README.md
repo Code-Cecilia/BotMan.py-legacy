@@ -1,12 +1,8 @@
-<h2 align="left">
-  <br>
-  <br>
-  BotMan - A Discord bot made with 💖and Python.
-  <br>
-</h1>
+#  BotMan - A Discord bot made with 💖and Python.
 
 ![BotMan Wallpaer Logo thing](./images/botman_logo.png)
 ###### If for some reason you wanted a low-effort BotMan wallpaper, you're welcome.
+
 # BotMan
 
 A discord bot written by [Mahasvan](https://github.com/Mahas1) in python using the library [Discord.py](https://discordpy.readthedocs.io/en/latest/index.html#).
