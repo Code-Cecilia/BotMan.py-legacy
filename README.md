@@ -1,4 +1,4 @@
-A Discord bot made with 💖and Python.
+# A Discord bot made with 💖and Python.
 
 ![BotMan Wallpaer Logo thing](./images/botman_logo.png)
 ###### If for some reason you wanted a low-effort BotMan wallpaper, you're welcome.
