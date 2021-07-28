@@ -1,7 +1,7 @@
-<h1 align="center">
+<h2 align="left">
   <br>
   <br>
-  BotMan - A Discord bot for Botchat, Moderation, Utilities, and other fun stuff.
+  BotMan - A Discord bot made with 💖and Python.
   <br>
 </h1>
 
