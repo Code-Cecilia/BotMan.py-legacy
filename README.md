@@ -160,15 +160,15 @@ intents = discord.Intents.default()
 
  This enables 24/7 functioning of your bot **without the premium plan**. (pretty cool, huh?)
 
- - Delete `requirements.txt` from the Repl's project files, or rename it to somethign else for the first startup.
+ - Delete `requirements.txt` from the Repl's project files, or rename it to something else for the first startup.
     It kind-of hindered the first setup for me, and I don't know why.
 You can add it later when the first boot is done, and the dependencies are installed automatically and the lock file is in place.
    
  - If you follow the above point, you'll probably find a few Cogs fail to load. If that is the case, install the dependencies one by one via the shell. Requests, AsyncPraw, and Prsaw need to be installed separately, as of the time I am writing this.
  
-- If Replit errors out while installing the dependencies from the lock file, remove what modules that conflict. 
+- If Replit errors out while installing the dependencies from the lock file, remove modules that conflict. 
 
-If you want the bot to function 24/7, you can follow these steps to enable this for free.
+Continuation for 24/7 Replit functioning. You need to follow this step, or it won't work.
 
  - When you run your repl, you'll see a web view pop up. (top-right in most cases). You need to copy the URL of this page.
  - Make an account in [UptimeRobot](https://uptimerobot.com/)
@@ -200,6 +200,7 @@ That's pretty much it.
 python3 main.py
 ```
 4. Enjoy.
+
 # Credits
 
 [CorpNewt](https://github.com/corpnewt) for [CorpBot.py](https://github.com/corpnewt/CorpBot.py), from which I ~~stole~~ got the ideas of quite a few commands from.
