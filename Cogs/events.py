@@ -9,7 +9,6 @@ class Errors(commands.Cog):
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
             await ctx.message.add_reaction("‼️")
-            await ctx.send("Command not found!")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.message.add_reaction("‼️")
             await ctx.send("An argument is missing or invalid. Check the help command for the correct usage..")

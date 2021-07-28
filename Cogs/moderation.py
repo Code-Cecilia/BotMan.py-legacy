@@ -61,59 +61,66 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if misc_checks.is_author(ctx, user):
             return await ctx.send('You cannot mute yourself. Sorry lol')
-
         if misc_checks.is_client(self.bot, user):
             return await ctx.send('I can\'t mute myself, sorry.')
-
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
             with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile, indent=4)
 
         with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
-        mute_role_id = int(data.get('mute_role'))
-
+        mute_role_id = (data.get('mute_role'))
         if mute_role_id is None:
             return await ctx.send('It seems you have not set the mute role. '
                                   'Please ask an administrator to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
-        mute_role = get(ctx.guild.roles, id=mute_role_id)
-        rolelist = [r.id for r in user.roles if r != ctx.guild.default_role]
+        mute_role = get(ctx.guild.roles, id=int(mute_role_id))
+
+        await ctx.send("Adding the mute role now...")
+        try:
+            await user.add_roles(mute_role)
+        except:
+            return await ctx.send(f"Could not add role {str(mute_role.name).replace('@', '')} to {user.mention}. Aborting...")
+
+        roles_embed = discord.Embed(title=f"{user.display_name} has these roles", color=discord.Color.random())
+        for role in user.roles:
+            roles_embed.add_field(name="\ufeff", value=role.mention, inline=True)
+        roles_embed.set_footer(text="Trying to remove these roles now...")
+        await ctx.send(embed=roles_embed)
 
         if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
-            with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
-                json.dump({}, createFile, indent=4)
+            with open(f'./storage/mute_files/guild{ctx.guild.id}.json', "w") as createFile:
+                json.dump({}, createFile)
+        with open(f'./storage/mute_files/guild{ctx.guild.id}.json', "r") as mute_file:
+            mute_data = json.load(mute_file)
 
-        with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
-            data = json.load(mute_file)
-        data[user.id] = list(rolelist)
-        with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as mute_file:
-            json.dump(data, mute_file, indent=4)
+        role_list = []
+        for role in user.roles:
+            if role != mute_role:
+                role_id = str(role.id)
+                role_list.append(role_id)
 
-        for x in rolelist:
-            role = get(ctx.guild.roles, id=int(x))
-            try:  # remove every role one by one
-                await user.remove_roles(role)
+        mute_data[str(user.id)] = role_list
+
+        with open(f'./storage/mute_files/guild{ctx.guild.id}.json', "w") as muteFile:
+            json.dump(mute_data, muteFile)
+
+        for role in user.roles:
+            try:
+                if not role == mute_role:
+                    await user.remove_roles(role)
             except:
-                await ctx.send(f'Could not remove role {role.name} from {user.display_name}...')
-                continue
-
-        await user.add_roles(mute_role)  # add the mute role
-
+                await ctx.send(f"Could not remove role **{str(role.name).replace('@', '')}**. Continuing... ")
         if time_period is not None:
-            final_time_text = time_calc.get_time(time_period)
-            await ctx.send(f'{user.display_name} has been muted for {final_time_text}.')
+            final_time_text = time_calc.time_suffix(time_period)
+            await ctx.send(f"{user.mention} has been hard-muted for {final_time_text}.")
             await asyncio.sleep(time_calc.get_time(time_period))
-            if mute_role not in user.roles:
-                await Moderation.unmute_func(ctx, user)
+            await Moderation.unhardmute_func(self, ctx, user)
         else:
-            await ctx.send(f'{user.display_name} has been hard-muted.')
+            await ctx.send(f"{user.mention} has been hard-muted.")
 
-    @commands.command(name='unmute', description='Unmutes the user mentioned if muted previously.\n'
-                                                 'It also attempts to add roles from before they were hard-muted '
-                                                 '(if they were).\n'
-                                                 'So don\'nt panic if it tries to add roles and fails.')
+    @commands.command(name='unmute', description='Unmutes the user mentioned if muted previously.\n')
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def unmute_func(self, ctx, user: discord.Member):
@@ -132,10 +139,35 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         mute_role_id = int(data.get('mute_role'))
+        mute_role = get(ctx.guild.roles, id=mute_role_id)
+        if mute_role in user.roles:
+            await user.remove_roles(mute_role)
+        await ctx.send(f'{user.display_name} has been unmuted.')
+
+    @commands.command(name="unhardmute", description="Unmutes a user if hard-muted previously.\n"
+                                                     "Adds the roles that the bot took away, and removes the mute role.")
+    @commands.guild_only()
+    @commands.has_permissions(manage_roles=True)
+    async def unhardmute_func(self, ctx, user: discord.Member):
+        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
+            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
+                json.dump({}, createFile, indent=4)
+                # create file if not present
+                print(f'Created file guild{ctx.guild.id}.json in configs...')
+
+        with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
+            data = json.load(jsonFile)
+
+        if data.get('mute_role') is None:
+            return await ctx.send('It seems you have not set the mute role. '
+                                  'Please ask an administrator to set a role as the mute role, '
+                                  'or make one by using the `setmuterole` or `createmuterole` commands.')
+
+        mute_role_id = int(data.get('mute_role'))
 
         mute_role = get(ctx.guild.roles, id=mute_role_id)
 
-        await user.remove_roles(mute_role)
+        await ctx.send(f"Unmuting {user.mention} and re-adding roles...")
 
         with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
             data = json.load(mute_file)
@@ -146,7 +178,9 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                 try:
                     await user.add_roles(actual_role)
                 except:
-                    await ctx.send(f'Could not add role **{actual_role.name}** to **{user.display_name}**')
+                    await ctx.send(
+                        f'Could not add role **{str(actual_role.name).replace("@", "")}** to '
+                        f'**{user.display_name}**. Continuing...')
                     continue
         await user.remove_roles(mute_role)
         await ctx.send(f'{user.display_name} has been unmuted.')
