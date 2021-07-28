@@ -1,4 +1,4 @@
-#  BotMan - A Discord bot made with 💖and Python.
+A Discord bot made with 💖and Python.
 
 ![BotMan Wallpaer Logo thing](./images/botman_logo.png)
 ###### If for some reason you wanted a low-effort BotMan wallpaper, you're welcome.
@@ -208,6 +208,8 @@ python3 main.py
 [YuiiiPTChan](https://github.com/YuiiiPTChan0) for helping me with commands, and agreeing to work on the bot together.
 
 [Discord.py](https://github.com/Rapptz/discord.py) for obvious reasons
+
+[abhinavs](https://github.com/abhinavs/moonwalk) for the GitHub Pages theme
 
 
 And a **LOT** of friends who helped make this bot what it is today. Thanks, guys!
