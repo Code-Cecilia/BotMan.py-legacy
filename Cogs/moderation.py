@@ -1,4 +1,5 @@
 import asyncio
+import re
 
 import discord
 from discord.ext import commands
@@ -81,7 +82,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         try:
             await user.add_roles(mute_role)
         except:
-            return await ctx.send(f"Could not add role {str(mute_role.name).replace('@', '')} to {user.mention}. Aborting...")
+            return await ctx.send(
+                f"Could not add role {str(mute_role.name).replace('@', '')} to {user.mention}. Aborting...")
 
         roles_embed = discord.Embed(title=f"{user.display_name} has these roles", color=discord.Color.random())
         for role in user.roles:
@@ -270,20 +272,31 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
     # unban user.
     @commands.command(name='unban', descriptiob='Unbans a member who is mentioned as argument.\n'
-                                                'Correct format of mentioning the member is `User#1234` **ONLY**.\n'
+                                                'Correct format of mentioning the member is '
+                                                '`User#1234` or the user\'s ID.\n'
                                                 'You need the `Administrator` permission to access this command.')
     @commands.has_permissions(administrator=True)
     @commands.guild_only()
     async def unban(self, ctx, *, member):
-
         banned_users = await ctx.guild.bans()
-        member_name, member_discriminator = member.split("#")
+        regex_user_disc = r"^.+#\d{4}$"  # matching by User#1234
+        if re.match(regex_user_disc, member):
+            member_name, member_discriminator = member.split("#")
+            for ban_entry in banned_users:
+                user = ban_entry.user
+                if (user.name, user.discriminator) == (member_name, member_discriminator):
+                    await ctx.guild.unban(user)
+                    await ctx.send(f'Unbanned {user}!')
 
-        for ban_entry in banned_users:
-            user = ban_entry.user
-            if (user.name, user.discriminator) == (member_name, member_discriminator):
-                await ctx.guild.unban(user)
-                await ctx.send(f'Unbanned {user}!')
+        elif len(member) == 18 or len(member) == 17:  # matching by user ID
+            for ban_entry in banned_users:
+                user = ban_entry.user
+                if user.id == int(member):
+                    await ctx.guild.unban(user)
+                    await ctx.send(f"Unbanned {user}.")
+                    return
+        else:
+            return await ctx.send("Wrong format. use `User#1234` or the user's ID (17/18 digits long).")
 
 
 def setup(bot):

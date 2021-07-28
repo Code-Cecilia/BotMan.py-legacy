@@ -14,7 +14,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         self.hello_last = None
         self.last_lenny = None
 
-    @commands.command(name='eat', description='Eats the person, I guess')
+    @commands.command(name='eat', description='Eat a member, install fear!')
     async def eat_func_actual(self, ctx, user: discord.Member):
         await ctx.send(rand_ass.eat_func(ctx.author, user, self.bot))
 

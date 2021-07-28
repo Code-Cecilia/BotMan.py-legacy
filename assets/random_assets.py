@@ -20,7 +20,8 @@ hug_reactions = ['_{0}_, you try to hug _{1}_, but they run away because they do
                  '_{0}_, you try to hug _{1}_, but they pull out a knife because they think you were gonna mug them.', ]
 
 fart_reactions = ['*farting noises*', 'Toot',
-                  '*Blerrrtttt*', '**no.**', '_ew_']
+                  '*Blerrrtttt*', '**no.**', '_ew_',
+                  'https://tenor.com/view/dance-moves-dancing-singer-groovy-gif-17029825']
 
 ask_answers_list = ['No', 'Yes', 'Maybe', 'Perhaps', 'Why don\'t you wait and see', 'Can\'t say for sure', 'For sure!',
                     'Why not?', '0w0', 'hell naw', 'no, just no.']
