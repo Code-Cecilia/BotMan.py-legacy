@@ -289,12 +289,17 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                     await ctx.send(f'Unbanned {user}!')
 
         elif len(member) == 18 or len(member) == 17:  # matching by user ID
+            found_user = False
             for ban_entry in banned_users:
                 user = ban_entry.user
                 if user.id == int(member):
                     await ctx.guild.unban(user)
                     await ctx.send(f"Unbanned {user}.")
-                    return
+                    found_user = True
+                    break
+            if not found_user:
+                await ctx.send(f"Could not find member with ID **{member}**.")
+
         else:
             return await ctx.send("Wrong format. use `User#1234` or the user's ID (17/18 digits long).")
 
