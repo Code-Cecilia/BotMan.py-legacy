@@ -197,10 +197,16 @@ That's pretty much it.
 
 2. (Very important) `cd` into the directory of the project. (if this is not done, it might break everything that uses the OS module, and maybe a few others)
 
+```
+cd [path to project folder]
+```
+
 3. run this command
+
 ```
 python3 main.py
 ```
+
 4. Enjoy.
 
 # Credits
