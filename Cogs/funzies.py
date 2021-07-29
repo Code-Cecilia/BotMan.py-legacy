@@ -153,7 +153,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         await ctx.send(embed=embed)
 
     @commands.command(name="cookies", aliases=["howmanycookiesdoihave", "howmanycookies"], description="Returns how many cookies the user has.")
-    async def no_of_cookies(self, ctx, user: discord.Member = None):
+    async def no_of_cookies(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author
 
@@ -181,6 +181,8 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
                     json.dump(cookie_data, cookieFile)
                 return await ctx.send("|| I've given you an extra cookie. Don't tell anyone... ||")
         if not misc_checks.is_author(ctx, user):
+            if data_user is None:
+                data_user = 0
             await ctx.send(f"_{user.display_name}_ has {data_user} cookies in their collection.")
 
 
