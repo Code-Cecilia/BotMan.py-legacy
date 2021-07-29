@@ -1,11 +1,13 @@
 import asyncio
 import random
-
+import os
+import json
 import discord
 from discord.ext import commands
 
 from assets import random_assets as rand_ass
 from assets import refine_text
+from assets import misc_checks
 
 
 class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
@@ -13,22 +15,6 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         self.bot = bot
         self.hello_last = None
         self.last_lenny = None
-
-    @commands.command(name='eat', description='Eat a member, install fear!')
-    async def eat_func_actual(self, ctx, user: discord.Member):
-        await ctx.send(rand_ass.eat_func(ctx.author, user, self.bot))
-
-    @commands.command(name='drink', description='Beware, you might spill the user you\'re trying to drink.')
-    async def drink_func(self, ctx, user: discord.Member):
-        await ctx.send(rand_ass.drink_func(ctx.author, user, self.bot))
-
-    @commands.command(name='hug', description='Try hugging yourself.')
-    async def hug_func(self, ctx, user: discord.Member):
-        await ctx.send(rand_ass.hug_func(ctx.author, user, self.bot))
-
-    @commands.command(name='pet', description='Pets whoever you mention. Exceptions may exist.')
-    async def pet_func(self, ctx, user: discord.Member):
-        await ctx.send(rand_ass.pet_func(ctx.author, user, self.bot))
 
     @commands.command(name='fart', description='Does this really need a description?')
     async def fart_func(self, ctx):
@@ -128,6 +114,73 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         embed.add_field(name="Message", value=f"```\n{content}\n```", inline=False)
         embed.set_footer(text=f"Server: {server.name} | Channel: {channel.name}")
         await ctx.send(embed=embed)
+
+    @commands.command(name="cookie", aliases=["biscuit", "feed"], description="Feed a fellow member a cookie!")
+    async def cookie(self, ctx, user: discord.Member):
+
+        if misc_checks.is_author(ctx, user):
+            return await ctx.send(f"_{ctx.author.display_name}_, You give yourself a cookie. This doesn't count to my database. 🤦")
+
+        if misc_checks.is_client(self.bot, user):
+            return await ctx.send(f"_{ctx.author.display_name}_, Thanks for the cookie. If you don't tell anyone, I won't.\n"
+                                  f"Now _gently_ turn around and walk back like nothing happened. "
+                                  f"We don't want people to become suspicious.")
+
+        if not os.path.exists(f"./storage/cookie/{ctx.guild.id}.json"):
+            with open(f"./storage/cookie/{ctx.guild.id}.json", "w") as cookieFile:
+                json.dump({}, cookieFile)
+
+        with open(f"./storage/cookie/{ctx.guild.id}.json", "r") as cookieFile:
+            cookie_data = json.load(cookieFile)
+            data_user = cookie_data.get(str(user.id))
+            if data_user is None:
+                cookie_data[str(user.id)] = 1
+                no_of_cookies = 1
+            else:
+                data_user = int(data_user)
+                cookie_data[str(user.id)] = data_user + 1
+                no_of_cookies = data_user + 1
+
+        with open(f"./storage/cookie/{ctx.guild.id}.json", "w") as cookieFile:
+            json.dump(cookie_data, cookieFile)
+
+            embed = discord.Embed(title=f"{user.display_name}, have a cookie!",
+                                  description=f"Say thanks to {ctx.author.mention}!",
+                                  color=discord.Color.random())
+            embed.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/612050519506026506/870332758348668998/cookie.png")
+            embed.set_footer(text=f"You now have {no_of_cookies} cookies!")
+        await ctx.send(embed=embed)
+
+    @commands.command(name="cookies", aliases=["howmanycookiesdoihave", "howmanycookies"], description="Returns how many cookies the user has.")
+    async def no_of_cookies(self, ctx, user: discord.Member = None):
+        if user is None:
+            user = ctx.author
+
+        if not os.path.exists:
+            with open(f"./storage/cookie/{ctx.guild.id}.json", "w") as cookieFile:
+                json.dump({}, cookieFile)
+
+        with open(f"./storage/cookie/{ctx.guild.id}.json", "r") as cookieFile:
+            cookie_data = json.load(cookieFile)
+            data_user = cookie_data.get(str(user.id))
+
+        if data_user is None:
+            await ctx.send(f"_{user.display_name}_, you haven't gotten cookies from anyone yet. "
+                           f"Don't be sad though, I'll give you one 🍪")
+            cookie_data[str(user.id)] = 1
+            with open(f"./storage/cookie/{ctx.guild.id}.json", "w") as cookieFile:
+                json.dump(cookie_data, cookieFile)
+            return
+        if misc_checks.is_author(ctx, user):
+            await ctx.send(f"_{user.display_name}_, you have {data_user} cookies in your collection.")
+            if random.choice([True, False, False, False]):
+                cookie_data[str(user.id)] = int(data_user) + 1
+                with open(f"./storage/cookie/{ctx.guild.id}.json", "w") as cookieFile:
+                    json.dump(cookie_data, cookieFile)
+                return await ctx.send("|| I've given you an extra cookie. Don't tell anyone... ||")
+        if not misc_checks.is_author(ctx, user):
+            await ctx.send(f"_{user.display_name}_ has {data_user} cookies in their collection.")
 
 
 def setup(bot):
