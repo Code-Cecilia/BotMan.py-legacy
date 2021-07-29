@@ -1,11 +1,7 @@
 {
-  "prefix_list": ["bm-", "Bm-"],
-  "main_prefix": "bm-",
+  "prefix": "bm-",
   "token": "Token here",
   "owner_id": "Owner ID here",
-  "replit": "False",
   "rsa_api_key": "XXXXXXXXXX",
   "currency_api_key": "Currency API key here",
-  "status_link": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-  "bio": "Hello! I am Botman, a bot written in Python by Mahasvan Mohan (github: Mahas1)."
 }
