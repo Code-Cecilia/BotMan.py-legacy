@@ -157,7 +157,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         if user is None:
             user = ctx.author
 
-        if not os.path.exists:
+        if not os.path.exists(f"./storage/cookie/{ctx.guild.id}.json"):
             with open(f"./storage/cookie/{ctx.guild.id}.json", "w") as cookieFile:
                 json.dump({}, cookieFile)
 
