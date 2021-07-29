@@ -165,7 +165,8 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             cookie_data = json.load(cookieFile)
             data_user = cookie_data.get(str(user.id))
 
-        if data_user is None:
+        if data_user is None and misc_checks.is_author(ctx, user):
+
             await ctx.send(f"_{user.display_name}_, you haven't gotten cookies from anyone yet. "
                            f"Don't be sad though, I'll give you one 🍪")
             cookie_data[str(user.id)] = 1
