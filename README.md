@@ -207,7 +207,7 @@ python3 main.py
 
 # Credits
 
-[CorpNewt](https://github.com/corpnewt) for [CorpBot.py](https://github.com/corpnewt/CorpBot.py), from which I ~~stole~~ got the ideas of quite a few commands from.
+[CorpNewt](https://github.com/corpnewt) for [CorpBot.py](https://github.com/corpnewt/CorpBot.py), from which I got the ideas of quite a few commands from.
 
 [YuiiiPTChan](https://github.com/YuiiiPTChan0) for helping me with commands, and agreeing to work on the bot together.
 
@@ -215,8 +215,4 @@ python3 main.py
 
 [abhinavs](https://github.com/abhinavs/moonwalk) for the GitHub Pages theme
 
-
 And a **LOT** of friends who helped make this bot what it is today. Thanks, guys!
-
-
-
