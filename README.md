@@ -68,10 +68,10 @@ When you get the API key, copy and paste it into the `currency_api_key` entry in
 
 A properly set-up config.json looks something like this
 
-```json
+```javascript
 {
   "prefix": "bm-",
-  "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU", 
+  "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU",
   "owner_id": "775176626773950474",
   "rsa_api_key": "XXXXXXXXXX",
   "currency_api_key": "XXXXXXXXXX"
@@ -129,7 +129,7 @@ Fill in the details for your reddit application in `reddit_details.json`.
 
 A properly set-up `reddit_details.json` looks something like this.
 
-```json
+```javascript
 {
   "client_id" : "E3RXXXXXXXjlKzOg",
   "client_secret": "nEdXXXXXXXXXS_9tBYyo1Q",
@@ -149,15 +149,15 @@ If you're going to host your bot on repl.it, these steps can be followed for fea
  - Change the `replit` variable in `main.py` from `False` to `True`.
 
 ```python
-...
-    status_link = details_data['status_link']
+# previous lines
+# status_link = details_data['status_link']
 
-    owner_id = int(details_data['owner_id'])
+# owner_id = int(details_data['owner_id'])
 
-replit = True <-- change
+replit = True   # change this to False or True depending on what you need
 
-intents = discord.Intents.default()
-...
+# intents = discord.Intents.default()
+# continuing lines
 ```
 
  This enables 24/7 functioning of your bot **without the premium plan**. (pretty cool, huh?)
