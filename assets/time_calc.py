@@ -22,9 +22,15 @@ def time_suffix(time):
         if time[-1] == 'd':
             final_thing = str(time)[:-1] + ' days'
         elif time[-1] == 'h':
-            final_thing = str(time)[:-1] + ' hours'
+            if not time[:-1] == '1':
+                final_thing = str(time)[:-1] + ' hours'
+            else:
+                final_thing = str(time)[:-1] + ' hour'
         elif time[-1] == 'm':
-            final_thing = str(time)[:-1] + ' minutes'
+            if not time[:-1] == '1':
+                final_thing = str(time)[:-1] + ' minutes'
+            else:
+                final_thing = str(time)[:-1] + ' minute'
         elif time[-1] == 's':
             if time[:-1] == '1':
                 final_thing = str(time)[:-1] + ' second'
@@ -32,7 +38,7 @@ def time_suffix(time):
                 final_thing = str(time)[:-1] + ' seconds'
         else:
             if time == '1':
-                final_thing = str(time) + ' seconds'
+                final_thing = str(time) + ' second'
             else:
                 final_thing = str(time) + ' seconds'
         return final_thing
