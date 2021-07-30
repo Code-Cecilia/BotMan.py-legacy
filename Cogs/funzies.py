@@ -114,7 +114,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         embed.add_field(
             name="Message", value=f"```\n{content}\n```", inline=False)
         embed.set_footer(
-            text=f"Server: {server.name} | Channel: {channel.name}")
+            text=f"Server: {server.name} • Channel: {channel.name}")
         await ctx.send(embed=embed)
 
     @commands.command(name="cookie", aliases=["biscuit", "feed"], description="Feed a fellow member a cookie!")

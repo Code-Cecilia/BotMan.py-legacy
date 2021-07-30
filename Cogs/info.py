@@ -73,7 +73,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
         if user is None:
             user = ctx.author
         embed = discord.Embed(
-            title=f'Avatar of {user.display_name}'
+            title=f'Avatar of {user.display_name}', colour=user.colour
         ).set_image(url=user.avatar_url)
         await ctx.send(embed=embed)
 
