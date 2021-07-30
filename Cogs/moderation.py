@@ -1,6 +1,5 @@
 import asyncio
 import re
-
 import discord
 from discord.ext import commands
 import json
@@ -85,9 +84,11 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             return await ctx.send(
                 f"Could not add role {str(mute_role.name).replace('@', '')} to {user.mention}. Aborting...")
 
-        roles_embed = discord.Embed(title=f"{user.display_name} has these roles", color=discord.Color.random())
+        roles_embed = discord.Embed(
+            title=f"{user.display_name} has these roles", color=discord.Color.random())
         for role in user.roles:
-            roles_embed.add_field(name="\ufeff", value=role.mention, inline=True)
+            roles_embed.add_field(
+                name="\ufeff", value=role.mention, inline=True)
         roles_embed.set_footer(text="Trying to remove these roles now...")
         await ctx.send(embed=roles_embed)
 

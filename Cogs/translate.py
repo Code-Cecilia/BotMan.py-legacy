@@ -43,7 +43,8 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
         to_translate = " ".join(split_text)
 
         if has_src:
-            result = self.translator.translate(to_translate, src=src_lang, dest=dest_lang)
+            result = self.translator.translate(
+                to_translate, src=src_lang, dest=dest_lang)
         else:
             result = self.translator.translate(to_translate, dest=dest_lang)
 
@@ -52,7 +53,8 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
         to_lang = str(self.lang_dict.get(str(result.dest)).lower()).title()
         final_string = f"{from_lang} --> {to_lang}"
 
-        embed = discord.Embed(title=f"{ctx.author.display_name}, your translation is:", color=discord.Color.random())
+        embed = discord.Embed(
+            title=f"{ctx.author.display_name}, your translation is:", color=discord.Color.random())
         embed.description = result.text
         embed.set_footer(text=f"{final_string} | Requested by {ctx.author}")
         await ctx.send(embed=embed)
@@ -60,7 +62,8 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
     @commands.command(name='langcodes', aliases=['languagecodes', 'listlanguagecodes', 'listlangcodes'],
                       description='List the language codes for use in the translate command.')
     async def get_lang_codes(self, ctx):
-        chunk_list = list(list_funcs.chunks(list(self.lang_code_dict.keys()), 25))
+        chunk_list = list(list_funcs.chunks(
+            list(self.lang_code_dict.keys()), 25))
         try:
             await ctx.author.send("List of language codes")
             await ctx.message.add_reaction("📭")

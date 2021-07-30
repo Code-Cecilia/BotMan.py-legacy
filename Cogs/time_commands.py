@@ -77,7 +77,8 @@ class Time(commands.Cog):
             async with session.get(timezone_link) as response:
                 response_dict = (await response.content.read()).decode('utf-8')
                 response_dict = json.loads(response_dict)
-        if response_dict.get('error') == "unknown location":  # invalid timezones have this entry in the json response
+        # invalid timezones have this entry in the json response
+        if response_dict.get('error') == "unknown location":
             return await ctx.send('Unknown timezone name. Check the `tzlist` command for a list of timezones.\n')
 
         if response_dict.get('datetime') is None:
@@ -119,7 +120,8 @@ class Time(commands.Cog):
         if not re.match(pattern, offset):
             return await ctx.send('Improper offset format. Please read the help command for more info.')
 
-        if not os.path.exists('./storage/time_files/time_offset.json'):  # create file if not exists
+        # create file if not exists
+        if not os.path.exists('./storage/time_files/time_offset.json'):
             with open('./storage/time_files/time_offset.json', 'w') as jsonFile:
                 json.dump({}, jsonFile)
 
@@ -161,7 +163,8 @@ class Time(commands.Cog):
             return await ctx.send('Could not send PM to you. '
                                   'Please check your settings to allow me to send messages to you.')
         for i in chunk_list:
-            embed = discord.Embed(title="List of Available Timezones", color=discord.Color.random())
+            embed = discord.Embed(
+                title="List of Available Timezones", color=discord.Color.random())
             for j in i:
                 embed.add_field(name=j, value="\uFEFF", inline=True)
             await author.send(embed=embed)
@@ -202,7 +205,8 @@ class Time(commands.Cog):
         embed.add_field(name="Weeks since Jan 1", value=week, inline=True)
         embed.add_field(name="Day of the week", value=day_of_week, inline=True)
         embed.add_field(name="Day of the year", value=day_of_year, inline=True)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/250869033669230592/869049832071888916/tenor.gif")
+        embed.set_thumbnail(
+            url="https://cdn.discordapp.com/attachments/250869033669230592/869049832071888916/tenor.gif")
         embed.set_footer(text=f"UTC format: {utc_datetime}")
 
         await ctx.send(embed=embed)

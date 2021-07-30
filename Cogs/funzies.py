@@ -111,18 +111,22 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             color = discord.Color.random()
         embed = discord.Embed(title=f"{author.display_name} sent in #{channel.name}",
                               timestamp=created_at, color=color)
-        embed.add_field(name="Message", value=f"```\n{content}\n```", inline=False)
-        embed.set_footer(text=f"Server: {server.name} | Channel: {channel.name}")
+        embed.add_field(
+            name="Message", value=f"```\n{content}\n```", inline=False)
+        embed.set_footer(
+            text=f"Server: {server.name} • Channel: {channel.name}")
         await ctx.send(embed=embed)
 
     @commands.command(name="cookie", aliases=["biscuit", "feed"], description="Feed a fellow member a cookie!")
     async def cookie(self, ctx, user: discord.Member):
 
         if misc_checks.is_author(ctx, user):
-            return await ctx.send(f"_{ctx.author.display_name}_, You give yourself a cookie. This doesn't count to my database. 🤦")
+            return await ctx.send(f"_{ctx.author.display_name}_, You give yourself a cookie. "
+                                  f"This doesn't count towards my database. 🤦")
 
         if misc_checks.is_client(self.bot, user):
-            return await ctx.send(f"_{ctx.author.display_name}_, Thanks for the cookie. If you don't tell anyone, I won't.\n"
+            return await ctx.send(f"_{ctx.author.display_name}_, Thanks for the cookie. "
+                                  f"If you don't tell anyone, I won't.\n"
                                   f"Now _gently_ turn around and walk back like nothing happened. "
                                   f"We don't want people to become suspicious.")
 
@@ -152,7 +156,8 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             embed.set_footer(text=f"You now have {no_of_cookies} cookies in this server!")
         await ctx.send(embed=embed)
 
-    @commands.command(name="cookies", aliases=["howmanycookiesdoihave", "howmanycookies"], description="Returns how many cookies the user has.")
+    @commands.command(name="cookies", aliases=["howmanycookiesdoihave", "howmanycookies"],
+                      description="Returns how many cookies the user has.")
     async def no_of_cookies(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author

@@ -2,6 +2,6 @@
   "prefix": "bm-",
   "token": "Token here",
   "owner_id": "Owner ID here",
-  "rsa_api_key": "XXXXXXXXXX",
-  "currency_api_key": "Currency API key here",
+  "rsa_api_key": "RSA API key here",
+  "currency_api_key": "Currency API key here"
 }

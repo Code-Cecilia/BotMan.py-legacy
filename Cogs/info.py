@@ -22,7 +22,8 @@ class Info(commands.Cog, description='Returns information about specific aspects
     async def on_message(self, message):
         # check for mentions, and react with a random emoji
         if self.bot.user.mentioned_in(message):
-            reaction = random.choice(random_reactions.reactions_random)  # add a reaction
+            reaction = random.choice(
+                random_reactions.reactions_random)  # add a reaction
             await message.add_reaction(reaction)
             if message.content not in [f'<@{self.bot.user.id}>', f'<@!{self.bot.user.id}>']:
                 return
@@ -72,7 +73,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
         if user is None:
             user = ctx.author
         embed = discord.Embed(
-            title=f'Avatar of {user.display_name}'
+            title=f'Avatar of {user.display_name}', colour=user.colour
         ).set_image(url=user.avatar_url)
         await ctx.send(embed=embed)
 
@@ -177,7 +178,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
 
     @commands.command(name='emojiinfo', description='Returns information about the emoji, passed as argument')
     async def emoji_info(self, ctx, emoji: discord.Emoji):
-        emoji_actual = await ctx.guild.fetch_emoji(int(emoji.id))  # used for the emoji creator coroutine
+        emoji_actual = await ctx.guild.fetch_emoji(int(emoji.id))
         emoji = ctx.author if not emoji else emoji
         emoji_name = emoji.name
         guild = emoji.guild
@@ -187,7 +188,8 @@ class Info(commands.Cog, description='Returns information about specific aspects
         emoji_id = emoji.id
         emoji_url = emoji.url
         try:
-            creator = emoji_actual.user.mention  # emoji.user.mention cannot be used - it returns None
+            # emoji.user.mention cannot be used - it returns None
+            creator = emoji_actual.user.mention
         except AttributeError:
             creator = "Missing Permissions to access this data."
         embed = discord.Embed(
@@ -219,8 +221,10 @@ class Info(commands.Cog, description='Returns information about specific aspects
                               timestamp=ctx.message.created_at)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name='Discord.Py', value=dpyVersion, inline=True)
-        embed.add_field(name='Total Guilds', value=str(serverCount), inline=True)
-        embed.add_field(name='Total Users', value=str(memberCount), inline=True)
+        embed.add_field(name='Total Guilds',
+                        value=str(serverCount), inline=True)
+        embed.add_field(name='Total Users', value=str(
+            memberCount), inline=True)
         embed.add_field(name='Latency', value=str(latency), inline=True)
         embed.add_field(name='Talk to my maker!',
                         value="__[Mahasvan](https://discord.com/users/775176626773950474)__", inline=True)
@@ -232,7 +236,10 @@ class Info(commands.Cog, description='Returns information about specific aspects
                         value=f"__[Link to invite](https://discord.com/oauth2/authorize"
                               f"?client_id={self.bot.user.id}&permissions=4294836215&scope=bot)__",
                         inline=True)
-        embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+        embed.add_field(name="Support Server",
+                        value="__[Link](https://discord.gg/pVEPfA3N3U)__", inline=True)
+        embed.set_footer(
+            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 
