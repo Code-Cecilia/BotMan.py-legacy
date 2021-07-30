@@ -57,12 +57,15 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
         with open(f'./configs/guild{message.guild.id}.json') as jsonFIle:
             data = json.load(jsonFIle)
             if data.get('botchat_channel') is not None:
-                botchat_channel_id = int(data.get('botchat_channel'))  # getting the botchat channel id
+                # getting the botchat channel id
+                botchat_channel_id = int(data.get('botchat_channel'))
             else:
                 botchat_channel_id = data.get('botchat_channel')
-            botchat_channel = self.bot.get_channel(botchat_channel_id)  # getting the botchat channel
+            botchat_channel = self.bot.get_channel(
+                botchat_channel_id)  # getting the botchat channel
             if message.channel == botchat_channel:
-                message_refined = refine_text.remove_mentions(str(message.content))  # remove everyone and here mentions
+                message_refined = refine_text.remove_mentions(
+                    str(message.content))  # remove everyone and here mentions
                 response = await rs.get_ai_response(message=message_refined, language='english')
                 response = response[0]
                 response = response.get('message')
@@ -71,7 +74,8 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
     @commands.command(name='chat', aliases=['botchat'], description='One-time chat command.')
     async def one_time_chat(self, ctx, *, message):
         message_refined = refine_text.remove_mentions(message)
-        response = await rs.get_ai_response(message=message_refined)  # returns a list
+        # returns a list
+        response = await rs.get_ai_response(message=message_refined)
         response = response[0]  # getting the first entry, which is a dict
         # getting the message, which is inside the dict
         response = response.get('message')

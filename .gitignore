@@ -35,6 +35,8 @@ venv.bak/
 .idea
 storage
 storage/mute_files
+storage/time_files
+storage/cookie
 links
 configs
 config.json
