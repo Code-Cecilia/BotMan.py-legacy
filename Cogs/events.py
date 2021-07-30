@@ -12,8 +12,8 @@ class Errors(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if f"<@{self.bot.id}>" in message or f"<@!<{self.bot.id}>" in message:
-            reaction = random.choice(reactions_random)
+        if f"<@{self.bot.user.id}>" in message or f"<@!<{self.bot.user.id}>" in message:
+            reaction = random.choice(reactions_random).strip()
             await message.add_reaction(reaction)
 
         if message.content not in [f'<@{self.bot.user.id}>', f'<@!{self.bot.user.id}>']:
