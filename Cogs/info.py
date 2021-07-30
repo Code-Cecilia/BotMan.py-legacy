@@ -178,7 +178,6 @@ class Info(commands.Cog, description='Returns information about specific aspects
 
     @commands.command(name='emojiinfo', description='Returns information about the emoji, passed as argument')
     async def emoji_info(self, ctx, emoji: discord.Emoji):
-        # used for the emoji creator coroutine
         emoji_actual = await ctx.guild.fetch_emoji(int(emoji.id))
         emoji = ctx.author if not emoji else emoji
         emoji_name = emoji.name
@@ -237,6 +236,8 @@ class Info(commands.Cog, description='Returns information about specific aspects
                         value=f"__[Link to invite](https://discord.com/oauth2/authorize"
                               f"?client_id={self.bot.user.id}&permissions=4294836215&scope=bot)__",
                         inline=True)
+        embed.add_field(name="Support Server",
+                        value="__[Link](https://discord.gg/pVEPfA3N3U)__", inline=True)
         embed.set_footer(
             text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
