@@ -20,6 +20,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     async def mute_func(self, ctx, user: discord.Member, time_period=None):
         try:
             trial_thing = int(time_period[:-1])
+            # throws up valur error if not an integer, so we can catch that and stop the command from executing further
             if time_period[-1] not in ["s", "h", "m"]:
                 return await ctx.send("Error in parsing the time_period argument. "
                                       "The correct format is `[int]h|m|s`\n"

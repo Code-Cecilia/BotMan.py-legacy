@@ -1,10 +1,9 @@
-import json
 import random
 
 import discord
 from discord.ext import commands
 
-from assets import count_lines, time_calc, random_reactions
+from assets import count_lines, time_calc
 
 countlines_responses = ["I am made of _{0}_ lines of python code. Pretty cool, huh?",
                         r"My owner has written _{0}_ lines of code in my brain. I a-a-am ... _glitches out_",
@@ -18,34 +17,6 @@ class Info(commands.Cog, description='Returns information about specific aspects
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        # check for mentions, and react with a random emoji
-        if self.bot.user.mentioned_in(message):
-            reaction = random.choice(
-                random_reactions.reactions_random)  # add a reaction
-            await message.add_reaction(reaction)
-            if message.content not in [f'<@{self.bot.user.id}>', f'<@!{self.bot.user.id}>']:
-                return
-
-            with open('./storage/prefixes.json', 'r') as f:
-                prefixes = json.load(f)
-                prefix_server = prefixes.get(str(message.guild.id))
-
-                if prefix_server is None:
-                    prefix_server = "bm-"
-
-                pre = prefix_server
-
-                if isinstance(pre, list):
-                    pre = pre[0]
-                    """if the prefix object is a list, we specify it as the first entry 
-                    (this happens when the server doesnt have a custom prefix.
-                    we get ['bm-', 'Bm-'] as the output in that case)"""
-
-                await message.channel.send(f'Hello! I am {self.bot.user.name},\n'
-                                           f'The prefix for this server is : `{pre}`, '
-                                           f'and my help command can be accessed using `{pre}help`.')
 
     @commands.command(name='ping', description='Returns the latency in milliseconds.')
     async def ping_command(self, ctx):
