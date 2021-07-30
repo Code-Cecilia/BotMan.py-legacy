@@ -149,7 +149,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
                                   color=discord.Color.random())
             embed.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/612050519506026506/870332758348668998/cookie.png")
-            embed.set_footer(text=f"You now have {no_of_cookies} cookies!")
+            embed.set_footer(text=f"You now have {no_of_cookies} cookies in this server!")
         await ctx.send(embed=embed)
 
     @commands.command(name="cookies", aliases=["howmanycookiesdoihave", "howmanycookies"], description="Returns how many cookies the user has.")
@@ -174,7 +174,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
                 json.dump(cookie_data, cookieFile)
             return
         if misc_checks.is_author(ctx, user):
-            await ctx.send(f"_{user.display_name}_, you have {data_user} cookies in your collection.")
+            await ctx.send(f"_{user.display_name}_, you have {data_user} cookies in your collection in this server.")
             if random.choice([True, False, False, False]):
                 cookie_data[str(user.id)] = int(data_user) + 1
                 with open(f"./storage/cookie/{ctx.guild.id}.json", "w") as cookieFile:
