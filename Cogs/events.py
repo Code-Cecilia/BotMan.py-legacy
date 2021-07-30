@@ -12,7 +12,7 @@ class Errors(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if f"<@{self.bot.user.id}>" in message or f"<@!<{self.bot.user.id}>" in message:
+        if f"<@{self.bot.user.id}>" in message.content or f"<@!<{self.bot.user.id}>" in message.content:
             reaction = random.choice(reactions_random).strip()
             await message.add_reaction(reaction)
 
