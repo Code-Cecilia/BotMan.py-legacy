@@ -18,16 +18,18 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def mute_func(self, ctx, user: discord.Member, time_period=None):
-        try:
-            trial_thing = int(time_period[:-1])
-            # throws up valur error if not an integer, so we can catch that and stop the command from executing further
-            if time_period[-1] not in ["s", "h", "m"]:
-                return await ctx.send("Error in parsing the time_period argument. "
-                                      "The correct format is `[int]h|m|s`\n"
+        if not time_period is None:
+            try:
+                trial_thing = int(time_period[:-1])
+                # throws up valur error if not an integer,
+                # so we can catch that and stop the command from executing further
+                if time_period[-1] not in ["s", "h", "m"]:
+                    return await ctx.send("Error in parsing the time_period argument. "
+                                          "The correct format is `[int]h|m|s`\n"
+                                          f"Example: `{ctx.prefix}mute [user] 5h`")
+            except ValueError:
+                return await ctx.send("Error in parsing the time_period argument. The correct format is `[int]h|m|s`\n"
                                       f"Example: `{ctx.prefix}mute [user] 5h`")
-        except ValueError:
-            return await ctx.send("Error in parsing the time_period argument. The correct format is `[int]h|m|s`\n"
-                                  f"Example: `{ctx.prefix}mute [user] 5h`")
 
         if misc_checks.is_author(ctx, user):
             return await ctx.send('You cannot mute yourself. Sorry lol')
@@ -69,16 +71,16 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def hardmute_func(self, ctx, user: discord.Member, time_period=None):
-
-        try:
-            trial_thing = int(time_period[:-1])
-            if time_period[-1] not in ["s", "h", "m"]:
-                return await ctx.send("Error in parsing the time_period argument. "
-                                      "The correct format is `[int]h|m|s`\n"
+        if not time_period is None:
+            try:
+                trial_thing = int(time_period[:-1])
+                if time_period[-1] not in ["s", "h", "m"]:
+                    return await ctx.send("Error in parsing the time_period argument. "
+                                          "The correct format is `[int]h|m|s`\n"
+                                          f"Example: `{ctx.prefix}hardmute [user] 5h`")
+            except ValueError:
+                return await ctx.send("Error in parsing the time_period argument. The correct format is `[int]h|m|s`\n"
                                       f"Example: `{ctx.prefix}hardmute [user] 5h`")
-        except ValueError:
-            return await ctx.send("Error in parsing the time_period argument. The correct format is `[int]h|m|s`\n"
-                                  f"Example: `{ctx.prefix}hardmute [user] 5h`")
 
         if misc_checks.is_author(ctx, user):
             return await ctx.send('You cannot mute yourself. Sorry lol')
