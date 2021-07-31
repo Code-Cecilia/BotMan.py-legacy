@@ -35,7 +35,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if mute_role_id is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask an administrator to set a role as the mute role, '
+                                  'Please ask a person with the `Manage Server` permission to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         # get the actual mute role from the role's ID
@@ -72,7 +72,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         mute_role_id = (data.get('mute_role'))
         if mute_role_id is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask an administrator to set a role as the mute role, '
+                                  'Please ask a person with the `Manage Server` permission to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         mute_role = get(ctx.guild.roles, id=int(mute_role_id))
@@ -138,7 +138,12 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if data.get('mute_role') is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask an administrator to set a role as the mute role, '
+                                  'Please ask an '
+                                  ''
+                                  ''
+                                  ''
+                                  ''
+                                  ' to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         mute_role_id = int(data.get('mute_role'))
@@ -163,7 +168,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if data.get('mute_role') is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask an administrator to set a role as the mute role, '
+                                  'Please ask a person with the `Manage Server` permission to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         mute_role_id = int(data.get('mute_role'))
@@ -275,8 +280,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.command(name='unban', descriptiob='Unbans a member who is mentioned as argument.\n'
                                                 'Correct format of mentioning the member is '
                                                 '`User#1234` or the user\'s ID.\n'
-                                                'You need the `Administrator` permission to access this command.')
-    @commands.has_permissions(administrator=True)
+                                                'You need the `Ban Members` permission to access this command.')
+    @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def unban(self, ctx, *, member):
         banned_users = await ctx.guild.bans()

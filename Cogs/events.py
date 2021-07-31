@@ -8,7 +8,7 @@ class Errors(commands.Cog):
     @commands.Cog.listener()  # error handling Cog, thanks @YuiiiPTChan
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.message.add_reaction("‼️")
+            pass
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.message.add_reaction("‼️")
             await ctx.send("An argument is missing or invalid. Check the help command for the correct usage..")

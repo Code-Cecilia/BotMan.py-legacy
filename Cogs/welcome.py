@@ -5,7 +5,7 @@ import os
 
 with open('config.json', 'r') as detailsFile:
     details_data = json.load(detailsFile)
-    main_prefix = details_data.get('prefix')
+    prefix = details_data.get('prefix')
 
 
 class Welcome(commands.Cog):
@@ -17,11 +17,11 @@ class Welcome(commands.Cog):
         owner = guild.owner
         try:
             await owner.send(f"Hello, I am {self.bot.user.name}! I was invited to {guild.name} just now.\n"
-                             f"I wanted to let you know that my prefix is `{main_prefix}`, and "
-                             f"my help command can be accessed through `{main_prefix}help`.\n"
+                             f"I wanted to let you know that my prefix is `{prefix}`, and "
+                             f"my help command can be accessed through `{prefix}help`.\n"
                              f"Have a good day ahead!")
         except:
-            print('couldn\'t send message to owner')
+            pass
         if not os.path.exists(f'configs/guild{guild.id}.json'):
             with open(f'configs/guild{guild.id}.json', 'a+') as createFile:
                 json.dump({}, createFile, indent=4)
@@ -29,7 +29,7 @@ class Welcome(commands.Cog):
         with open('./storage/prefixes.json', 'r') as f:
             prefixes = json.load(f)
 
-        prefixes[str(guild.id)] = ['bm-', 'Bm-']
+        prefixes[str(guild.id)] = "bm-"
 
         with open('./storage/prefixes.json', 'w') as f:
             json.dump(prefixes, f, indent=4)
@@ -39,11 +39,12 @@ class Welcome(commands.Cog):
         owner = guild.owner
         try:
             await owner.send(f"Hello, it seems I have been removed from {guild.name}.\n"
-                             f"Your server's config files will be deleted, along with the mute files, and custom prefix.\n"
+                             f"Your server's config files will be deleted, "
+                             f"along with the mute files, and the custom prefix.\n"
                              f"Thank you for having me in your server for this long.\n"
                              f"Until next time!")
         except:
-            print(f'couldn\'t send message to owner of {guild.owner}')
+            pass
         if os.path.exists(f'configs/guild{guild.id}.json'):
             os.remove(f'./configs/guild{guild.id}.json')
 
@@ -83,7 +84,7 @@ class Welcome(commands.Cog):
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
         await welcome_channel.send(f'{member.mention} has left **{member.guild.name}**. Until Next time!')
         if member.bot:
-            await welcome_channel.send('It\'s a bot. Oh, well...')
+            await welcome_channel.send("Oof, it's a bot!")
 
 
 def setup(bot):

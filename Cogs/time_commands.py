@@ -19,6 +19,7 @@ class Time(commands.Cog):
 
     @commands.command(name='time', description='Gets the time from a location, or using the offset. '
                                                'Use the `settz` and `setoffset` commands for setting this up.')
+    @commands.guild_only()
     async def time_user(self, ctx, user: discord.Member = None):
         if user is None:
             user = ctx.author

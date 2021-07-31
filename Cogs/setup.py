@@ -85,7 +85,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
                                                         'in a case where no reason is given.\n'
                                                         'Check the description of the `setup` command '
                                                         'for more information.')
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
     async def set_kick_reason(self, ctx, *, reason):
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
@@ -105,7 +105,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
     @commands.command(name='setmemberrole', description='Used to set the role which is given to every member upon '
                                                         'joining. '
                                                         'Check description of `setup` command for more info.')
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
     async def set_member_role(self, ctx, role: discord.Role):
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
@@ -125,7 +125,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
     @commands.command(name='setmuterole', description='Sets the role assigned to muted people. '
                                                       'Use `createmuterole` for creating a muted role and '
                                                       'automatically setting permissions to every channel.')
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
     async def set_mute_role(self, ctx, role: discord.Role):
         if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
@@ -159,7 +159,7 @@ class Setup(commands.Cog, description='Used to set up the bot for welcome messag
         await Setup.set_mute_role(self, ctx, mutedRole)
 
     @commands.command(name='changeprefix', aliases=['setprefix'], description='Sets the server-specific prefix')
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
     async def change_prefix_func(self, ctx, prefix):
         with open('./storage/prefixes.json', 'r') as f:
