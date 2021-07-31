@@ -37,16 +37,16 @@ class Errors(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             pass
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.message.add_reaction("‼️")
+            await ctx.message.add_reaction("‼️".strip())
             await ctx.send("An argument is missing or invalid. Check the help command for the correct usage..")
         elif isinstance(error, commands.BadArgument):
-            await ctx.message.add_reaction("‼️")
+            await ctx.message.add_reaction("‼️".strip())
             await ctx.send("A bad argument has been passed, please check the context and the needed arguments.")
         elif isinstance(error, commands.NoPrivateMessage):
-            await ctx.message.add_reaction("‼️")
+            await ctx.message.add_reaction("‼️".strip())
             await ctx.send("This command cannot be used in private messages. Please use this command in a server.")
         elif isinstance(error, commands.CheckFailure):
-            await ctx.message.add_reaction("‼️")
+            await ctx.message.add_reaction("‼️".strip())
             await ctx.send("You lack the necessary permissions to use this command.")
         else:
             raise error
