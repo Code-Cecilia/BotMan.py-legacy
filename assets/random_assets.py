@@ -7,8 +7,9 @@ So you leave, with the taste of failure hanging in your mouth.''',
                  '_{0}_, you finish eating _{1}_, and have a long nap, the sign of a good meal.']
 
 pet_reactions = ['_{0}_, you pet _{1}_, as they smile from your petting.',
-                 '_{0}_, you try to pet _{1}_, but they run away',
-                 '_{0}_, you pet _{1}_. They smile from your petting.']
+                 '_{0}_, you try to pet _{1}_, but they hid somewhere.',
+                 '_{0}_, you take your hand near _{1}_, but they bite you.',
+                 '_{0}_, you try petting _{1}_ but then they hiss and run away.']
 
 drink_reactions = ['_{0}_, you pierce {1} with a straw, as they cry out in pain.',
                    '_{0}_, you try to drink _{1}_, but you realize they aren\'t liquid.',
@@ -23,8 +24,8 @@ fart_reactions = ['*farting noises*', 'Toot',
                   '*Blerrrtttt*', '**no.**', '_ew_',
                   'https://tenor.com/view/dance-moves-dancing-singer-groovy-gif-17029825']
 
-ask_answers_list = ['No', 'Yes', 'Maybe', 'Perhaps', 'Why don\'t you wait and see', 'Can\'t say for sure', 'For sure!',
-                    'Why not?', '0w0', 'hell naw', 'no, just no.']
+ask_answers_list = ['No', 'Yes', 'Perhaps' 'Can\'t say for sure', 'For sure!',
+                    'Why not?', 'hell naw', 'no, just no.', 'Definitely 👌']
 
 toss_outcomes = ['Heads', 'Tails', 'Nothing']
 
