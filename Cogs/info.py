@@ -26,7 +26,7 @@ class Info(commands.Cog, description='Returns information about specific aspects
     @commands.command(name="vote", description="Vote for BotMan on top.gg!")
     async def vote_topgg(self, ctx):
         embed = discord.Embed(title=f"{ctx.author.display_name}, you can vote for me here!",
-                              description="__[Link to my (very own) page!](https://top.gg/bot/845225811152732179)__",
+                              description="__[Link to my (very own) page!](https://top.gg/bot/845225811152732179/vote)__",
                               color=discord.Color.random())
         embed.set_footer(text=f"It's the gesture that counts first, so thanks a lot, {ctx.author.name}!")
         await ctx.send(embed=embed)
