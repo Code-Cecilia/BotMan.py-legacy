@@ -60,8 +60,9 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             await ctx.send(f'{user.display_name} has been muted for {final_time_text}.')
             # sleep for specified time, then remove the muted role
             await asyncio.sleep(time_calc.get_time(time_period))
-            await user.remove_roles(mute_role)
-            await ctx.send(f'{user.display_name} has been unmuted.')
+            if mute_role in user.roles:
+                await user.remove_roles(mute_role)
+                await ctx.send(f'{user.display_name} has been unmuted.')
         else:
             await ctx.send(f'{user.display_name} has been muted.')
 
@@ -140,11 +141,15 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                 await ctx.send(f"Could not remove role **{str(role.name).replace('@', '')}**. Continuing... ")
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
-            await ctx.send(f"{user.mention} has been hard-muted for {final_time_text}.")
+            await ctx.send(f"{user.mention} has been hard-muted for {final_time_text}.\n"
+                           f"If you want to un-hardmute them before the specified time, "
+                           f"use the `{ctx.prefix}unhardmute` command.")
             await asyncio.sleep(time_calc.get_time(time_period))
-            await Moderation.unhardmute_func(self, ctx, user)
+            if mute_role in user.roles:
+                await Moderation.unhardmute_func(self, ctx, user)  # if they are unmuted, we dont want to unmute again
         else:
-            await ctx.send(f"{user.mention} has been hard-muted.")
+            await ctx.send(f"{user.mention} has been hard-muted.\n"
+                           f"If you want to un-hardmute the user, use the `{ctx.prefix}unhardmute` command.")
 
     @commands.command(name='unmute', description='Unmutes the user mentioned if muted previously.\n')
     @commands.guild_only()
