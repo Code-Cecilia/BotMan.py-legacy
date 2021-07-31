@@ -17,12 +17,19 @@ class Info(commands.Cog, description='Returns information about specific aspects
     def __init__(self, bot):
         self.bot = bot
 
-
     @commands.command(name='ping', description='Returns the latency in milliseconds.')
     async def ping_command(self, ctx):
         latency = float(self.bot.latency) * 1000
         latency = round(latency, 0)
         await ctx.send(f'Pong! `Latency: {latency}ms`')
+
+    @commands.command(name="vote", description="Vote for BotMan on top.gg!")
+    async def vote_topgg(self, ctx):
+        embed = discord.Embed(title=f"{ctx.author.display_name}, you can vote for me here!",
+                              description="__[Link to my (very own) page!](https://top.gg/bot/845225811152732179)__",
+                              color=discord.Color.random())
+        embed.set_footer(text=f"It's the gesture that counts first, so thanks a lot, {ctx.author.name}!")
+        await ctx.send(embed=embed)
 
     @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
                                                                             'the bot currently has.')
