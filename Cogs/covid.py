@@ -56,7 +56,6 @@ class CoronaTracking(commands.Cog, description="Get Covid-19 stats worldwide, or
             country_flag_url = virus_image_url
             pass
 
-
         if country is None:
             embed = discord.Embed(title="Covid-19 Stats Worldwide",
                                   description=f"Updated **{updated_date}** at **{updated_time} UTC+0**",
