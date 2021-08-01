@@ -11,7 +11,7 @@ def get_time(time):
         return time_final
 
 
-def parse_utc(utc_str):
+def parse_utc(utc_str: str):
     date = utc_str[:10]
     time = utc_str[11:19]
     return date, time
