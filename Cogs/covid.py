@@ -48,12 +48,14 @@ class CoronaTracking(commands.Cog, description="Get Covid-19 stats worldwide, or
         recovered_per_million = response_dict.get("recoveredPerOneMillion")
         critical_per_million = response_dict.get("criticalPerOneMillion")
 
+        virus_image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/SARS-CoV-2_without_background.png"
         country_name = response_dict.get("country")  # not used in worldwide stats
         try:
             country_flag_url = response_dict.get("countryInfo").get("flag")
         except AttributeError:
+            country_flag_url = virus_image_url
             pass
-        virus_image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/SARS-CoV-2_without_background.png"
+
 
         if country is None:
             embed = discord.Embed(title="Covid-19 Stats Worldwide",
