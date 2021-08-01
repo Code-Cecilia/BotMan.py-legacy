@@ -8,18 +8,25 @@ from discord.ext import commands
 from assets import time_calc
 
 
-class CoronaTracking(commands.Cog):
+class CoronaTracking(commands.Cog, description="Get Covid-19 stats worldwide, or for a selected country"):
 
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name="coronastats", aliases=["covidstats"], description="Status of the Corona virus worldwide")
-    async def corona_stats(self, ctx):
-        track_url = "https://disease.sh/v3/covid-19/all"
+    async def corona_stats(self, ctx, country: str = None):
+        if country is None:
+            track_url = "https://disease.sh/v3/covid-19/all"
+        else:
+            track_url = f"https://disease.sh/v3/covid-19/countries/{country}?strict=true"
         async with aiohttp.ClientSession() as session:
             async with session.get(track_url) as response:
                 response_dict = (await response.content.read()).decode('utf-8')
         response_dict = ast.literal_eval(response_dict)
+
+        if response_dict.get("message") == "Country not found or doesn't have any cases":
+            return await ctx.send("Country not found or doesn't have any cases.")
+
         time_unix = response_dict.get("updated") / 1000
         time_utcformat = datetime.datetime.utcfromtimestamp(time_unix)
 
@@ -35,16 +42,28 @@ class CoronaTracking(commands.Cog):
         cases_per_million = response_dict.get("casesPerOneMillion")
         deaths_per_million = response_dict.get("deathsPerOneMillion")
         total_tests = response_dict.get("tests")
-        world_population = response_dict.get("population")
+        population = response_dict.get("population")
         active_per_million = response_dict.get("activePerOneMillion")
         recovered_per_million = response_dict.get("recoveredPerOneMillion")
         critical_per_million = response_dict.get("criticalPerOneMillion")
-        affected_countries = response_dict.get("affectedCountries")
 
-        embed = discord.Embed(title="Covid-19 Stats Worldwide",
-                              description=f"Updated **{updated_date}** at **{updated_time} UTC+0**",
-                              color=discord.Color.dark_red())
-        embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/commons/8/82/SARS-CoV-2_without_background.png")
+        country_name = response_dict.get("country")  # not used in worldwide stats
+        try:
+            country_flag_url = response_dict.get("countryInfo").get("flag")
+        except AttributeError:
+            pass
+        virus_image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/SARS-CoV-2_without_background.png"
+
+        if country is None:
+            embed = discord.Embed(title="Covid-19 Stats Worldwide",
+                                  description=f"Updated **{updated_date}** at **{updated_time} UTC+0**",
+                                  color=discord.Color.dark_red())
+            embed.set_thumbnail(url=virus_image_url)
+        else:
+            embed = discord.Embed(title=f"Covid-19 Stats in {country_name}",
+                                  description=f"Updated **{updated_date}** at **{updated_time} UTC+0**",
+                                  color=discord.Color.dark_red())
+            embed.set_thumbnail(url=country_flag_url)
         embed.add_field(name="Total cases", value=total_cases, inline=True)
         embed.add_field(name="New Cases Today", value=today_cases, inline=True)
         embed.add_field(name="Cases per Million", value=cases_per_million, inline=True)
@@ -65,8 +84,11 @@ class CoronaTracking(commands.Cog):
 
         embed.add_field(name="Total Tests", value=total_tests, inline=True)
 
-        embed.add_field(name="World Population", value=world_population, inline=True)
-        
+        if country is None:
+            embed.add_field(name="World Population", value=population, inline=False)
+        else:
+            embed.add_field(name=f"Population of {country_name}", value=population, inline=False)
+
         embed.set_footer(text=f"Powered by disease.sh")
 
         await ctx.send(embed=embed)
