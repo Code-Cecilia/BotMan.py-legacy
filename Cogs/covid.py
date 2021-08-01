@@ -83,7 +83,7 @@ class CoronaTracking(commands.Cog, description="Get Covid-19 stats worldwide, or
         embed.add_field(name="Recovered Today", value=today_recovered, inline=True)
         embed.add_field(name="Recovered per Million", value=recovered_per_million, inline=True)
 
-        embed.add_field(name="Total Tests", value=total_tests, inline=True)
+        embed.add_field(name="Total Tests", value=total_tests, inline=False)
 
         if country is None:
             embed.add_field(name="World Population", value=population, inline=False)
