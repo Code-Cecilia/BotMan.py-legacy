@@ -88,7 +88,7 @@ class CoronaTracking(commands.Cog, description="Get Covid-19 stats worldwide, or
         if country is None:
             embed.add_field(name="World Population", value=population, inline=False)
         else:
-            embed.add_field(name=f"Population of {country_name}", value=population, inline=False)
+            embed.add_field(name=f"Population of {country_name}", value=population, inline=True)
 
         embed.set_footer(text=f"Powered by disease.sh")
 
