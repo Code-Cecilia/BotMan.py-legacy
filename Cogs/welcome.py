@@ -55,12 +55,12 @@ class Welcome(commands.Cog):
         if os.path.exists(f'./storage/mute_files/guild{guild.id}.json'):
             os.remove(f'./storage/mute_files/guild{guild.id}.json')
 
-        with open('prefixes.json', 'r') as prefixFile:
+        with open('./storage/prefixes.json', 'r') as prefixFile:
             data = json.load(prefixFile)
         if str(guild.id) in data.keys():
             data.pop(str(guild.id))
 
-        with open('prefixes.json', 'w') as prefixFile:
+        with open('./storage/prefixes.json', 'w') as prefixFile:
             json.dump(data, prefixFile)
 
     @commands.Cog.listener()
