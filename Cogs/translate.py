@@ -1,8 +1,8 @@
 import asyncio
 
 import discord
-from discord.ext import commands
 import googletrans
+from discord.ext import commands
 from googletrans import Translator
 
 from assets import list_funcs
@@ -19,12 +19,20 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
 
     @commands.command(name='translate', aliases=['tr'], description='Translate from one language to the other.\n'
                                                                     'Usage: `bm-translate Hola es en` --> '
-                                                                    'translates from spanish to english\n'
+                                                                    'translates from Spanish to English\n'
                                                                     '`bm-translate Hola en` --> '
-                                                                    'translates by detecting the language')
+                                                                    'translates to English by d'
+                                                                    'etecting the source language\n'
+                                                                    '`bm-translate Hola` --> '
+                                                                    'translates by detecting source language '
+                                                                    'and setting the destination language to English')
     async def translate(self, ctx, *, text):
         split_text = text.split()
-        src_lang = split_text[-2].lower()
+        try:
+            src_lang = split_text[-2].lower()
+        except IndexError:
+            src_lang = None
+
         dest_lang = split_text[-1].lower()
 
         if str(src_lang) in self.lang_list:
@@ -33,10 +41,13 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
             has_src = False
 
         if dest_lang not in self.lang_list:
-            return await ctx.send(f"Could not find destination language `{dest_lang}`. "
-                                  f"Use the `langcodes` command for a list of language codes.")
+            dest_lang = "en"
+            has_dest = False
+        else:
+            has_dest = True
 
-        split_text.pop(-1)  # remove destination lang
+        if has_dest:
+            split_text.pop(-1)  # remove destination lang if exists
         if has_src:  # remove source lang if exists
             split_text.pop(-1)
 
