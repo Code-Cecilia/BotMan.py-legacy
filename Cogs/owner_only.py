@@ -1,10 +1,10 @@
+import asyncio
 import os
 import sys
-
-from discord.ext import commands
-import discord
-import asyncio
 import traceback
+
+import discord
+from discord.ext import commands
 
 
 class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
@@ -55,7 +55,7 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
             embed = discord.Embed(
                 title="Reloading cogs!", color=discord.Color.random(), timestamp=ctx.message.created_at)
             ext = f"{cog.lower()}.py"
-            if not os.path.exists(f"./cogs/{ext}"):
+            if not os.path.exists(f"./Cogs/{ext}"):
                 embed.add_field(
                     name=f"Failed to reload: `{ext}`", value="This cog does not exist.", inline=False)
 
