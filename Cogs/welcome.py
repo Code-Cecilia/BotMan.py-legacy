@@ -1,7 +1,8 @@
-from discord.ext import commands
-from discord.utils import get
 import json
 import os
+
+from discord.ext import commands
+from discord.utils import get
 
 with open('config.json', 'r') as detailsFile:
     details_data = json.load(detailsFile)
@@ -19,6 +20,9 @@ class Welcome(commands.Cog):
             await owner.send(f"Hello, I am {self.bot.user.name}! I was invited to {guild.name} just now.\n"
                              f"I wanted to let you know that my prefix is `{prefix}`, and "
                              f"my help command can be accessed through `{prefix}help`.\n"
+                             f"Allow me to invite you to the support server: https://discord.gg/9pYEXybAHH\n"
+                             f"When you can, please leave a review in my top.gg page, "
+                             f"it would really help me maker improve me: https://top.gg/bot/845225811152732179/\n"
                              f"Have a good day ahead!")
         except:
             pass
