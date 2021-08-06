@@ -9,7 +9,6 @@ class TopGG(commands.Cog):
         self.topggtoken = "insert topgg webhook token here"
         if self.topggtoken == "insert topgg webhook token here""insert topgg webhook token here":
             raise ValueError
-            return
         self.bot = bot
         self.bot.topggpy = topgg.DBLClient(self.bot, self.topggtoken)
 
