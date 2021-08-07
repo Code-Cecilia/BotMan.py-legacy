@@ -1,12 +1,14 @@
+import os
+
 import discord
-from discord.ext import commands
 import topgg
+from discord.ext import commands
 
 
 class TopGG(commands.Cog):
 
     def __init__(self, bot):
-        self.topggtoken = "insert topgg webhook token here"
+        self.topggtoken = os.environ["tokggtoken"]
         if self.topggtoken == "insert topgg webhook token here""insert topgg webhook token here":
             raise ValueError
         self.bot = bot
