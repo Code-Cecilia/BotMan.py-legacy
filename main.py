@@ -21,6 +21,7 @@ intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
 intents.members = True
+intents.messages = True
 activity = discord.Streaming(name=f'{prefix}help', url=status_link)
 description = "The coolest python bot ever 😎"
 
