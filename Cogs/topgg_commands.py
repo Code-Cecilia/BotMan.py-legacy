@@ -8,7 +8,7 @@ from discord.ext import commands
 class TopGG(commands.Cog):
 
     def __init__(self, bot):
-        self.topggtoken = os.environ["tokggtoken"]
+        self.topggtoken = os.environ["topggtoken"]
         if self.topggtoken == "insert topgg webhook token here""insert topgg webhook token here":
             raise ValueError
         self.bot = bot
