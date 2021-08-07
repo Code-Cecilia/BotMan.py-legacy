@@ -10,7 +10,7 @@ class TopGG(commands.Cog):
         if self.topggtoken == "insert topgg webhook token here""insert topgg webhook token here":
             raise ValueError
         self.bot = bot
-        self.bot.topggpy = topgg.DBLClient(self.bot, self.topggtoken)
+        self.bot.topggpy = topgg.DBLClient(self.bot, self.topggtoken, autopost=True)
 
     @commands.command(name="getbot", description="Gets information of a bot from top.gg\n"
                                                  "Use the bot's ID as argument.")
