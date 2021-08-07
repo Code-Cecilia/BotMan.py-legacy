@@ -1,9 +1,10 @@
-import discord
-from discord.ext import commands
 import json
 import os
-
 from pathlib import Path
+
+import discord
+from discord.ext import commands
+
 from assets.keep_alive import keep_alive
 
 with open('config.json', 'r') as detailsFile:

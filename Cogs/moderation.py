@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import random
 import re
 
 import discord
@@ -98,6 +99,20 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             return await ctx.send('It seems you have not set the mute role. '
                                   'Please ask a person with the `Manage Server` permission to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
+        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm hard-mute.",
+                              description=f"**{final_otp}**", color=ctx.author.color)
+        embed.set_footer(text="Timeout: 15 seconds")
+        embed_message = await ctx.send(embed=embed)
+        try:
+            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
+            if not str(message_otp.content) == final_otp:
+                return await ctx.send("Incorrect OTP - Aborting...")
+            await embed_message.delete()
+            await message_otp.add_reaction("✅")
+        except asyncio.TimeoutError:
+            return await ctx.send("Timed out - Aborting...")
 
         mute_role = get(ctx.guild.roles, id=int(mute_role_id))
 
@@ -166,12 +181,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if data.get('mute_role') is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask an '
-                                  ''
-                                  ''
-                                  ''
-                                  ''
-                                  ' to set a role as the mute role, '
+                                  'Please ask a person with the `Manage Server` permission '
+                                  'to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         mute_role_id = int(data.get('mute_role'))
@@ -196,7 +207,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if data.get('mute_role') is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask a person with the `Manage Server` permission to set a role as the mute role, '
+                                  'Please ask a person with the `Manage Server` permission '
+                                  'to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         mute_role_id = int(data.get('mute_role'))
@@ -242,6 +254,21 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         if misc_checks.is_client(self.bot, member):
             return await ctx.send('I can\'t ban myself, sorry.')
 
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
+        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm ban.",
+                              description=f"**{final_otp}**", color=ctx.author.color)
+        embed.set_footer(text="Timeout: 15 seconds")
+        embed_message = await ctx.send(embed=embed)
+        try:
+            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
+            if not str(message_otp.content) == final_otp:
+                return await ctx.send("Incorrect OTP - Aborting...")
+            await embed_message.delete()
+            await message_otp.add_reaction("✅")
+        except asyncio.TimeoutError:
+            return await ctx.send("Timed out - Aborting...")
+
         if reason is None:
             if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
                 with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
@@ -261,8 +288,10 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             await member.send(message_to_user)
         except:
             await ctx.send(f'Count not send DM to {member}. Banning anyway...')
-
-        await member.ban(reason=reason)
+        try:
+            await member.ban(reason=reason)
+        except Exception as e:
+            return await ctx.send(f"Failed to ban. reason: `{type(e).__name__}`")
         await ctx.send(f'**{member}** has been banned for **{reason}**.')
 
     # kick user
@@ -279,6 +308,21 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if misc_checks.is_client(self.bot, member):
             return await ctx.send('I can\'t mute kick, sorry.')
+
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
+        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm kick.",
+                              description=f"**{final_otp}**", color=ctx.author.color)
+        embed.set_footer(text="Timeout: 15 seconds")
+        embed_message = await ctx.send(embed=embed)
+        try:
+            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
+            if not str(message_otp.content) == final_otp:
+                return await ctx.send("Incorrect OTP - Aborting...")
+            await embed_message.delete()
+            await message_otp.add_reaction("✅")
+        except asyncio.TimeoutError:
+            return await ctx.send("Timed out - Aborting...")
 
         if reason is None:
             if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
@@ -312,6 +356,22 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
     async def unban(self, ctx, *, member):
+
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
+        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm unban.",
+                              description=f"**{final_otp}**", color=ctx.author.color)
+        embed.set_footer(text="Timeout: 15 seconds")
+        embed_message = await ctx.send(embed=embed)
+        try:
+            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
+            if not str(message_otp.content) == final_otp:
+                return await ctx.send("Incorrect OTP - Aborting...")
+            await embed_message.delete()
+            await message_otp.add_reaction("✅")
+        except asyncio.TimeoutError:
+            return await ctx.send("Timed out - Aborting...")
+
         banned_users = await ctx.guild.bans()
         regex_user_disc = r"^.+#\d{4}$"  # matching by User#1234
         if re.match(regex_user_disc, member):

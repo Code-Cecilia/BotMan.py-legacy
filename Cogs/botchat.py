@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import discord
 from discord.ext import commands
 from prsaw import RandomStuff
@@ -52,15 +53,12 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
                 with open(f'./configs/guild{message.guild.id}.json', 'w') as jsonFile:
                     json.dump({}, jsonFile)
         except AttributeError:
-            return None
-
+            return
         with open(f'./configs/guild{message.guild.id}.json') as jsonFIle:
             data = json.load(jsonFIle)
-            if data.get('botchat_channel') is not None:
-                # getting the botchat channel id
-                botchat_channel_id = int(data.get('botchat_channel'))
-            else:
-                botchat_channel_id = data.get('botchat_channel')
+            botchat_channel_id = int(data.get('botchat_channel'))
+            if data.get('botchat_channel') is None:
+                return
             botchat_channel = self.bot.get_channel(
                 botchat_channel_id)  # getting the botchat channel
             if message.channel == botchat_channel:
@@ -72,10 +70,10 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
                 await botchat_channel.send(response)  # sending the response
 
     @commands.command(name='chat', aliases=['botchat'], description='One-time chat command.')
-    async def one_time_chat(self, ctx, *, message):
-        message_refined = refine_text.remove_mentions(message)
+    async def one_time_chat(self, ctx, *, message: commands.clean_content(fix_channel_mentions=True, use_nicknames=True,
+                                                                          remove_markdown=True)):
         # returns a list
-        response = await rs.get_ai_response(message=message_refined)
+        response = await rs.get_ai_response(message=message)
         response = response[0]  # getting the first entry, which is a dict
         # getting the message, which is inside the dict
         response = response.get('message')

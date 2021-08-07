@@ -26,17 +26,6 @@ class Welcome(commands.Cog):
                              f"Have a good day ahead!")
         except:
             pass
-        if not os.path.exists(f'configs/guild{guild.id}.json'):
-            with open(f'configs/guild{guild.id}.json', 'a+') as createFile:
-                json.dump({}, createFile, indent=4)
-
-        with open('./storage/prefixes.json', 'r') as f:
-            prefixes = json.load(f)
-
-        prefixes[str(guild.id)] = "bm-"
-
-        with open('./storage/prefixes.json', 'w') as f:
-            json.dump(prefixes, f, indent=4)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
@@ -68,6 +57,8 @@ class Welcome(commands.Cog):
         with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
             welcome_channel_id = dict(data).get('welcome_channel')
+            if welcome_channel_id is None:
+                return
             member_role_id = data.get('member_role')
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
         await welcome_channel.send(f'{member.mention} has joined **{member.guild.name}**! Say hi!')
@@ -85,6 +76,8 @@ class Welcome(commands.Cog):
         with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
             welcome_channel_id = dict(data).get('welcome_channel')
+            if welcome_channel_id is None:
+                return
         welcome_channel = self.bot.get_channel(id=int(welcome_channel_id))
         await welcome_channel.send(f'{member.mention} has left **{member.guild.name}**. Until Next time!')
         if member.bot:
