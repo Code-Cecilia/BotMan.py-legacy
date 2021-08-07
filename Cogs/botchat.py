@@ -56,8 +56,9 @@ class BotChat(commands.Cog, description='A Cog to... chat with the bot, i guess?
             return
         with open(f'./configs/guild{message.guild.id}.json') as jsonFIle:
             data = json.load(jsonFIle)
-            botchat_channel_id = int(data.get('botchat_channel'))
-            if data.get('botchat_channel') is None:
+            try:
+                botchat_channel_id = int(data.get('botchat_channel'))
+            except TypeError:
                 return
             botchat_channel = self.bot.get_channel(
                 botchat_channel_id)  # getting the botchat channel
