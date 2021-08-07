@@ -33,10 +33,13 @@ venv.bak/
 
 # ignoring storage folders and config files
 .idea
+
 storage
 storage/mute_files
 storage/time_files
 storage/cookie
+storage/tempText
+
 links
 configs
 config.json
