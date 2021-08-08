@@ -1,5 +1,5 @@
 import json
-
+import os
 import discord
 from discord.ext import commands
 
@@ -33,8 +33,9 @@ class Modlogs(commands.Cog):
         embed.add_field(name="After", value=after.content, inline=False)
         embed.set_footer(text=f"Author  •  {before.author}  |  Edited", icon_url=before.author.avatar_url)
         # the edited timestamp would come in the right, so we dont need to specify it in the footer
-
         message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(before.guild.id))))
+        if message_channel is None:
+            return
         await message_channel.send(embed=embed)
 
     @commands.Cog.listener()
@@ -47,7 +48,8 @@ class Modlogs(commands.Cog):
         # the edited timestamp would come in the right, so we dont need to specify it in the footer
 
         message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(message.guild.id))))
-
+        if message_channel is None:
+            return
         await message_channel.send(embed=embed)
 
     @commands.Cog.listener()
@@ -63,8 +65,11 @@ class Modlogs(commands.Cog):
 
         file = discord.File(f"./storage/tempText/{messages[0].guild.id}.txt")
         message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(messages[0].guild.id))))
+        if message_channel is None:
+            return
         await message_channel.send(file=file, content=f"{len(messages)} messages deleted. "
                                                       f"Sending information as text file.")
+        os.remove(f"./storage/tempText/{messages[0].guild.id}.txt")
 
 
 def setup(bot):
