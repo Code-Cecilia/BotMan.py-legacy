@@ -29,7 +29,9 @@ class Modlogs(commands.Cog):
     # message edit event
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        if self.modlogsFile.get(str(before.guild.id)) is None:
+        message_channel_id = self.modlogsFile.get(str(before.guild.id))
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        if message_channel is None:
             return
         message_link = f"https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id}"
         embed = discord.Embed(title=f"Message edited in {before.channel.name}",
@@ -40,9 +42,6 @@ class Modlogs(commands.Cog):
         embed.set_footer(text=f"Author  •  {before.author}  |  Edited")
         embed.set_thumbnail(url=before.author.avatar_url)
         # the edited timestamp would come in the right, so we dont need to specify it in the footer
-        message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(before.guild.id))))
-        if message_channel is None:
-            return
         await message_channel.send(embed=embed)
 
     # message delete event
@@ -106,16 +105,12 @@ class Modlogs(commands.Cog):
         message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
-        embed = discord.Embed(title=f"{before}'s profile has been updated", description=f"ID: {before.id}",
-                              color=get_color.get_color(after), timestamp=before.created_at)
 
-        if not before.name == after.name:
-            embed.add_field(name="Username", value=f"{before.name} --> {after.name}", inline=False)
-        if not before.discriminator == after.discriminator:
-            embed.add_field(name="Discriminator", value=f"{before.discriminator} --> {after.discriminator}", inline=False)
-        if not before.avatar_url == after.avatar_url:
-            embed.add_field(name="Avatar", value=f"__[Before]({before.avatar_url})__ --> __[After]({after.avatar_url})__",
-                            inline=False)
+        if not (before.color == after.color or before.roles == after.roles or before.nick == after.nick):
+            return
+
+        embed = discord.Embed(title=f"{before}'s server profile has been updated", description=f"ID: {before.id}",
+                              color=get_color.get_color(after), timestamp=before.created_at)
         if not before.color == after.color:
             embed.add_field(name="Color", value=f"{before.color} --> {after.color}", inline=False)
         if not before.nick == after.nick:
@@ -128,6 +123,28 @@ class Modlogs(commands.Cog):
                 after_roles_str += f"{x.mention} "
             embed.add_field(name="Before", value=before_roles_str, inline=False)
             embed.add_field(name="After", value=after_roles_str, inline=False)
+        embed.set_thumbnail(url=after.avatar_url)
+        embed.set_footer(text="Account created at")
+        await message_channel.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_user_update(self, before, after):
+        message_channel_id = self.modlogsFile.get(str(before.guild.id))
+        if message_channel_id is None:
+            return
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        if message_channel is None:
+            return
+        embed = discord.Embed(title=f"{before}'s profile has been updated", description=f"ID: {before.id}",
+                              color=get_color.get_color(after), timestamp=before.created_at)
+        if not before.name == after.name:
+            embed.add_field(name="Username", value=f"{before.name} --> {after.name}", inline=False)
+        if not before.discriminator == after.discriminator:
+            embed.add_field(name="Discriminator", value=f"{before.discriminator} --> {after.discriminator}", inline=False)
+
+        if not (before.name == after.name or before.discriminator == after.discriminator):
+            embed.add_field(name="Avatar", value=f"__[Link]({after.avatar_url})__", inline=False)
+
         embed.set_thumbnail(url=after.avatar_url)
         embed.set_footer(text="Account created at")
         await message_channel.send(embed=embed)
