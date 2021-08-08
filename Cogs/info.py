@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from assets import time_calc
+from assets import time_calc, get_color
 
 
 class Info(commands.Cog, description="Returns information about specific aspects of the server, role, emoji or a user."):
@@ -20,9 +20,8 @@ class Info(commands.Cog, description="Returns information about specific aspects
     async def get_avatar(self, ctx, user: discord.Member = None):
         if user is None:
             user = ctx.author
-        embed = discord.Embed(
-            title=f'Avatar of {user.display_name}', colour=user.colour
-        ).set_image(url=user.avatar_url)
+        embed = discord.Embed(title=f'Avatar of {user.display_name}', colour=get_color.get_color(user))
+        embed.set_image(url=user.avatar_url)
         await ctx.send(embed=embed)
 
     @commands.command(name='serverinfo', description='Returns basic information about the server.')
@@ -97,6 +96,7 @@ class Info(commands.Cog, description="Returns information about specific aspects
     @commands.guild_only()
     async def user_info(self, ctx, user: discord.Member):
         name = user.display_name
+        discriminator = user.discriminator
         color = user.color
         id = user.id
         bot_bool = user.bot
@@ -114,7 +114,7 @@ class Info(commands.Cog, description="Returns information about specific aspects
         embed.set_thumbnail(url=avatar)
         embed.set_footer(
             text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
-        embed.add_field(name='Username', value=str(username), inline=True)
+        embed.add_field(name='Username', value=f"{username}#{discriminator}", inline=True)
         embed.add_field(name='Is a Bot', value=bot_bool)
         embed.add_field(name='Color', value=color, inline=True)
         embed.add_field(name='Account Creation Date',
@@ -139,9 +139,9 @@ class Info(commands.Cog, description="Returns information about specific aspects
             # emoji.user.mention cannot be used - it returns None
             creator = emoji_actual.user.mention
         except AttributeError:
-            creator = "Missing Permissions to access this data."
+            creator = "Insufficient Permissions"
         embed = discord.Embed(
-            title=emoji_name, description=f'ID: {emoji_id}', color=discord.Color.random())
+            title=emoji_name, description=f'ID: {emoji_id}', color=get_color.get_color(ctx.author))
         embed.set_thumbnail(url=emoji_url)
         embed.add_field(name='Source Server', value=guild, inline=True)
         embed.add_field(name='Creator', value=creator, inline=True)
@@ -152,7 +152,7 @@ class Info(commands.Cog, description="Returns information about specific aspects
         embed.add_field(name='Time of creation',
                         value=creation_time, inline=True)
         embed.set_footer(
-            text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
+            text=f'Command requested by {ctx.author}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 

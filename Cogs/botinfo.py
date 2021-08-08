@@ -4,14 +4,7 @@ import time
 import discord
 from discord.ext import commands
 
-from assets import count_lines
-
-countlines_responses = ["I am made of _{0}_ lines of python code. Pretty cool, huh?",
-                        r"My owner has written _{0}_ lines of code in my brain. I a-a-am ... _glitches out_",
-                        "I have _{0}_ lines of python code as my insides. That's pretty cool to me, you know...",
-                        "Oh no! How did _{0}_ lines of python code get inside me? _I'm scared..._",
-                        "I am made of _{0}_ lines of python code. What can I say except 😎",
-                        "Some poor soul wrote _{0}_ lines of python code to give me a life."]
+from assets import count_lines, get_color, random_assets
 
 
 class BotInfo(commands.Cog, description="Information on various aspects of the bot."):
@@ -38,8 +31,9 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
                                                                             'the bot currently has.')
     async def countlines_func(self, ctx):
         lines = count_lines.countlines('./')
-        final_str = random.choice(countlines_responses).format(lines)
-        await ctx.send(final_str)
+        final_str = random.choice(random_assets.countlines_responses).format(lines)
+        embed = discord.Embed(title=final_str, color=get_color.get_color(self.bot.user))
+        await ctx.send(embed=embed)
 
     @commands.command(name='botinfo', aliases=['clientinfo', 'botstats'],
                       description='Returns information about the bot.')
@@ -58,7 +52,8 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         minutes = int(uptime_seconds // 60)
         seconds = int(uptime_seconds % 60)
 
-        embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=discord.Color.random(),
+        embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF',
+                              colour=get_color.get_color(self.bot.user),
                               timestamp=ctx.message.created_at)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name='Discord.Py', value=dpyVersion, inline=True)
@@ -84,15 +79,19 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
             text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command(name="uptime")
+    @commands.command(name="uptime", description="Returns how long I have been awake.")
     async def get_uptime(self, ctx):
         now = time.monotonic()
         uptime_seconds = int(now - self.startTime)
         days = int(uptime_seconds // (3600 * 24))
-        hours = int(uptime_seconds // 3600)
+        hours = int(uptime_seconds // (60 * 60))
         minutes = int(uptime_seconds // 60)
         seconds = int(uptime_seconds % 60)
-        await ctx.send(f"I have been awake for _{days} days, {hours} hours, {minutes} minutes and {seconds} seconds_.")
+        embed = discord.Embed(title="Uptime", description=f"I have been awake for **{days}** days, **{hours}** hours, "
+                                                          f"**{minutes}** minutes and **{seconds}** seconds.",
+                              color=get_color.get_color(self.bot.user))
+        embed.set_footer(text=random.choice(random_assets.uptime_footers))
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
