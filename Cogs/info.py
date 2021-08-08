@@ -1,42 +1,12 @@
-import random
-
 import discord
 from discord.ext import commands
 
-from assets import count_lines, time_calc
-
-countlines_responses = ["I am made of _{0}_ lines of python code. Pretty cool, huh?",
-                        r"My owner has written _{0}_ lines of code in my brain. I a-a-am ... _glitches out_",
-                        "I have _{0}_ lines of python code as my insides. That's pretty cool to me, you know...",
-                        "Oh no! How did _{0}_ lines of python code get inside me? _I'm scared..._",
-                        "I am made of _{0}_ lines of python code. What can I say except 😎"]
+from assets import time_calc
 
 
-class Info(commands.Cog, description='Returns information about specific aspects of the server, bot, or a user.\n'
-                                     r'Maybe does even more, idk. ¯\_(ツ)_/¯'):
+class Info(commands.Cog, description="Returns information about specific aspects of the server, role, emoji or a user."):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.command(name='ping', description='Returns the latency in milliseconds.')
-    async def ping_command(self, ctx):
-        latency = float(self.bot.latency) * 1000
-        latency = round(latency, 0)
-        await ctx.send(f'Pong! `Latency: {latency}ms`')
-
-    @commands.command(name="vote", description="Vote for BotMan on top.gg!")
-    async def vote_topgg(self, ctx):
-        embed = discord.Embed(title=f"{ctx.author.display_name}, you can vote for me here!",
-                              description="__[Link to my (very own) page!](https://top.gg/bot/845225811152732179/vote)__",
-                              color=discord.Color.random())
-        embed.set_footer(text=f"It's the gesture that counts first, so thanks a lot, {ctx.author.name}!")
-        await ctx.send(embed=embed)
-
-    @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
-                                                                            'the bot currently has.')
-    async def countlines_func(self, ctx):
-        lines = count_lines.countlines('./')
-        final_str = random.choice(countlines_responses).format(lines)
-        await ctx.send(final_str)
 
     @commands.command(name='userid', description='Returns the User\'s ID mentioned. '
                                                  'Returns author\'s ID if no argument is given.')
@@ -183,41 +153,6 @@ class Info(commands.Cog, description='Returns information about specific aspects
                         value=creation_time, inline=True)
         embed.set_footer(
             text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
-        await ctx.send(embed=embed)
-
-    @commands.command(name='botinfo', aliases=['clientinfo', 'botstats'],
-                      description='Returns information about the bot.')
-    async def stats(self, ctx):
-        dpyVersion = f"Version {discord.__version__}"
-        serverCount = len(self.bot.guilds)
-        memberCount = len(set(self.bot.get_all_members()))
-        latency = float(self.bot.latency) * 1000
-        latency = f"{round(latency, 0)} ms"
-        source = "__[Github](https://github.com/Code-Cecilia/BotMan.py)__"
-        guren = f"__[Guren Ichinose](https://github.com/Code-Cecilia/Guren)__"
-        embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF', colour=discord.Color.random(),
-                              timestamp=ctx.message.created_at)
-        embed.set_thumbnail(url=self.bot.user.avatar_url)
-        embed.add_field(name='Discord.Py', value=dpyVersion, inline=True)
-        embed.add_field(name='Total Guilds',
-                        value=str(serverCount), inline=True)
-        embed.add_field(name='Total Users', value=str(
-            memberCount), inline=True)
-        embed.add_field(name='Latency', value=str(latency), inline=True)
-        embed.add_field(name='Talk to my maker!',
-                        value="__[Mahasvan](https://discord.com/users/775176626773950474)__", inline=True)
-        embed.add_field(name="Source", value=source, inline=True)
-        embed.add_field(name="Sibling Bot", value=guren, inline=True)
-        embed.add_field(name="Found an issue?",
-                        value="__[Report Here!](https://github.com/Code-Cecilia/BotMan.py/issues)__", inline=True)
-        embed.add_field(name='Invite Me!',
-                        value=f"__[Link to invite](https://discord.com/oauth2/authorize"
-                              f"?client_id={self.bot.user.id}&permissions=4294836215&scope=bot)__",
-                        inline=True)
-        embed.add_field(name="Support Server",
-                        value="__[Link](https://discord.gg/pVEPfA3N3U)__", inline=True)
-        embed.set_footer(
-            text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 
