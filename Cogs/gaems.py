@@ -62,9 +62,8 @@ class Gaems(commands.Cog, description="A collection of games. "
         async with aiohttp.ClientSession() as session:
             async with session.get("https://opentdb.com/api.php?amount=1") as x:
                 response = (await x.content.read()).decode("utf-8")
-                print(response)
                 response = json.loads(response)
-        print(response.get("response_code"))
+
         if not response.get("response_code") == 0:
             return
 
@@ -77,7 +76,6 @@ class Gaems(commands.Cog, description="A collection of games. "
         answers = wrong_ans_list
         answers.append(correctans)
 
-        print(correctans)
         random.shuffle(answers)
         correctans_index = list(answers).index(correctans) + 1
 
