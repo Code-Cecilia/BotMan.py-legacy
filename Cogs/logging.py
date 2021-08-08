@@ -106,9 +106,6 @@ class Modlogs(commands.Cog):
         if message_channel is None:
             return
 
-        if not before.color != after.color or not before.roles != after.roles or not before.nick != after.nick:
-            return
-
         embed = discord.Embed(title=f"{before}'s server profile has been updated", description=f"ID: {before.id}",
                               color=get_color.get_color(after), timestamp=before.created_at)
         if not before.color == after.color:
