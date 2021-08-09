@@ -47,10 +47,9 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         guren = f"__[Guren Ichinose](https://github.com/Code-Cecilia/Guren)__"
         now = time.monotonic()
         uptime_seconds = int(now - self.startTime)
-        days = int(uptime_seconds // (3600 * 24))
-        hours = int(uptime_seconds // 3600)
-        minutes = int(uptime_seconds // 60)
-        seconds = int(uptime_seconds % 60)
+        m, s = divmod(uptime_seconds, 60)
+        h, m = divmod(m, 60)
+        d, h = divmod(h, 24)
 
         embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF',
                               colour=get_color.get_color(self.bot.user),
@@ -62,7 +61,7 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         embed.add_field(name='Total Users', value=str(
             memberCount), inline=True)
         embed.add_field(name='Latency', value=str(latency), inline=True)
-        embed.add_field(name="Uptime", value=f"{days}d, {hours}h, {minutes}m, {seconds}s", inline=True)
+        embed.add_field(name="Uptime", value=f"{d}d, {h}h, {m}m, {s}s", inline=True)
         embed.add_field(name='Talk to my maker!',
                         value="__[Mahasvan](https://discord.com/users/775176626773950474)__", inline=True)
         embed.add_field(name="Source", value=source, inline=True)
@@ -83,12 +82,11 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
     async def get_uptime(self, ctx):
         now = time.monotonic()
         uptime_seconds = int(now - self.startTime)
-        days = int(uptime_seconds // (3600 * 24))
-        hours = int(uptime_seconds // (60 * 60))
-        minutes = int(uptime_seconds // 60)
-        seconds = int(uptime_seconds % 60)
-        embed = discord.Embed(title="Uptime", description=f"I have been awake for **{days}** days, **{hours}** hours, "
-                                                          f"**{minutes}** minutes and **{seconds}** seconds.",
+        m, s = divmod(uptime_seconds, 60)
+        h, m = divmod(m, 60)
+        d, h = divmod(h, 24)
+        embed = discord.Embed(title="Uptime", description=f"I have been awake for **{d}** days, **{h}** hours, "
+                                                          f"**{m}** minutes and **{s}** seconds.",
                               color=get_color.get_color(self.bot.user))
         embed.set_footer(text=random.choice(random_assets.uptime_footers))
         await ctx.send(embed=embed)
