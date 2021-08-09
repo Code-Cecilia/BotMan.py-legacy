@@ -42,7 +42,10 @@ class Modlogs(commands.Cog):
         embed.set_footer(text=f"Author  •  {before.author}  |  Edited")
         embed.set_thumbnail(url=before.author.avatar_url)
         # the edited timestamp would come in the right, so we dont need to specify it in the footer
-        await message_channel.send(embed=embed)
+        try:
+            await message_channel.send(embed=embed)
+        except:  # embeds dont have a message.content, so it gives us an error
+            pass
 
     # message delete event
     @commands.Cog.listener()
