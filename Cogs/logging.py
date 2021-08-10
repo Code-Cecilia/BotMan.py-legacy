@@ -52,14 +52,18 @@ class Modlogs(commands.Cog):
     # message delete event
     @commands.Cog.listener()
     async def on_message_delete(self, message):
+        message_channel_id = self.modlogsFile.get(str(message.guild.id))
+        if message_channel_id is None:
+            return
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
+        if message_channel is None:
+            return
         embed = discord.Embed(title=f"Message deleted in {message.channel.name}",
                               color=get_color.get_color(message.author), timestamp=message.created_at)
         embed.add_field(name="Content", value=message.content, inline=False)
         embed.set_footer(text=f"Author  •  {message.author}  |  Created")
         embed.set_thumbnail(url=message.author.avatar_url)
         # the edited timestamp would come in the right, so we dont need to specify it in the footer
-
-        message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(message.guild.id))))
         if message_channel is None:
             return
         try:
@@ -70,9 +74,10 @@ class Modlogs(commands.Cog):
     # bulk delete event
     @commands.Cog.listener()
     async def on_bulk_message_delete(self, messages):
-        if self.modlogsFile.get(str(messages[0].guild.id)) is None:
+        message_channel_id = (self.modlogsFile.get(str(messages[0].guild.id)))
+        if message_channel_id is None:
             return
-        message_channel = self.bot.get_channel(id=int(self.modlogsFile.get(str(messages[0].guild.id))))
+        message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
         with open(f"./storage/tempText/{messages[0].guild.id}.txt", "w") as temp_textfile:
@@ -152,7 +157,7 @@ class Modlogs(commands.Cog):
 
     # join event
     @commands.Cog.listener()
-    async def on_member_join(self, guild, member: discord.Member):
+    async def on_member_join(self, guild, member):
         message_channel_id = self.modlogsFile.get(str(guild.id))
         if message_channel_id is None:
             return
