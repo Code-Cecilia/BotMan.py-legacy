@@ -30,6 +30,8 @@ class Modlogs(commands.Cog):
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         message_channel_id = self.modlogsFile.get(str(before.guild.id))
+        if message_channel_id is None:
+            return
         message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
@@ -50,7 +52,6 @@ class Modlogs(commands.Cog):
     # message delete event
     @commands.Cog.listener()
     async def on_message_delete(self, message):
-
         embed = discord.Embed(title=f"Message deleted in {message.channel.name}",
                               color=get_color.get_color(message.author), timestamp=message.created_at)
         embed.add_field(name="Content", value=message.content, inline=False)
@@ -109,23 +110,29 @@ class Modlogs(commands.Cog):
         if message_channel is None:
             return
 
-        embed = discord.Embed(title=f"{before}'s server profile has been updated", description=f"ID: {before.id}",
-                              color=get_color.get_color(after), timestamp=before.created_at)
-        if not before.color == after.color:
-            embed.add_field(name="Color", value=f"{before.color} --> {after.color}", inline=False)
         if not before.nick == after.nick:
-            embed.add_field(name="Nickname", value=f"{before.nick} --> {after.nick}", inline=False)
+            embed = discord.Embed(title=f"{before}'s nickname has been updated", description=f"ID: {before.id}",
+                                  color=get_color.get_color(after), timestamp=before.created_at)
+
+            embed.add_field(name="Before", value=before.nick, inline=False)
+            embed.add_field(name="After", value=after.nick, inline=False)
+
+            embed.set_thumbnail(url=after.avatar_url)
+            embed.set_footer(text="Account created at")
+            await message_channel.send(embed=embed)
         if not before.roles == after.roles:
+            embed = discord.Embed(title=f"{before}'s roles have been updated", description=f"ID: {before.id}",
+                                  color=after.color, timestamp=before.created_at)
             before_roles_str, after_roles_str = "", ""
-            for x in before.roles:
+            for x in before.roles[::-1]:
                 before_roles_str += f"{x.mention} "
-            for x in after.roles:
+            for x in after.roles[::-1]:
                 after_roles_str += f"{x.mention} "
             embed.add_field(name="Before", value=before_roles_str, inline=False)
             embed.add_field(name="After", value=after_roles_str, inline=False)
-        embed.set_thumbnail(url=after.avatar_url)
-        embed.set_footer(text="Account created at")
-        await message_channel.send(embed=embed)
+            embed.set_thumbnail(url=after.avatar_url)
+            embed.set_footer(text="Account created at")
+            await message_channel.send(embed=embed)
 
     # unban event
     @commands.Cog.listener()
