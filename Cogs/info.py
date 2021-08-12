@@ -4,7 +4,8 @@ from discord.ext import commands
 from assets import time_calc, get_color
 
 
-class Info(commands.Cog, description="Returns information about specific aspects of the server, role, emoji or a user."):
+class Info(commands.Cog,
+           description="Returns information about specific aspects of the server, role, emoji or a user."):
     def __init__(self, bot):
         self.bot = bot
 
@@ -24,9 +25,12 @@ class Info(commands.Cog, description="Returns information about specific aspects
         embed.set_image(url=user.avatar_url)
         await ctx.send(embed=embed)
 
-    @commands.command(name='serverinfo', description='Returns basic information about the server.')
+    @commands.command(name='serverinfo', description='Returns basic information about the server.\n'
+                                                     'Add "features" to the command as an argument '
+                                                     'to see a list of special features of this server.\n'
+                                                     'More features will be added with time.')
     @commands.guild_only()
-    async def serverinfo(self, ctx):
+    async def serverinfo(self, ctx, *args):
         bots_count = len([bot.mention for bot in ctx.guild.members if bot.bot])
         channels_list = "{:,} text, {:,} voice".format(
             len(ctx.guild.text_channels), len(ctx.guild.voice_channels))
@@ -38,7 +42,7 @@ class Info(commands.Cog, description="Returns information about specific aspects
         embed.set_thumbnail(url=ctx.guild.icon_url)
         embed.add_field(name='Owner', value=ctx.guild.owner.mention, inline=True)
         embed.add_field(name='Members', value=ctx.guild.member_count, inline=True)
-        embed.add_field(name='No. of roles', value=str(len(ctx.guild.roles)-1), inline=True)
+        embed.add_field(name='No. of roles', value=str(len(ctx.guild.roles) - 1), inline=True)
         embed.add_field(name='Date of creation',
                         value=str(created_date), inline=True)
         embed.add_field(name='Time of creation',
@@ -46,7 +50,10 @@ class Info(commands.Cog, description="Returns information about specific aspects
         embed.add_field(name='Channel Categories',
                         value=str(len(list(ctx.guild.categories))), inline=True)
         embed.add_field(name='Channels', value=str(channels_list), inline=True)
-        embed.add_field(name='Booster Role', value=ctx.guild.premium_subscriber_role.mention, inline=True)
+        try:
+            embed.add_field(name='Booster Role', value=ctx.guild.premium_subscriber_role.mention, inline=True)
+        except AttributeError:
+            embed.add_field(name="Booster Role", value="No Role", inline=True)
         embed.add_field(name='Boost Tier', value=f'Tier {ctx.guild.premium_tier}')
         embed.add_field(name='No. of Boosts', value=ctx.guild.premium_subscription_count)
         embed.add_field(name='Emojis', value=str(len(ctx.guild.emojis)), inline=True)
@@ -57,6 +64,20 @@ class Info(commands.Cog, description="Returns information about specific aspects
         embed.set_footer(
             text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
+        print(ctx.guild.features)
+
+        if "features" in args or "feature" in args:
+            feature_string = ""
+            if len(ctx.guild.features) == 0:
+                embed_features = discord.Embed(title=f"{ctx.guild.name} does not have any special features",
+                                               color=embed.color)
+                return await ctx.send(embed=embed_features)
+            for feature in ctx.guild.features:
+                new_str = str(feature).replace("_", " ").title()
+                feature_string += new_str + "\n"
+            embed_features = discord.Embed(title=f"{ctx.guild.name}'s Special Features",
+                                           description=feature_string, color=embed.color)
+            await ctx.send(embed=embed_features)
 
     @commands.command(name='roleinfo', description='Returns basic information about the role mentioned as argument.')
     @commands.guild_only()
