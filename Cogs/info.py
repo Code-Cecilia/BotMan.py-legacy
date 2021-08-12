@@ -29,7 +29,7 @@ class Info(commands.Cog, description="Returns information about specific aspects
     async def serverinfo(self, ctx):
         guild_name = ctx.guild.name
         guild_id = ctx.guild.id
-        owner = str(ctx.guild.owner.name)
+        owner = str(ctx.guild.owner.mention)
         description = f'Server ID: {guild_id}'
         thumb_url = str(ctx.guild.icon_url)
         banner_url = ctx.guild.banner_url
