@@ -32,6 +32,7 @@ class Info(commands.Cog, description="Returns information about specific aspects
         owner = str(ctx.guild.owner.name)
         description = f'Server ID: {guild_id}'
         thumb_url = str(ctx.guild.icon_url)
+        banner_url = ctx.guild.banner_url
         role_count = str(len(ctx.guild.roles) - 1)
         bots_count = len([bot.mention for bot in ctx.guild.members if bot.bot])
         categories_list = len(list(ctx.guild.categories))
@@ -63,6 +64,9 @@ class Info(commands.Cog, description="Returns information about specific aspects
         embed.add_field(name='No. of Boosts', value=boost_count)
         embed.add_field(name='Emojis', value=str(emojis_count), inline=True)
         embed.add_field(name='Bots', value=str(bots_count))
+        if not str(banner_url) == "":
+            embed.add_field(name="Banner", value="Banner below!", inline=False)
+            embed.set_image(url=banner_url)
         embed.set_footer(
             text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
