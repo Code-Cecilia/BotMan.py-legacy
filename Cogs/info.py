@@ -27,46 +27,33 @@ class Info(commands.Cog, description="Returns information about specific aspects
     @commands.command(name='serverinfo', description='Returns basic information about the server.')
     @commands.guild_only()
     async def serverinfo(self, ctx):
-        guild_name = ctx.guild.name
-        guild_id = ctx.guild.id
-        owner = str(ctx.guild.owner.mention)
-        description = f'Server ID: {guild_id}'
-        thumb_url = str(ctx.guild.icon_url)
-        banner_url = ctx.guild.banner_url
-        role_count = str(len(ctx.guild.roles) - 1)
         bots_count = len([bot.mention for bot in ctx.guild.members if bot.bot])
-        categories_list = len(list(ctx.guild.categories))
         channels_list = "{:,} text, {:,} voice".format(
             len(ctx.guild.text_channels), len(ctx.guild.voice_channels))
-        created_details = ctx.guild.created_at
-        created_date, created_time = time_calc.parse_utc(str(created_details))
-        members = ctx.guild.member_count
-        emojis_count = len(ctx.guild.emojis)
-        booster_role = str(ctx.guild.premium_subscriber_role)
-        boost_tier = str(ctx.guild.premium_tier)
-        boost_count = str(ctx.guild.premium_subscription_count)
+        created_date, created_time = time_calc.parse_utc(str(ctx.guild.created_at))
 
-        embed = discord.Embed(title=guild_name, description=description, timestamp=ctx.message.created_at,
+        embed = discord.Embed(title=ctx.guild.name, description=f'Server ID: {ctx.guild.id}',
+                              timestamp=ctx.message.created_at,
                               color=discord.Color.random())
-        embed.set_thumbnail(url=thumb_url)
-        embed.add_field(name='Owner', value=owner, inline=True)
-        embed.add_field(name='Members', value=members, inline=True)
-        embed.add_field(name='No. of roles', value=role_count, inline=True)
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.add_field(name='Owner', value=ctx.guild.owner.mention, inline=True)
+        embed.add_field(name='Members', value=ctx.guild.member_count, inline=True)
+        embed.add_field(name='No. of roles', value=str(len(ctx.guild.roles)-1), inline=True)
         embed.add_field(name='Date of creation',
                         value=str(created_date), inline=True)
         embed.add_field(name='Time of creation',
                         value=str(created_time), inline=True)
         embed.add_field(name='Channel Categories',
-                        value=str(categories_list), inline=True)
+                        value=str(len(list(ctx.guild.categories))), inline=True)
         embed.add_field(name='Channels', value=str(channels_list), inline=True)
-        embed.add_field(name='Booster Role', value=booster_role, inline=True)
-        embed.add_field(name='Boost Tier', value=f'Tier {boost_tier}')
-        embed.add_field(name='No. of Boosts', value=boost_count)
-        embed.add_field(name='Emojis', value=str(emojis_count), inline=True)
+        embed.add_field(name='Booster Role', value=ctx.guild.premium_subscriber_role.mention, inline=True)
+        embed.add_field(name='Boost Tier', value=f'Tier {ctx.guild.premium_tier}')
+        embed.add_field(name='No. of Boosts', value=ctx.guild.premium_subscription_count)
+        embed.add_field(name='Emojis', value=str(len(ctx.guild.emojis)), inline=True)
         embed.add_field(name='Bots', value=str(bots_count))
-        if not str(banner_url) == "":
+        if not str(ctx.guild.banner_url) == "":
             embed.add_field(name="Banner", value="Banner below!", inline=False)
-            embed.set_image(url=banner_url)
+            embed.set_image(url=ctx.guild.banner_url)
         embed.set_footer(
             text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
