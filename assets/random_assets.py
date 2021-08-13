@@ -35,7 +35,7 @@ uptime_footers = ["I'm tired. I need coffee.", "Man, being a bot is a tiring job
 countlines_responses = ["I am made of _{0}_ lines of python code. Pretty cool, huh?",
                         r"My owner has written _{0}_ lines of code in my brain. I a-a-am ... _glitches out_",
                         "I have _{0}_ lines of python code as my insides. That's pretty cool to me, you know...",
-                        "Oh no! How did _{0}_ lines of python code get inside me? _I'm scared..._",
+                        "Oh no! How did _{0}_ lines of python code get inside me?\n_I'm scared..._",
                         "I am made of _{0}_ lines of python code. What can I say except 😎",
                         "Some poor soul wrote _{0}_ lines of python code to give me a life. I hope he's okay"]
 

@@ -9,7 +9,7 @@ from discord.ext import commands
 from assets import get_color
 
 
-class Modlogs(commands.Cog):
+class Logging(commands.Cog, description="Keep a track of what members do in your server with this category."):
     def __init__(self, bot):
         self.bot = bot
         with open("./storage/modlogs_channels.json", "r") as modlogsFile:
@@ -184,7 +184,7 @@ class Modlogs(commands.Cog):
         embed = discord.Embed(title=f"Member {member} left from the server.", color=member.color,
                               timestamp=datetime.datetime.utcnow(),
                               description=f"**Their account was created at:** {member.created_at}")
-        embed.add_field(name="Their roles:", value=" ".join(
+        embed.add_field(name="Their roles", value=" ".join(
             [role.mention for role in roles]))
         embed.set_footer(text=f"Left at")
         embed.set_thumbnail(url=member.avatar_url)
@@ -192,4 +192,4 @@ class Modlogs(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Modlogs(bot))
+    bot.add_cog(Logging(bot))

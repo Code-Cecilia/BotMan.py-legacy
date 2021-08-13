@@ -1,10 +1,14 @@
 import json
 import os
+import random
 from pathlib import Path
 
 import discord
+import discord_slash
 from discord.ext import commands
 
+from Cogs import botinfo
+from assets import count_lines, random_assets, get_color
 from assets.keep_alive import keep_alive
 
 with open('config.json', 'r') as detailsFile:
@@ -66,6 +70,34 @@ bot.cwd = cwd
 @bot.event
 async def on_ready():
     print(f'{bot.user} is online!')
+
+
+# slash commands
+slash = discord_slash.SlashCommand(client=bot, sync_commands=True)
+botinfo = botinfo.BotInfo(bot)
+
+
+@slash.slash(name="ping", description="Returns the latency of the bot.")
+async def ping(ctx):
+    latency = float(bot.latency) * 1000
+    latency = round(latency, 2)
+    await ctx.send(f'Pong! `Latency: {latency}ms`')
+
+
+@slash.slash(name="vote", description="Vote for me on top.gg!")
+async def vote_topgg(ctx):
+    embed = discord.Embed(title=f"{ctx.author.display_name}, you can vote for me here!",
+                          description="https://top.gg/bot/845225811152732179/vote",
+                          color=discord.Color.random())
+    await ctx.send(embed=embed)
+
+
+@slash.slash(name='countlines', description='Counts the number of lines of python code the bot currently has.')
+async def countlines_func(ctx):
+    lines = count_lines.countlines('./')
+    final_str = random.choice(random_assets.countlines_responses).format(lines)
+    embed = discord.Embed(title=final_str, color=get_color.get_color(bot.user))
+    await ctx.send(embed=embed)
 
 
 if __name__ == '__main__':

@@ -52,7 +52,7 @@ class Info(commands.Cog,
         embed.add_field(name='Channels', value=str(channels_list), inline=True)
         try:
             embed.add_field(name='Booster Role', value=ctx.guild.premium_subscriber_role.mention, inline=True)
-        except AttributeError:
+        except AttributeError:  # if no boost role, it gives a None value
             embed.add_field(name="Booster Role", value="No Role", inline=True)
         embed.add_field(name='Boost Tier', value=f'Tier {ctx.guild.premium_tier}')
         embed.add_field(name='No. of Boosts', value=ctx.guild.premium_subscription_count)
