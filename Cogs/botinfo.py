@@ -69,8 +69,8 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         embed.add_field(name="Found an issue?",
                         value="__[Report Here!](https://github.com/Code-Cecilia/BotMan.py/issues)__", inline=True)
         embed.add_field(name='Invite Me!',
-                        value=f"__[Link to invite](https://discord.com/oauth2/authorize"
-                              f"?client_id={self.bot.user.id}&permissions=4294836215&scope=bot)__",
+                        value=f"__[Link to invite](https://discord.com/api/oauth2/authorize?client_id"
+                              f"=848529420716867625&permissions=261993005047&scope=applications.commands%20bot)__",
                         inline=True)
         embed.add_field(name="Support Server",
                         value="__[Link](https://discord.gg/pVEPfA3N3U)__", inline=True)
