@@ -100,6 +100,17 @@ async def countlines_func(ctx):
     await ctx.send(embed=embed)
 
 
+@slash.slash(name="help", description="Are you lost? Let me show you the way!")
+async def slash_help(ctx):
+    embed = discord.Embed(title=f"Need help, {ctx.author.name}?", color=get_color.get_color(ctx.author))
+    guild_prefix = get_prefix(bot, ctx.message)
+    embed.description = f"My prefix for this server is `{guild_prefix}` " \
+                        f"and my help command can be accessed through `{guild_prefix}help`.\n" \
+                        f"If you want to use my commands in private messages, use the `bm-` prefix."
+    embed.set_thumbnail(url=bot.user.avatar_url)
+    embed.set_footer(text="Have fun!")
+    await ctx.send(embed=embed)
+
 if __name__ == '__main__':
     failed_modules = []
     for file in os.listdir(cwd + "/Cogs"):
