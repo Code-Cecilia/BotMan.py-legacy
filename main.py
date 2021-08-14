@@ -21,11 +21,7 @@ replit = False
 
 status_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
-intents = discord.Intents.default()
-intents.typing = False
-intents.presences = False
-intents.members = True
-intents.messages = True
+intents = discord.Intents.all()
 activity = discord.Streaming(name=f'{prefix}help', url=status_link)
 description = "The coolest python bot ever 😎"
 
@@ -63,7 +59,9 @@ bot = commands.Bot(command_prefix=get_prefix,
                    help_command=NewHelpName(),  # custom help command
                    activity=activity,
                    description=description,
-                   owner_id=owner_id)  # owner's ID as in the config file
+                   owner_id=owner_id,
+                   max_messages=100000,
+                   shard_count=10)  # owner's ID as in the config file
 bot.cwd = cwd
 
 

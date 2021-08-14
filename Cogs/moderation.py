@@ -269,15 +269,12 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         except asyncio.TimeoutError:
             return await ctx.send("Timed out - Aborting...")
 
-        if reason is None:
-            if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
-                with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
-                    json.dump({}, createFile, indent=4)
-                    print(
-                        f'Created file guild{ctx.guild.id}.json in configs/...')  # create file if not present
-
-            with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
-                data = json.load(jsonFile)
+        if reason is not None:
+            try:
+                with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
+                    data = json.load(jsonFile)
+            except:
+                data = {}
             default_kickBan_reason = data.get(
                 'default_kick_ban_reason')  # get the default reason
             reason = default_kickBan_reason
@@ -314,39 +311,35 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm kick.",
                               description=f"**{final_otp}**", color=ctx.author.color)
         embed.set_footer(text="Timeout: 15 seconds")
-        embed_message = await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
         try:
             message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
             if not str(message_otp.content) == final_otp:
                 return await ctx.send("Incorrect OTP - Aborting...")
-            await embed_message.delete()
             await message_otp.add_reaction("✅")
         except asyncio.TimeoutError:
             return await ctx.send("Timed out - Aborting...")
 
         if reason is None:
-            if not os.path.exists(f'./storage/mute_files/guild{ctx.guild.id}.json'):
-                with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'w') as createFile:
-                    json.dump({}, createFile, indent=4)
-                    print(
-                        f'Created file guild{ctx.guild.id}.json in storage/mute_files...')  # create file if not present
-
-            with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
-                data = json.load(jsonFile)
+            try:
+                with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
+                    data = json.load(jsonFile)
+            except:
+                data = {}
             default_kickBan_reason = data.get(
                 'default_kick_ban_reason')  # get the default reason
             reason = default_kickBan_reason
 
-            message_to_user = f'You have been kicked from **{ctx.guild.name}** for **{reason}**'
+        message_to_user = f'You have been kicked from **{ctx.guild.name}** for **{reason}**'
 
-            try:
-                await member.send(message_to_user)
-            except:
-                await ctx.send(f'Count not send DM to {member}. Kicking anyway...')
+        try:
+            await member.send(message_to_user)
+        except:
+            await ctx.send(f'Count not send DM to {member}. Kicking anyway...')
 
-            await member.kick(reason=reason)
+        await member.kick(reason=reason)
 
-            await ctx.send(f'**{member}** has been kicked for **{reason}**.')
+        await ctx.send(f'**{member}** has been kicked for **{reason}**.')
 
     # unban user.
     @commands.command(name='unban', descriptiob='Unbans a member who is mentioned as argument.\n'
