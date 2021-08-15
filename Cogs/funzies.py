@@ -1,13 +1,14 @@
 import asyncio
-import random
-import os
 import json
+import os
+import random
+
 import discord
 from discord.ext import commands
 
+from assets import misc_checks
 from assets import random_assets as rand_ass
 from assets import refine_text
-from assets import misc_checks
 
 
 class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
@@ -171,7 +172,6 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             data_user = cookie_data.get(str(user.id))
 
         if data_user is None and misc_checks.is_author(ctx, user):
-
             await ctx.send(f"_{user.display_name}_, you haven't gotten cookies from anyone yet. "
                            f"Don't be sad though, I'll give you one 🍪")
             cookie_data[str(user.id)] = 1
@@ -189,6 +189,12 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
             if data_user is None:
                 data_user = 0
             await ctx.send(f"_{user.display_name}_ has {data_user} cookies in their collection.")
+
+    @commands.command(name="alien", aliases=["shuffle"], description="Wanna see how aliens communicate?")
+    async def shuffle_chard(self, ctx, *, message: list):
+        random.shuffle(message)
+        final_str = "".join(message)
+        await ctx.send(final_str)
 
 
 def setup(bot):

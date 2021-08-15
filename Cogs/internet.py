@@ -1,14 +1,17 @@
-import random
-import discord
-import asyncpraw
-from discord.ext import commands
 import json
-import aiohttp
 import os
+import random
+import urllib.parse
 
-from assets import quotes
+import aiohttp
+import asyncpraw
+import discord
+from discord.ext import commands
+
 from assets import UrbanDict
 from assets import money_convert
+from assets import quotes
+from assets import tinyurl
 
 with open('reddit_details.json', 'r') as jsonFile:
     data = json.load(jsonFile)
@@ -121,6 +124,14 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
         async with ctx.typing():
             final_string = await money_convert.get_converted_currency(value, from_currency, to_currency)
             await ctx.send(final_string)
+
+    @commands.command(name="google", aliases=["search"], description="Feeling too lazy to open a browser? Search here!")
+    async def lmgtfy(self, ctx, *, search_term):
+        encoded_term = urllib.parse.quote(search_term)
+        lmgtfy_link = f"https://lmgtfy.app/?q={encoded_term}"
+        tinyurl_link = await tinyurl.get_tinyurl(lmgtfy_link)
+        await ctx.send(f"_{ctx.author.display_name}_, here is the google search you asked for.\n"
+                       f"<{tinyurl_link}>")
 
 
 def setup(bot):

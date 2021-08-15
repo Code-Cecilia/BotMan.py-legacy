@@ -52,8 +52,6 @@ class Errors(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.message.add_reaction("‼️".strip())
             await ctx.send("You lack the necessary permissions to use this command.")
-        elif isinstance(error, discord.errors.Forbidden):
-            await ctx.send("I do not have enough permissions to perform this action.")
         else:
             raise error
 
