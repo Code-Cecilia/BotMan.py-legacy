@@ -93,7 +93,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
 
     # ban event
     @commands.Cog.listener()
-    async def on_member_ban(self, guild, member: discord.Member):
+    async def on_member_ban(self, guild, member):
         message_channel_id = self.modlogsFile.get(str(guild.id))
         if message_channel_id is None:
             return
@@ -115,16 +115,19 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         if message_channel is None:
             return
 
+        # nickname change
         if not before.nick == after.nick:
             embed = discord.Embed(title=f"{before}'s nickname has been updated", description=f"ID: {before.id}",
                                   color=get_color.get_color(after), timestamp=before.created_at)
 
-            embed.add_field(name="Before", value=before.nick, inline=False)
-            embed.add_field(name="After", value=after.nick, inline=False)
+            embed.add_field(name="Before", value=before.display_name, inline=False)
+            embed.add_field(name="After", value=after.display_name, inline=False)
 
             embed.set_thumbnail(url=after.avatar_url)
             embed.set_footer(text="Account created at")
             await message_channel.send(embed=embed)
+
+        # role change
         if not before.roles == after.roles:
             embed = discord.Embed(title=f"{before}'s roles have been updated", description=f"ID: {before.id}",
                                   color=after.color, timestamp=before.created_at)
@@ -141,7 +144,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
 
     # unban event
     @commands.Cog.listener()
-    async def on_member_unban(self, guild, member: discord.Member):
+    async def on_member_unban(self, guild, member):
         message_channel_id = self.modlogsFile.get(str(guild.id))
         if message_channel_id is None:
             return
@@ -157,14 +160,14 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
 
     # join event
     @commands.Cog.listener()
-    async def on_member_join(self, guild, member):
-        message_channel_id = self.modlogsFile.get(str(guild.id))
+    async def on_member_join(self, member):
+        message_channel_id = self.modlogsFile.get(str(member.guild.id))
         if message_channel_id is None:
             return
         message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
-        embed = discord.Embed(title=f"Member {member} joined the the server.", color=member.color,
+        embed = discord.Embed(title=f"{member} joined the the server.", color=discord.Color.green(),
                               timestamp=datetime.datetime.utcnow(),
                               description=f"**Their account was created at:** {member.created_at}")
         embed.set_thumbnail(url=member.avatar_url)
@@ -173,15 +176,15 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
 
     # leave event
     @commands.Cog.listener()
-    async def on_member_remove(self, guild, member: discord.Member):
-        message_channel_id = self.modlogsFile.get(str(guild.id))
+    async def on_member_remove(self, member):
+        message_channel_id = self.modlogsFile.get(str(member.guild.id))
         if message_channel_id is None:
             return
         message_channel = self.bot.get_channel(id=int(message_channel_id))
         if message_channel is None:
             return
         roles = [role for role in member.roles]
-        embed = discord.Embed(title=f"Member {member} left from the server.", color=member.color,
+        embed = discord.Embed(title=f"{member} has left the server.", color=discord.Color.dark_red(),
                               timestamp=datetime.datetime.utcnow(),
                               description=f"**Their account was created at:** {member.created_at}")
         embed.add_field(name="Their roles", value=" ".join(
