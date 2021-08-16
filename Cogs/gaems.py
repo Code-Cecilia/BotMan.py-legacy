@@ -68,10 +68,14 @@ class Gaems(commands.Cog, description="A collection of games. "
             return
 
         results = response.get("results")[0]
-        category = results.get("category").replace("&quot;", "\"").replace("&#039;", "'")
-        difficulty = results.get("difficulty").replace("&quot;", "\"").replace("&#039;", "'")
-        question = results.get("question").replace("&quot;", "\"").replace("&#039;", "'")
-        correctans = results.get("correct_answer").replace("&quot;", "\"").replace("&#039;", "'")
+        category = results.get("category").replace(
+            "&quot;", "\"").replace("&#039;", "'")
+        difficulty = results.get("difficulty").replace(
+            "&quot;", "\"").replace("&#039;", "'")
+        question = results.get("question").replace(
+            "&quot;", "\"").replace("&#039;", "'")
+        correctans = results.get("correct_answer").replace(
+            "&quot;", "\"").replace("&#039;", "'")
         wrong_ans_list = results.get("incorrect_answers")
         answers = wrong_ans_list
         answers.append(correctans)
@@ -95,7 +99,8 @@ class Gaems(commands.Cog, description="A collection of games. "
             option_string += f"`{answers.index(x) + 1}.` {option_str}\n"
 
         embed.add_field(name="Options", value=option_string, inline=True)
-        embed.set_footer(text=f"{ctx.author.display_name}, pick the answer! You have 10 seconds.")
+        embed.set_footer(
+            text=f"{ctx.author.display_name}, pick the answer! You have 10 seconds.")
         await ctx.send(embed=embed)
         try:
             message_from_user = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author,

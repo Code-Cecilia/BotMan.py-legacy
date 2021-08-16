@@ -154,7 +154,8 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
                                   color=discord.Color.random())
             embed.set_thumbnail(
                 url="https://cdn.discordapp.com/attachments/612050519506026506/870332758348668998/cookie.png")
-            embed.set_footer(text=f"You now have {no_of_cookies} cookies in this server!")
+            embed.set_footer(
+                text=f"You now have {no_of_cookies} cookies in this server!")
         await ctx.send(embed=embed)
 
     @commands.command(name="cookies", aliases=["howmanycookiesdoihave", "howmanycookies"],

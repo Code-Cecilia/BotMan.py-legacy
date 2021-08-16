@@ -21,7 +21,8 @@ class Info(commands.Cog,
     async def get_avatar(self, ctx, user: discord.Member = None):
         if user is None:
             user = ctx.author
-        embed = discord.Embed(title=f'Avatar of {user.display_name}', colour=get_color.get_color(user))
+        embed = discord.Embed(
+            title=f'Avatar of {user.display_name}', colour=get_color.get_color(user))
         embed.set_image(url=user.avatar_url)
         await ctx.send(embed=embed)
 
@@ -34,15 +35,19 @@ class Info(commands.Cog,
         bots_count = len([bot.mention for bot in ctx.guild.members if bot.bot])
         channels_list = "{:,} text, {:,} voice".format(
             len(ctx.guild.text_channels), len(ctx.guild.voice_channels))
-        created_date, created_time = time_calc.parse_utc(str(ctx.guild.created_at))
+        created_date, created_time = time_calc.parse_utc(
+            str(ctx.guild.created_at))
 
         embed = discord.Embed(title=ctx.guild.name, description=f'Server ID: {ctx.guild.id}',
                               timestamp=ctx.message.created_at,
                               color=discord.Color.random())
         embed.set_thumbnail(url=ctx.guild.icon_url)
-        embed.add_field(name='Owner', value=ctx.guild.owner.mention, inline=True)
-        embed.add_field(name='Members', value=ctx.guild.member_count, inline=True)
-        embed.add_field(name='No. of roles', value=str(len(ctx.guild.roles) - 1), inline=True)
+        embed.add_field(
+            name='Owner', value=ctx.guild.owner.mention, inline=True)
+        embed.add_field(
+            name='Members', value=ctx.guild.member_count, inline=True)
+        embed.add_field(name='No. of roles', value=str(
+            len(ctx.guild.roles) - 1), inline=True)
         embed.add_field(name='Date of creation',
                         value=str(created_date), inline=True)
         embed.add_field(name='Time of creation',
@@ -51,12 +56,16 @@ class Info(commands.Cog,
                         value=str(len(list(ctx.guild.categories))), inline=True)
         embed.add_field(name='Channels', value=str(channels_list), inline=True)
         try:
-            embed.add_field(name='Booster Role', value=ctx.guild.premium_subscriber_role.mention, inline=True)
+            embed.add_field(
+                name='Booster Role', value=ctx.guild.premium_subscriber_role.mention, inline=True)
         except AttributeError:  # if no boost role, it gives a None value
             embed.add_field(name="Booster Role", value="No Role", inline=True)
-        embed.add_field(name='Boost Tier', value=f'Tier {ctx.guild.premium_tier}')
-        embed.add_field(name='No. of Boosts', value=ctx.guild.premium_subscription_count)
-        embed.add_field(name='Emojis', value=str(len(ctx.guild.emojis)), inline=True)
+        embed.add_field(name='Boost Tier',
+                        value=f'Tier {ctx.guild.premium_tier}')
+        embed.add_field(name='No. of Boosts',
+                        value=ctx.guild.premium_subscription_count)
+        embed.add_field(name='Emojis', value=str(
+            len(ctx.guild.emojis)), inline=True)
         embed.add_field(name='Bots', value=str(bots_count))
         if not str(ctx.guild.banner_url) == "":
             embed.add_field(name="Banner", value="Banner below!", inline=False)
@@ -126,7 +135,8 @@ class Info(commands.Cog,
         embed.set_thumbnail(url=avatar)
         embed.set_footer(
             text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
-        embed.add_field(name='Username', value=f"{username}#{discriminator}", inline=True)
+        embed.add_field(name='Username',
+                        value=f"{username}#{discriminator}", inline=True)
         embed.add_field(name='Is a Bot', value=bot_bool)
         embed.add_field(name='Color', value=color, inline=True)
         embed.add_field(name='Account Creation Date',

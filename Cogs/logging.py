@@ -16,7 +16,8 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
             self.modlogsFile = json.load(modlogsFile)
 
     @commands.command(name="messagelogschannel",
-                      aliases=["seteditedlogschannel", "setdeletedlogschannel", "setlogschannel", "setlogchannel"],
+                      aliases=["seteditedlogschannel", "setdeletedlogschannel",
+                               "setlogschannel", "setlogchannel"],
                       description="Sets the channel in which edited/deleted message logs are sent.")
     async def set_modlogs_channel(self, ctx, channel: discord.TextChannel):
         channel_id = channel.id
@@ -40,7 +41,8 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
                               color=get_color.get_color(before.author), timestamp=after.created_at)
         embed.add_field(name="Before", value=before.content, inline=False)
         embed.add_field(name="After", value=after.content, inline=False)
-        embed.add_field(name="Link", value=f"__[Message]({message_link})__", inline=False)
+        embed.add_field(
+            name="Link", value=f"__[Message]({message_link})__", inline=False)
         embed.set_footer(text=f"Author  •  {before.author}  |  Edited")
         embed.set_thumbnail(url=before.author.avatar_url)
         # the edited timestamp would come in the right, so we dont need to specify it in the footer
@@ -120,8 +122,10 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
             embed = discord.Embed(title=f"{before}'s nickname has been updated", description=f"ID: {before.id}",
                                   color=get_color.get_color(after), timestamp=before.created_at)
 
-            embed.add_field(name="Before", value=before.display_name, inline=False)
-            embed.add_field(name="After", value=after.display_name, inline=False)
+            embed.add_field(
+                name="Before", value=before.display_name, inline=False)
+            embed.add_field(
+                name="After", value=after.display_name, inline=False)
 
             embed.set_thumbnail(url=after.avatar_url)
             embed.set_footer(text="Account created at")
@@ -136,7 +140,8 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
                 before_roles_str += f"{x.mention} "
             for x in after.roles[::-1]:
                 after_roles_str += f"{x.mention} "
-            embed.add_field(name="Before", value=before_roles_str, inline=False)
+            embed.add_field(
+                name="Before", value=before_roles_str, inline=False)
             embed.add_field(name="After", value=after_roles_str, inline=False)
             embed.set_thumbnail(url=after.avatar_url)
             embed.set_footer(text="Account created at")
@@ -152,7 +157,8 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         if message_channel is None:
             return
         embed = discord.Embed(title=f"{member} has been unbanned", description=f"ID: {member.id}",
-                              color=get_color.get_color(discord.Color.random()),
+                              color=get_color.get_color(
+                                  discord.Color.random()),
                               timestamp=member.created_at)
         embed.set_thumbnail(url=member.avatar_url)
         embed.set_footer(text="Account created at")

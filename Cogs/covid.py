@@ -50,7 +50,8 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a se
         critical_per_million = response_dict.get("criticalPerOneMillion")
 
         virus_image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/SARS-CoV-2_without_background.png"
-        country_name = response_dict.get("country")  # not used in worldwide stats
+        country_name = response_dict.get(
+            "country")  # not used in worldwide stats
         try:
             country_flag_url = response_dict.get("countryInfo").get("flag")
         except AttributeError:
@@ -69,28 +70,37 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a se
             embed.set_thumbnail(url=country_flag_url)
         embed.add_field(name="Total cases", value=total_cases, inline=True)
         embed.add_field(name="New Cases Today", value=today_cases, inline=True)
-        embed.add_field(name="Cases per Million", value=cases_per_million, inline=True)
+        embed.add_field(name="Cases per Million",
+                        value=cases_per_million, inline=True)
 
         embed.add_field(name="Total Deaths", value=total_deaths, inline=True)
         embed.add_field(name="Deaths Today", value=today_deaths, inline=True)
-        embed.add_field(name="Deaths per Million", value=deaths_per_million, inline=True)
+        embed.add_field(name="Deaths per Million",
+                        value=deaths_per_million, inline=True)
 
         embed.add_field(name="Active cases", value=active_cases, inline=True)
-        embed.add_field(name="Active per Million", value=active_per_million, inline=True)
+        embed.add_field(name="Active per Million",
+                        value=active_per_million, inline=True)
 
-        embed.add_field(name="Critical Cases", value=critical_cases, inline=True)
-        embed.add_field(name="Critical per Million", value=critical_per_million, inline=True)
+        embed.add_field(name="Critical Cases",
+                        value=critical_cases, inline=True)
+        embed.add_field(name="Critical per Million",
+                        value=critical_per_million, inline=True)
 
         embed.add_field(name="Recovered", value=total_recovered, inline=True)
-        embed.add_field(name="Recovered Today", value=today_recovered, inline=True)
-        embed.add_field(name="Recovered per Million", value=recovered_per_million, inline=True)
+        embed.add_field(name="Recovered Today",
+                        value=today_recovered, inline=True)
+        embed.add_field(name="Recovered per Million",
+                        value=recovered_per_million, inline=True)
 
         embed.add_field(name="Total Tests", value=total_tests, inline=False)
 
         if country is None:
-            embed.add_field(name="World Population", value=population, inline=True)
+            embed.add_field(name="World Population",
+                            value=population, inline=True)
         else:
-            embed.add_field(name=f"Population of {country_name}", value=population, inline=True)
+            embed.add_field(
+                name=f"Population of {country_name}", value=population, inline=True)
 
         embed.set_footer(text=f"Powered by disease.sh")
 

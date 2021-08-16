@@ -1,6 +1,8 @@
 def get_time(time):
     if time is not None:
-        if time[-1] == 'h':
+        if time[-1] == 'd':
+            time_final = int(time[-1]) * 3600*24
+        elif time[-1] == 'h':
             time_final = int(time[:-1]) * 3600
         elif time[-1] == 'm':
             time_final = int(time[:-1]) * 60

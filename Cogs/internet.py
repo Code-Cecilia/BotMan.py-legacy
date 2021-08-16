@@ -43,9 +43,9 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
     @commands.command(name='meme', description='Sends a random meme from r/memes, and '
                                                'if "all" is passed in as an argument, a few more subreddits are used.')
     async def get_meme(self, ctx, arg=None):
-        if arg is None:
+        if arg == "all":
             subreddit = await reddit.subreddit('memes')
-        elif arg == 'all':
+        else:
             subreddit = await reddit.subreddit('memes+dankmemes+prequelmemes+otmemes+funny')
         sub_list = []
         x = subreddit.hot(limit=50)
@@ -117,9 +117,9 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
         await ctx.send(embed=embed)
 
     @commands.command(name='convert', description='Converts an integer value from one currency to another.\n'
-                      f'Usage example: `bm-convert 100 USD EUR`\n'
-                      f'For currency codes, check '
-                      f'__[here](https://www.iban.com/currency-codes)__')
+                                                  f'Usage example: `bm-convert 100 USD EUR`\n'
+                                                  f'For currency codes, check '
+                                                  f'__[here](https://www.iban.com/currency-codes)__')
     async def get_currency(self, ctx, value: float, from_currency: str.upper, to_currency: str.upper):
         async with ctx.typing():
             final_string = await money_convert.get_converted_currency(value, from_currency, to_currency)

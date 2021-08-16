@@ -24,15 +24,18 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
                               description="__[Link to my (very own) page!]("
                                           "https://top.gg/bot/845225811152732179/vote)__",
                               color=discord.Color.random())
-        embed.set_footer(text=f"It's the gesture that counts first, so thanks a lot, {ctx.author.name}!")
+        embed.set_footer(
+            text=f"It's the gesture that counts first, so thanks a lot, {ctx.author.name}!")
         await ctx.send(embed=embed)
 
     @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
                                                                             'the bot currently has.')
     async def countlines_func(self, ctx):
         lines = count_lines.countlines('./')
-        final_str = random.choice(random_assets.countlines_responses).format(lines)
-        embed = discord.Embed(title=final_str, color=get_color.get_color(self.bot.user))
+        final_str = random.choice(
+            random_assets.countlines_responses).format(lines)
+        embed = discord.Embed(
+            title=final_str, color=get_color.get_color(self.bot.user))
         await ctx.send(embed=embed)
 
     @commands.command(name='botinfo', aliases=['clientinfo', 'botstats'],
@@ -61,7 +64,8 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         embed.add_field(name='Total Users', value=str(
             memberCount), inline=True)
         embed.add_field(name='Latency', value=str(latency), inline=True)
-        embed.add_field(name="Uptime", value=f"{d}d, {h}h, {m}m, {s}s", inline=True)
+        embed.add_field(
+            name="Uptime", value=f"{d}d, {h}h, {m}m, {s}s", inline=True)
         embed.add_field(name='Talk to my maker!',
                         value="__[Mahasvan](https://discord.com/users/775176626773950474)__", inline=True)
         embed.add_field(name="Source", value=source, inline=True)

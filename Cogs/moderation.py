@@ -19,18 +19,11 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def mute_func(self, ctx, user: discord.Member, time_period=None):
-        if not time_period is None:
-            try:
-                trial_thing = int(time_period[:-1])
-                # throws up valur error if not an integer,
-                # so we can catch that and stop the command from executing further
-                if time_period[-1] not in ["s", "h", "m"]:
-                    return await ctx.send("Error in parsing the time_period argument. "
-                                          "The correct format is `[int]h|m|s`\n"
-                                          f"Example: `{ctx.prefix}mute [user] 5h`")
-            except ValueError:
-                return await ctx.send("Error in parsing the time_period argument. The correct format is `[int]h|m|s`\n"
-                                      f"Example: `{ctx.prefix}mute [user] 5h`")
+        if time_period is not None:
+            pattern = r"^[\d]+[s|m|h|d]{1}$"
+            if not re.match(pattern, time_period):
+                return await ctx.send("Time period is of the wrong format.\n"
+                                      "Example usage: `5s`, `10m`, `15h`, `2d`")
 
         if misc_checks.is_author(ctx, user):
             return await ctx.send('You cannot mute yourself. Sorry lol')
@@ -49,7 +42,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if mute_role_id is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask a person with the `Manage Server` permission to set a role as the mute role, '
+                                  'Please ask a person with the `Manage Server` permission '
+                                  'to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
 
         # get the actual mute role from the role's ID
@@ -58,14 +52,14 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
-            await ctx.send(f'{user.display_name} has been muted for {final_time_text}.')
+            await ctx.send(f'{user} has been muted for {final_time_text}.')
             # sleep for specified time, then remove the muted role
             await asyncio.sleep(time_calc.get_time(time_period))
             if mute_role in user.roles:
                 await user.remove_roles(mute_role)
-                await ctx.send(f'{user.display_name} has been unmuted.')
+                await ctx.send(f'{user} has been unmuted.')
         else:
-            await ctx.send(f'{user.display_name} has been muted.')
+            await ctx.send(f'{user} has been muted.')
 
     @commands.command(name='hardmute', description='Hard-mutes the person mentioned. '
                                                    'This means all roles are removed until the mute period is over. '
@@ -73,16 +67,11 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.has_permissions(manage_roles=True)
     @commands.guild_only()
     async def hardmute_func(self, ctx, user: discord.Member, time_period=None):
-        if not time_period is None:
-            try:
-                trial_thing = int(time_period[:-1])
-                if time_period[-1] not in ["s", "h", "m"]:
-                    return await ctx.send("Error in parsing the time_period argument. "
-                                          "The correct format is `[int]h|m|s`\n"
-                                          f"Example: `{ctx.prefix}hardmute [user] 5h`")
-            except ValueError:
-                return await ctx.send("Error in parsing the time_period argument. The correct format is `[int]h|m|s`\n"
-                                      f"Example: `{ctx.prefix}hardmute [user] 5h`")
+        if time_period is not None:
+            pattern = r"^[\d]+[s|m|h|d]{1}$"
+            if not re.match(pattern, time_period):
+                return await ctx.send("Time period is of the wrong format.\n"
+                                      "Example usage: `5s`, `10m`, `15h`, `2d`")
 
         if misc_checks.is_author(ctx, user):
             return await ctx.send('You cannot mute yourself. Sorry lol')
@@ -97,11 +86,14 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         mute_role_id = (data.get('mute_role'))
         if mute_role_id is None:
             return await ctx.send('It seems you have not set the mute role. '
-                                  'Please ask a person with the `Manage Server` permission to set a role as the mute role, '
+                                  'Please ask a person with the `Manage Server` permission '
+                                  'to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
+            0, 9), random.randint(0, 9), random.randint(0, 9)
         final_otp = f"{otp1}{otp2}{otp3}{otp4}"
-        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm hard-mute.",
+        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below "
+                                    f"to confirm hard-mute.",
                               description=f"**{final_otp}**", color=ctx.author.color)
         embed.set_footer(text="Timeout: 15 seconds")
         embed_message = await ctx.send(embed=embed)
@@ -156,14 +148,15 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                 await ctx.send(f"Could not remove role **{str(role.name).replace('@', '')}**. Continuing... ")
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
-            await ctx.send(f"{user.mention} has been hard-muted for {final_time_text}.\n"
+            await ctx.send(f"{user} has been hard-muted for {final_time_text}.\n"
                            f"If you want to un-hardmute them before the specified time, "
                            f"use the `{ctx.prefix}unhardmute` command.")
             await asyncio.sleep(time_calc.get_time(time_period))
             if mute_role in user.roles:
-                await Moderation.unhardmute_func(self, ctx, user)  # if they are unmuted, we dont want to unmute again
+                # if they are unmuted, we dont want to unmute again
+                await Moderation.unhardmute_func(self, ctx, user)
         else:
-            await ctx.send(f"{user.mention} has been hard-muted.\n"
+            await ctx.send(f"{user} has been hard-muted.\n"
                            f"If you want to un-hardmute the user, use the `{ctx.prefix}unhardmute` command.")
 
     @commands.command(name='unmute', description='Unmutes the user mentioned if muted previously.\n')
@@ -254,7 +247,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         if misc_checks.is_client(self.bot, member):
             return await ctx.send('I can\'t ban myself, sorry.')
 
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
+            0, 9), random.randint(0, 9), random.randint(0, 9)
         final_otp = f"{otp1}{otp2}{otp3}{otp4}"
         embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm ban.",
                               description=f"**{final_otp}**", color=ctx.author.color)
@@ -306,7 +300,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         if misc_checks.is_client(self.bot, member):
             return await ctx.send('I can\'t mute kick, sorry.')
 
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
+            0, 9), random.randint(0, 9), random.randint(0, 9)
         final_otp = f"{otp1}{otp2}{otp3}{otp4}"
         embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm kick.",
                               description=f"**{final_otp}**", color=ctx.author.color)
@@ -350,7 +345,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.guild_only()
     async def unban(self, ctx, *, member):
 
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(0, 9), random.randint(0, 9), random.randint(0, 9)
+        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
+            0, 9), random.randint(0, 9), random.randint(0, 9)
         final_otp = f"{otp1}{otp2}{otp3}{otp4}"
         embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm unban.",
                               description=f"**{final_otp}**", color=ctx.author.color)
