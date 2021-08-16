@@ -155,6 +155,36 @@ class Info(commands.Cog,
             embed.add_field(name="Banner", value="See image below!", inline=False)
             embed.set_image(url=banner_url)
         await ctx.send(embed=embed)
+        if user.activity.name == "Spotify":
+            SpotEmbed = discord.Embed(title="Listening to Spotify",
+                                      description=f"{user.activity.title}\n"
+                                                  f"Duration: {str(user.activity.duration)[:-7]}",
+                                      color=user.activity.color, timestamp=user.activity.start)
+            SpotEmbed.set_footer(text="Started listening")
+            SpotEmbed.add_field(name="Artist", value=user.activity.artist)
+            SpotEmbed.add_field(name="Album", value=user.activity.album)
+            SpotEmbed.set_thumbnail(url=user.activity.album_cover_url)
+            await ctx.send(embed=SpotEmbed)
+        elif user.activity is not None:
+            try:
+                title = f"{user.activity.type} - {user.activity.title}"
+                activity_embed = discord.Embed(title=title, color=get_color.get_color(user))
+                if user.activity.description is not None:
+                    activity_embed.description = user.activity.description
+                activity_embed.set_thumbnail(url=user.activity.large_image_url)
+                if user.activity.application_id is not None:
+                    activity_embed.add_field(name="APplication ID", value=user.activity.application_id)
+                if user.activity.url is not None:
+                    activity_embed.add_field(name="Activity URL", value=user.activity.url)
+                if user.activity.state is not None:
+                    activity_embed.add_field(name="State", value=user.activity.state)
+                if user.activity.details is not None:
+                    activity_embed.add_field(name="More Details", value=user.activity.details)
+                if user.activity.small_image_text is not None:
+                    activity_embed.add_field(name="Small Image Text", value=user.activity.small_image_text)
+                await ctx.send(embed=activity_embed)
+            except AttributeError:
+                pass
 
     @commands.command(name='emojiinfo', description='Returns information about the emoji, passed as argument')
     async def emoji_info(self, ctx, emoji: discord.Emoji):
