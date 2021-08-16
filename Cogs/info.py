@@ -129,6 +129,13 @@ class Info(commands.Cog,
             mutual_guilds = len(user.mutual_guilds)
         except:
             mutual_guilds = 0
+        req = await self.bot.http.request(discord.http.Route("GET", "/users/{uid}", uid=user.id))
+        banner_id = req["banner"]
+        # If statement because the user may not have a banner
+        if banner_id:
+            banner_url = f"https://cdn.discordapp.com/banners/{user.id}/{banner_id}?size=4096"
+        else:
+            banner_url = None
 
         embed = discord.Embed(
             title=name, description=f'ID: {id}', color=color, timestamp=ctx.message.created_at)
@@ -144,6 +151,9 @@ class Info(commands.Cog,
         embed.add_field(name='Creation Time', value=creation_time, inline=True)
         embed.add_field(name=f'Mutual Servers with {self.bot.user.name}', value=str(
             mutual_guilds), inline=False)
+        if banner_url:
+            embed.add_field(name="Banner", value="See imaga below!", inline=False)
+            embed.set_image(url=banner_url)
         await ctx.send(embed=embed)
 
     @commands.command(name='emojiinfo', description='Returns information about the emoji, passed as argument')

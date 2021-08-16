@@ -39,6 +39,9 @@ countlines_responses = ["I am made of _{0}_ lines of python code. Pretty cool, h
                         "I am made of _{0}_ lines of python code. What can I say except 😎",
                         "Some poor soul wrote _{0}_ lines of python code to give me a life. I hope he's okay"]
 
+spongebob_text_responses = ["You didn't enter any text, genius", "Enter some text, smartass",
+                            "Look who didn't specify the text!"]
+
 
 def ask_qn(msg):
     if len(msg.split()) == 1:

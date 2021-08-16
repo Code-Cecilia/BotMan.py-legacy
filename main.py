@@ -7,7 +7,6 @@ import discord
 import discord_slash
 from discord.ext import commands
 
-from Cogs import botinfo
 from assets import count_lines, random_assets, get_color
 from assets.keep_alive import keep_alive
 
@@ -72,7 +71,6 @@ async def on_ready():
 
 # slash commands
 slash = discord_slash.SlashCommand(client=bot, sync_commands=True)
-botinfo = botinfo.BotInfo(bot)
 
 
 @slash.slash(name="ping", description="Returns the latency of the bot.")
