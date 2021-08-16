@@ -152,7 +152,7 @@ class Info(commands.Cog,
         embed.add_field(name=f'Mutual Servers with {self.bot.user.name}', value=str(
             mutual_guilds), inline=False)
         if banner_url:
-            embed.add_field(name="Banner", value="See imaga below!", inline=False)
+            embed.add_field(name="Banner", value="See image below!", inline=False)
             embed.set_image(url=banner_url)
         await ctx.send(embed=embed)
 
