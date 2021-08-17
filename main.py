@@ -39,15 +39,16 @@ def get_prefix(bot, message):
         data = prefix_server
         return commands.when_mentioned_or(data)(bot, message)
 
+
 help_attributes = {
-   'name': "hell",
-   'aliases': ["help", "helps"],
+    'name': "help",
+    'aliases': ["hell", "helps", "helmp", "helo"],
 }
 
 
 class MyHelp(commands.MinimalHelpCommand):
     def get_command_signature(self, command):
-        return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
+        return '%s%s' % (self.clean_prefix, command.qualified_name)
 
     async def send_bot_help(self, mapping):
         channel = self.get_destination()
@@ -61,7 +62,7 @@ class MyHelp(commands.MinimalHelpCommand):
             command_signatures = [self.get_command_signature(c) for c in filtered]
             if command_signatures:
                 cog_name = getattr(cog, "qualified_name", "No Category")
-                embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
+                embed.add_field(name=cog_name, value=", ".join(command_signatures), inline=False)
 
         await channel.send(embed=embed)
 
@@ -82,7 +83,7 @@ class MyHelp(commands.MinimalHelpCommand):
         commands_list = cog.get_commands()
         cog_title = cog.qualified_name
         filtered = await self.filter_commands(commands_list, sort=True)
-        embed=discord.Embed(title=f"Cog - {cog_title}", colour=get_color.get_color(user))
+        embed = discord.Embed(title=f"Cog - {cog_title}", colour=get_color.get_color(user))
         embed.set_thumbnail(url=bot.user.avatar_url)
         commands_embed_list = "\n".join([("%s%s" % (self.clean_prefix, command.name)) for command in filtered])
         embed.description = cog.description
@@ -94,6 +95,7 @@ class MyHelp(commands.MinimalHelpCommand):
         user = channel.guild.me
         embed = discord.Embed(title="Error", description=error, colour=get_color.get_color(user))
         await channel.send(embed=embed)
+
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
