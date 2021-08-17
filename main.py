@@ -49,6 +49,9 @@ help_attributes = {
 
 class MyHelp(commands.MinimalHelpCommand):
     def get_command_signature(self, command):
+        return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
+
+    def get_command_name(self, command):
         return '%s%s' % (self.clean_prefix, command.qualified_name)
 
     async def send_bot_help(self, mapping):
@@ -72,7 +75,7 @@ class MyHelp(commands.MinimalHelpCommand):
         user = channel.guild.me
         if command.cog is not None:
             cog_name = command.cog.qualified_name
-            embed = discord.Embed(title=f"{self.get_command_signature(command)}: Extension of {cog_name}"
+            embed = discord.Embed(title=f"{self.get_command_name(command)}: Extension of {cog_name}"
                                   , color=get_color.get_color(user))
         else:
             embed = discord.Embed(title=f"{self.get_command_signature(command)}"
@@ -81,6 +84,7 @@ class MyHelp(commands.MinimalHelpCommand):
         if command.description:
             embed.add_field(name="Description", value=command.description)
         alias = command.aliases
+        embed.add_field(name="Usage", value=self.get_command_signature(command), inline=False)
         if alias:
             embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
         await channel.send(embed=embed)
