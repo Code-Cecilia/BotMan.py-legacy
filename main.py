@@ -89,6 +89,11 @@ class MyHelp(commands.MinimalHelpCommand):
         embed.add_field(name="Commands", value=commands_embed_list, inline=False)
         await channel.send(embed=embed)
 
+    async def send_error_message(self, error):
+        channel = self.get_destination()
+        user = channel.guild.me
+        embed = discord.Embed(title="Error", description=error, colour=get_color.get_color(user))
+        await channel.send(embed=embed)
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
