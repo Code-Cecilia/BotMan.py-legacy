@@ -10,14 +10,14 @@ Don't use my code without giving credit. You are free to host it and fork it you
 
 
 ## If all you want is a stable instance of the bot, I'd recommend using my instance - [Link](https://discord.com/oauth2/authorize?client_id=845225811152732179&permissions=4294836215&scope=bot)
-# Usage and installation
 
-## If you're reading this while in the repo, check out this cool new Github Pages deployment: [Link](https://code-cecilia.github.io/BotMan.py/)
+# Usage and installation
 
 ### What we're gonna do
  - Download the repo's files
  - Get the Discord Bot Application's token (while setting the appropriate OAuth permissions)
  - Fill in the Reddit App details
+ - Fill in Spotify Application Details
  - Get the API key from RSA
  - Get the currency API key from ExchangeRatesAPI
  - Fill in details in `config.json` and `reddit_details.json`
@@ -139,6 +139,32 @@ A properly set-up `reddit_details.json` looks something like this.
 ```
 (don't worry, the password is wrong)
 
+# Setting up Spotify Credentials
+
+This bot has a Spotify category that can get information on artists and categories (more coming soon!).
+
+To make this work, we need an application, You can make one [here](https://developer.spotify.com/dashboard/applications).
+
+After signing on, your page should look something like this.
+
+![Spotify Dashboard](./images/spotify_dashboard.png)
+
+Click on "Create An App"
+
+![creating the app](./images/spot_create_app.png)
+
+Copy the Client ID and Client Secret and paste them in their respective fields in `spotify_details.json`. 
+
+A fully configured `spotify_details.json` looks something like this
+
+```javascript
+{
+  "client_id": "b0d95fb2d92241d690c109314c09dd8d",
+  "client_secret": "c7b628b7b52a47f29bb82adfa1049a11"
+}
+```
+## Note:
+It is recommended to change the variable `replit` to `False` in `main.py`. I keep it on as True, but you might want to change it to False.
 And that should be it.
 You can run `main.py` to run the bot. I'm working on a startup file, so bear with me till I finish it.
 
