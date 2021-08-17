@@ -16,7 +16,7 @@ with open('config.json', 'r') as detailsFile:
     token = details_data['token']
     owner_id = int(details_data['owner_id'])
 
-replit = False
+replit = True
 
 status_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
@@ -39,23 +39,62 @@ def get_prefix(bot, message):
         data = prefix_server
         return commands.when_mentioned_or(data)(bot, message)
 
+help_attributes = {
+   'name': "hell",
+   'aliases': ["help", "helps"],
+}
 
-class NewHelpName(commands.MinimalHelpCommand):  # we're making a new help command
-    async def send_pages(self):
-        destination = self.get_destination()
-        for page in self.paginator.pages:
-            embed = discord.Embed(
-                description=page, color=discord.Color.random())
-            embed.set_thumbnail(url=bot.user.avatar_url)
-            embed.set_footer(text='')
-            await destination.send(embed=embed)
+
+class MyHelp(commands.MinimalHelpCommand):
+    def get_command_signature(self, command):
+        return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
+
+    async def send_bot_help(self, mapping):
+        channel = self.get_destination()
+        user = channel.guild.me
+        embed = discord.Embed(title=bot.description, colour=get_color.get_color(user))
+        embed.description = f"Use `{self.clean_prefix}help [command/category]` " \
+                            f"for more information on a command/category."
+        embed.set_thumbnail(url=bot.user.avatar_url)
+        for cog, commands_list in mapping.items():
+            filtered = await self.filter_commands(commands_list, sort=True)
+            command_signatures = [self.get_command_signature(c) for c in filtered]
+            if command_signatures:
+                cog_name = getattr(cog, "qualified_name", "No Category")
+                embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
+
+        await channel.send(embed=embed)
+
+    async def send_command_help(self, command):
+        channel = self.get_destination()
+        user = channel.guild.me
+        embed = discord.Embed(title=self.get_command_signature(command), color=get_color.get_color(user))
+        embed.set_thumbnail(url=bot.user.avatar_url)
+        embed.add_field(name="Description", value=command.description)
+        alias = command.aliases
+        if alias:
+            embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
+        await channel.send(embed=embed)
+
+    async def send_cog_help(self, cog):
+        channel = self.get_destination()
+        user = channel.guild.me
+        commands_list = cog.get_commands()
+        cog_title = cog.qualified_name
+        filtered = await self.filter_commands(commands_list, sort=True)
+        embed=discord.Embed(title=f"Cog - {cog_title}", colour=get_color.get_color(user))
+        embed.set_thumbnail(url=bot.user.avatar_url)
+        commands_embed_list = "\n".join([("%s%s" % (self.clean_prefix, command.name)) for command in filtered])
+        embed.description = cog.description
+        embed.add_field(name="Commands", value=commands_embed_list, inline=False)
+        await channel.send(embed=embed)
 
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 bot = commands.Bot(command_prefix=get_prefix,
                    intents=intents,
-                   help_command=NewHelpName(),  # custom help command
+                   help_command=MyHelp(command_attrs=help_attributes),  # custom help command
                    activity=activity,
                    description=description,
                    owner_id=owner_id,
@@ -107,6 +146,7 @@ async def slash_help(ctx):
     embed.set_thumbnail(url=bot.user.avatar_url)
     embed.set_footer(text="Have fun!")
     await ctx.send(embed=embed)
+
 
 if __name__ == '__main__':
     failed_modules = []
