@@ -43,6 +43,7 @@ def get_prefix(bot, message):
 help_attributes = {
     'name': "help",
     'aliases': ["hell", "helps", "helmp", "helo"],
+    'description': "Shows this command. (Obviously)"
 }
 
 
@@ -69,9 +70,16 @@ class MyHelp(commands.MinimalHelpCommand):
     async def send_command_help(self, command):
         channel = self.get_destination()
         user = channel.guild.me
-        embed = discord.Embed(title=self.get_command_signature(command), color=get_color.get_color(user))
+        if command.cog is not None:
+            cog_name = command.cog.qualified_name
+            embed = discord.Embed(title=f"{self.get_command_signature(command)}: Extension of {cog_name}"
+                                  , color=get_color.get_color(user))
+        else:
+            embed = discord.Embed(title=f"{self.get_command_signature(command)}"
+                                  , color=get_color.get_color(user))
         embed.set_thumbnail(url=bot.user.avatar_url)
-        embed.add_field(name="Description", value=command.description)
+        if command.description:
+            embed.add_field(name="Description", value=command.description)
         alias = command.aliases
         if alias:
             embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
