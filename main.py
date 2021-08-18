@@ -54,6 +54,9 @@ class MyHelp(commands.MinimalHelpCommand):
     def get_command_name(self, command):
         return '%s%s' % (self.clean_prefix, command.qualified_name)
 
+    def get_command_clean(self, command):
+        return command.qualified_name
+
     async def send_bot_help(self, mapping):
         channel = self.get_destination()
         user = channel.guild.me
@@ -63,10 +66,10 @@ class MyHelp(commands.MinimalHelpCommand):
         embed.set_thumbnail(url=bot.user.avatar_url)
         for cog, commands_list in mapping.items():
             filtered = await self.filter_commands(commands_list, sort=True)
-            command_signatures = [self.get_command_signature(c) for c in filtered]
+            command_signatures = [self.get_command_clean(c) for c in filtered]
             if command_signatures:
                 cog_name = getattr(cog, "qualified_name", "No Category")
-                embed.add_field(name=cog_name, value=", ".join(command_signatures), inline=False)
+                embed.add_field(name=cog_name, value=", ".join([f"`{x}`" for x in command_signatures]), inline=False)
 
         await channel.send(embed=embed)
 
@@ -75,7 +78,7 @@ class MyHelp(commands.MinimalHelpCommand):
         user = channel.guild.me
         if command.cog is not None:
             cog_name = command.cog.qualified_name
-            embed = discord.Embed(title=f"{self.get_command_name(command)}: Extension of {cog_name}"
+            embed = discord.Embed(title=f"{self.get_command_clean(command)} - Extension of the {cog_name} cog"
                                   , color=get_color.get_color(user))
         else:
             embed = discord.Embed(title=f"{self.get_command_signature(command)}"
