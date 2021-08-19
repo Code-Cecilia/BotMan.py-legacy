@@ -5,11 +5,11 @@ from discord.ext import commands
 from assets import wiki_assets, get_color
 
 
-class Wikipedia(commands.Cog):
+class Wikipedia(commands.Cog, description="WIP Wikipedia Cog"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="wikisearch")
+    @commands.command(name="wikisearch", description="Gives search results for a query.")
     async def wiki_search(self, ctx, *, search_term):
         async with ctx.typing():
             try:
@@ -27,7 +27,7 @@ class Wikipedia(commands.Cog):
             embed.set_footer(text=f"Search requested by {ctx.author}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
 
-    @commands.command(name="wiki")
+    @commands.command(name="wiki", description="Wikipedia summary for a search term.")
     async def wiki_define(self, ctx, *, search_term):
         async with ctx.typing():
             try:
