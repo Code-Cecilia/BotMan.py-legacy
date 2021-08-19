@@ -119,9 +119,8 @@ bot = commands.Bot(command_prefix=get_prefix,
                    help_command=MyHelp(command_attrs=help_attributes),  # custom help command
                    activity=activity,
                    description=description,
-                   owner_id=owner_id,
-                   max_messages=100000,
-                   shard_count=10)  # owner's ID as in the config file
+                   owner_id=owner_id, # owner's ID as in the config file
+                   max_messages=100000)
 bot.cwd = cwd
 
 
