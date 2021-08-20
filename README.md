@@ -30,9 +30,13 @@ sudo apt-get install git
 git clone https://github.com/Code-Cecilia/BotMan.py
 ``` 
 `cd` into the project's directory and run this command
+
 ```bash
 python3 -m pip install -r requirements.txt
 ```
+
+Note that you also need `git` for the above command to work properly.
+
 Get to the [Discord Developer Portal](https://discord.com/developers/applications) and make a new application.
 
 ![new application](./images/new_application.png)
