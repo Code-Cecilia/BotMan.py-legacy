@@ -40,11 +40,12 @@ Get to the [Discord Developer Portal](https://discord.com/developers/application
 ![name the app](./images/name_app.png)
 
 ![add bot](./images/add_bot.png)
+
 You also need to enable Privileged gateway intents in the `Bot` section of your application's page
 
 ![image](https://user-images.githubusercontent.com/82939599/125238018-3eec9b00-e304-11eb-9fd8-efcac130d250.png)
 
-The bot doesn't use prescence intents as of now, so feel free to disable it if you want. You need to enable the `Server Members Intent`, though.
+This screenshot above is outdated, enable all Privileged Intents for the bot to work properly.
 
 ![copy token](./images/copy_token.png)
 
