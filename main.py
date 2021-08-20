@@ -101,7 +101,9 @@ class MyHelp(commands.MinimalHelpCommand):
                                   , color=get_color.get_color(user))
         embed.set_thumbnail(url=bot.user.avatar_url)
         if command.description:
-            embed.add_field(name="Description", value=command.description)
+            embed.add_field(name="Description", value=command.description, inline=False)
+        if command.help:
+            embed.add_field(name="Help", value=command.help, inline=False)
         alias = command.aliases
         embed.add_field(name="Usage", value=self.get_command_signature(command), inline=False)
         if alias:

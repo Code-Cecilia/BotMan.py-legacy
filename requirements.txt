@@ -12,3 +12,4 @@ requests~=2.26.0
 wikipedia
 git+https://github.com/Rapptz/discord-ext-menus
 python-aiml
+discord-together

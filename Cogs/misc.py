@@ -42,7 +42,7 @@ class Misc(commands.Cog, description="A category for miscellaneous stuff, of cou
         except:
             await ctx.reply(content=f"{ctx.author.mention}, I could not send you a DM.", embed=embed)
 
-    @commands.command(name="bored", aliases=["activity"], description="Bored? Let's find you something to do!")
+    @commands.command(name="bored", aliases=["randomactivity"], description="Bored? Let's find you something to do!")
     async def get_activity(self, ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get(url=self.bored_api_link) as response:
