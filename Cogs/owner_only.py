@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 import sys
 import traceback
@@ -26,7 +27,10 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
     async def reboot(self, ctx):
         async with ctx.typing():
             await ctx.send('Rebooting...')
-            os.execv(sys.executable, ['python'] + sys.argv)
+            with open("./storage/reboot.json", "w") as rebootFile:
+                json.dump(ctx.message.channel.id, rebootFile)
+        print(sys.argv)
+        os.execv(sys.executable, ['python'] + sys.argv)
 
     @commands.command(name='reload', description="Reload all/one of the bot's cogs.\n"
                                                  "This is Owner-only, so don't have any funny ideas.", )

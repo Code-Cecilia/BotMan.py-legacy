@@ -16,7 +16,7 @@ with open('config.json', 'r') as detailsFile:
     token = details_data['token']
     owner_id = int(details_data['owner_id'])
 
-replit = True
+replit = False
 
 status_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
@@ -143,7 +143,17 @@ bot.cwd = cwd
 @bot.event
 async def on_ready():
     print(f'{bot.user} is online!')
-
+    if os.path.exists("./storage/reboot.json"):
+        with open("./storage/reboot.json", "r") as readFile:
+            channel_id = json.load(readFile)
+        channel = bot.get_channel(id=channel_id)
+        await channel.send("Rebooted Succesfully!")
+        if len(failed_modules) != 0:
+            failed_modules_string = "\n".join(failed_modules)
+            embed = discord.Embed(title="These modules failed to load", color=discord.Color.dark_red())
+            embed.description = failed_modules_string
+            await channel.send(embed=embed)
+        os.remove("./storage/reboot.json")
 
 # slash commands
 slash = discord_slash.SlashCommand(client=bot, sync_commands=True)
