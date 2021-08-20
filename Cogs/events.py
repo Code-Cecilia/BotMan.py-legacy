@@ -37,8 +37,9 @@ class Errors(commands.Cog):
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandInvokeError):
             error = error.original
-
-        if isinstance(error, discord.errors.Forbidden):
+        if isinstance(error, commands.CommandNotFound):
+            pass
+        elif isinstance(error, discord.errors.Forbidden):
             await ctx.send("I do not have enough permissions to perform this action.")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.message.add_reaction("‼️".strip())

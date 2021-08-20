@@ -5,9 +5,9 @@ from pathlib import Path
 
 import discord
 import discord_slash
-from discord.ext import commands
+from discord.ext import commands, menus
 
-from assets import count_lines, random_assets, get_color
+from assets import count_lines, random_assets, get_color, list_funcs
 from assets.keep_alive import keep_alive
 
 with open('config.json', 'r') as detailsFile:
@@ -47,15 +47,27 @@ help_attributes = {
 }
 
 
+class EmbedPageSource(menus.ListPageSource):
+    async def format_page(self, menu, item):
+        embed = discord.Embed(title=bot.description, color=discord.Color.blue(),
+                              description="Use `bm-help [command/category]` for more information on a command/category.")
+        embed.set_footer(text="React with the emojis to switch pages!")
+        embed.set_thumbnail(url=bot.user.avatar_url)
+        for x in item:
+            embed.add_field(name=x["name"], value=x["value"], inline=x["inline"])
+        return embed
+
+
+def get_command_clean(command):
+    return command.qualified_name
+
+
 class MyHelp(commands.MinimalHelpCommand):
     def get_command_signature(self, command):
         return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
 
     def get_command_name(self, command):
         return '%s%s' % (self.clean_prefix, command.qualified_name)
-
-    def get_command_clean(self, command):
-        return command.qualified_name
 
     async def send_bot_help(self, mapping):
         channel = self.get_destination()
@@ -66,19 +78,23 @@ class MyHelp(commands.MinimalHelpCommand):
         embed.set_thumbnail(url=bot.user.avatar_url)
         for cog, commands_list in mapping.items():
             filtered = await self.filter_commands(commands_list, sort=True)
-            command_signatures = [self.get_command_clean(c) for c in filtered]
+            command_signatures = [get_command_clean(c) for c in filtered]
             if command_signatures:
                 cog_name = getattr(cog, "qualified_name", "No Category")
                 embed.add_field(name=cog_name, value=", ".join([f"`{x}`" for x in command_signatures]), inline=False)
-
-        await channel.send(embed=embed)
+        to_dict = embed.to_dict()
+        fields = to_dict.get("fields")
+        chunked_fields = list_funcs.chunks(fields, 10)
+        items_to_add = [x for x in chunked_fields]
+        menu = menus.MenuPages(EmbedPageSource(items_to_add, per_page=1))
+        await menu.start(self.context)
 
     async def send_command_help(self, command):
         channel = self.get_destination()
         user = channel.guild.me
         if command.cog is not None:
             cog_name = command.cog.qualified_name
-            embed = discord.Embed(title=f"{self.get_command_clean(command)} - Extension of the {cog_name} cog"
+            embed = discord.Embed(title=f"{get_command_clean(command)} - Extension of the {cog_name} cog"
                                   , color=get_color.get_color(user))
         else:
             embed = discord.Embed(title=f"{self.get_command_signature(command)}"
@@ -119,7 +135,7 @@ bot = commands.Bot(command_prefix=get_prefix,
                    help_command=MyHelp(command_attrs=help_attributes),  # custom help command
                    activity=activity,
                    description=description,
-                   owner_id=owner_id, # owner's ID as in the config file
+                   owner_id=owner_id,  # owner's ID as in the config file
                    max_messages=100000)
 bot.cwd = cwd
 

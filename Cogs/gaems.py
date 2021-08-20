@@ -6,13 +6,15 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-from assets import get_color
+from assets import get_color, random_assets
 
 number_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", '10']
 
 
-class Gaems(commands.Cog, description="A collection of games. "
-                                      "They _are_ good games, but don't expect something like **Cyberpunk 2077**..."):
+class Gaems(commands.Cog, description="A collection of gaems. "
+                                      f"They _are_ good games, but don't expect something like "
+                                      f"**{random.choice(random_assets.good_games)}**...\n"
+                                      f"Play gaem, life good."):
 
     def __init__(self, bot):
         self.bot = bot

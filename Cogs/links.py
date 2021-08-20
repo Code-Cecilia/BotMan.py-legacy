@@ -1,12 +1,13 @@
-import discord
-from discord.ext import commands
 import json
 import os
+
+import discord
+from discord.ext import commands
 
 from assets import get_link
 
 
-class Links(commands.Cog):
+class Links(commands.Cog, description="A cog for storing, sending, and modifying links."):
 
     def __init__(self, bot):
         self.bot = bot
@@ -21,7 +22,7 @@ class Links(commands.Cog):
     @commands.command(name='addlink', description='Add a guild-only link,'
                                                   ' which can be accessed anywhere in this server.')
     @commands.has_permissions(administrator=True)
-    async def add_link(self, ctx, link_name, link_url):
+    async def add_link(self, ctx, link_name, *, link_or_text):
         # add the file if not present
         if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):
             with open(f'./links/guild{ctx.guild.id}.json', 'w') as jsonFile:
@@ -30,7 +31,7 @@ class Links(commands.Cog):
 
         with open(f'./links/guild{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
-        data[link_name] = str(link_url)
+        data[link_name] = str(link_or_text)
 
         with open(f'./links/guild{ctx.guild.id}.json', 'w') as writeFile:
             json.dump(data, writeFile)
