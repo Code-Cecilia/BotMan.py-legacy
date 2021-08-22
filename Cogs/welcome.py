@@ -1,6 +1,7 @@
 import json
 import os
 
+import discord
 from discord.ext import commands
 from discord.utils import get
 
@@ -15,15 +16,35 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        owner = guild.owner
         try:
-            await owner.send(f"Hello, I am {self.bot.user.name}! I was invited to {guild.name} just now.\n"
-                             f"I wanted to let you know that my prefix is `{prefix}`, and "
-                             f"my help command can be accessed through `{prefix}help`.\n"
-                             f"Allow me to invite you to the support server: https://discord.gg/9pYEXybAHH\n"
-                             f"When you can, please leave a review in my top.gg page, "
-                             f"it would really help me maker improve me: https://top.gg/bot/845225811152732179/\n"
-                             f"Have a good day ahead!")
+            embed = discord.Embed(title=f"Hello! I am {self.bot.user.name}!", colour=discord.Color.blue())
+            embed.description = f"I am pleased to have been invited to {guild.name}, " \
+                                f"and I wanted to let the members and administrators of this server " \
+                                f"know a few things about me."
+            embed.add_field(name="Basic Information", value="My prefix is `bm-`, "
+                                                            "and a list of my commands is available in `bm-help`.",
+                            inline=False)
+            embed.add_field(name="Changing my prefix", value="Use `bm-changeprefix [new prefix]` "
+                                                             "to change my prefix for this server.",
+                            inline=False)
+            embed.add_field(name="Setting up my preferences for this server",
+                            value="You can set a channel for welcome messages, botchat, madlibs, etc. "
+                                  "using their respective commands.\n"
+                                  "You can set a mute-role using the `setmuterole` command, "
+                                  "or I could make one for this server using the `createmuterole` command. "
+                                  "I set the permissions for the role automatically.\n"
+                                  "You can set the default reason to be used for kicking/banning members "
+                                  "using the `setkickreason` command.\n"
+                                  "You can set a role to be assigned to new members "
+                                  "using the `setmemberrole` command.\n",
+                            inline=False)
+            embed.set_thumbnail(url=self.bot.user.avatar_url)
+            embed.set_footer(text="Have fun!")
+            await guild.system_channel.send(embed=embed)
+            embed.description = f"I am pleased to have been invited to {guild.name}, " \
+                                f"and I wanted to let you, the owner of the server, " \
+                                f"know a few things about me."
+            await guild.owner.send(embed=embed)
         except:
             pass
 
