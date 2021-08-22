@@ -32,6 +32,8 @@ Do not enter the "channel" argument to clear the madlibs channel entry from my d
                 return print(traceback.format_exc(e))
 
         self.madlibs_channels[str(ctx.guild.id)] = channel.id
+        with open("./storage/madlibs_channels.json", "w") as writeFile:
+            json.dump(self.madlibs_channels, writeFile)
         await ctx.send(f"MadLibs channel set as {channel.mention} succesfully!")
 
     @commands.command(name="madlibs", aliases=["ml"], description="Let's play MadLibs!")
