@@ -75,6 +75,8 @@ class Welcome(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        if not os.path.exists(f'./configs/guild{member.guild.id}.json'):
+            return
         with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
             welcome_channel_id = dict(data).get('welcome_channel')
@@ -93,6 +95,8 @@ class Welcome(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         if member == self.bot.user:
+            return
+        if not os.path.exists(f'./configs/guild{member.guild.id}.json'):
             return
         with open(f'./configs/guild{member.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
