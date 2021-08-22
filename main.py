@@ -150,7 +150,7 @@ async def on_ready():
         with open("./storage/reboot.json", "r") as readFile:
             channel_id = json.load(readFile)
         channel = bot.get_channel(id=channel_id)
-        await channel.send("Rebooted Succesfully!")
+        await channel.send("Rebooted Successfully!")
         if len(failed_modules) != 0:
             failed_modules_string = "\n".join(failed_modules)
             embed = discord.Embed(title="These modules failed to load", color=discord.Color.dark_red())
