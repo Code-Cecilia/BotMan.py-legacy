@@ -40,7 +40,8 @@ class Spotify(commands.Cog, description="A category for viewing information rela
             name = list(related_list[x].keys())[0]
             url = list(related_list[x].values())[0]
             related_string += f", __[{name}]({url})__"
-        embed.add_field(name="Related Artists", value=related_string[1:], inline=False)
+        if not related_string == "":
+            embed.add_field(name="Related Artists", value=related_string[1:], inline=False)
         await ctx.send(embed=embed)
 
     @commands.command(name="spotifycategories")
