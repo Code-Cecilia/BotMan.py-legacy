@@ -1,3 +1,4 @@
+import asyncio
 import json
 import random
 
@@ -53,6 +54,8 @@ class Errors(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.message.add_reaction("‼️".strip())
             await ctx.send("You lack the necessary permissions to use this command.")
+        elif isinstance(error, asyncio.TimeoutError):
+            pass
         else:
             raise error
 

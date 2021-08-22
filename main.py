@@ -16,7 +16,7 @@ with open('config.json', 'r') as detailsFile:
     token = details_data['token']
     owner_id = int(details_data['owner_id'])
 
-replit = False
+replit = True
 
 status_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
@@ -119,7 +119,8 @@ class MyHelp(commands.MinimalHelpCommand):
         embed = discord.Embed(title=f"Cog - {cog_title}", colour=get_color.get_color(user))
         embed.set_thumbnail(url=bot.user.avatar_url)
         commands_embed_list = "\n".join([("%s%s" % (self.clean_prefix, command.name)) for command in filtered])
-        embed.description = cog.description
+        if cog.description:
+            embed.description = cog.description
         embed.add_field(name="Commands", value=commands_embed_list, inline=False)
         await channel.send(embed=embed)
 
