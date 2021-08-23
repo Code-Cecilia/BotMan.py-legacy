@@ -115,7 +115,9 @@ class Info(commands.Cog,
     @commands.command(name='userinfo', aliases=['user', 'whois'],
                       description='Returns basic information about the user mentioned as argument.')
     @commands.guild_only()
-    async def user_info(self, ctx, user: discord.Member):
+    async def user_info(self, ctx, user: discord.Member = None):
+        if user is None:
+            user = ctx.author
         name = user.display_name
         discriminator = user.discriminator
         color = user.color
