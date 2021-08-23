@@ -61,6 +61,31 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
             text=f"By u/{author} | {int(like_ratio)}% upvoted | Powered by Reddit")
         await ctx.send(embed=embed)
 
+    @commands.command(name="redditpost", aliases=["reddit"],
+                      description="Gets a random reddit post from the subreddit(s) mentioned as arguments.")
+    async def get_reddit_post(self, ctx, *subreddits):
+        f"""Example Usage: `{ctx.prefix}redditpost memes all nocontext` gets one post from the subreddits combined"""
+        if len(subreddits) == 0:
+            subreddits = ["all"]
+        subreddit = await reddit.subreddit("+".join(subreddits))
+        sub_list = []
+        try:
+            x = subreddit.hot(limit=20)
+            async for y in x:
+                sub_list.append(y)
+            final_choice = random.choice(sub_list)
+            author = final_choice.author
+            like_ratio = float(final_choice.upvote_ratio) * 100
+
+            embed = discord.Embed(title=final_choice.title,
+                                  color=discord.Color.random())
+            embed.set_image(url=final_choice.url)
+            embed.set_footer(
+                text=f"By u/{author} | {int(like_ratio)}% upvoted | Subreddit: r/{final_choice.subreddit.display_name}")
+        except Exception as e:
+            return await ctx.send(f"An exception occured: **{type(e).__name__}**")
+        await ctx.send(embed=embed)
+
     @commands.command(name="funfact", aliases=['randomfact', 'fact'], description="Sends a random fact.")
     async def fact(self, ctx):
         url = f'https://uselessfacts.jsph.pl/random.json?language=en'
