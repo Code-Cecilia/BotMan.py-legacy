@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 import random
 
 import discord.errors
@@ -58,6 +59,31 @@ class Errors(commands.Cog):
             pass
         else:
             raise error
+
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        owner = guild.owner
+        try:
+            await owner.send(f"Hello, it seems I have been removed from {guild.name}.\n"
+                             f"Your server's config files will be deleted, "
+                             f"along with the mute files, and the custom prefix.\n"
+                             f"Thank you for having me in your server for this long.\n"
+                             f"Until next time!")
+        except:
+            pass
+        if os.path.exists(f'configs/guild{guild.id}.json'):
+            os.remove(f'./configs/guild{guild.id}.json')
+
+        if os.path.exists(f'./storage/mute_files/guild{guild.id}.json'):
+            os.remove(f'./storage/mute_files/guild{guild.id}.json')
+
+        with open('./storage/prefixes.json', 'r') as prefixFile:
+            data = json.load(prefixFile)
+        if str(guild.id) in data.keys():
+            data.pop(str(guild.id))
+
+        with open('./storage/prefixes.json', 'w') as prefixFile:
+            json.dump(data, prefixFile)
 
 
 def setup(bot):

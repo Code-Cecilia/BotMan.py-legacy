@@ -19,6 +19,8 @@ client_id = data.get('client_id')
 client_secret = data.get('client_secret')
 username = data.get('username')
 password = data.get('password')
+with open("./assets/nsfw_subreddits.json", "r") as nsfwFile:
+    nsfw_subreddits_list = json.load(nsfwFile)
 
 reddit = asyncpraw.Reddit(client_id=client_id, client_secret=client_secret, username=username, password=password,
                           user_agent="pythonpraw")
@@ -65,12 +67,22 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
                       description="Gets a random reddit post from the subreddit(s) mentioned as arguments.")
     async def get_reddit_post(self, ctx, *subreddits):
         f"""Example Usage: `{ctx.prefix}redditpost memes all nocontext` gets one post from the subreddits combined"""
+        subreddits = list(subreddits)
+        has_nsfw = False
+        for x in subreddits:
+            if x.lower() in [entry.lower() for entry in nsfw_subreddits_list]:
+                subreddits.remove(x)
+                has_nsfw = True
+        if has_nsfw:
+            await ctx.send("You choices contain one or more nsfw subreddits. "
+                           "They have been removed from your choices list.")
         if len(subreddits) == 0:
             subreddits = ["all"]
+            await ctx.send("Here's a random post from r/all")
         subreddit = await reddit.subreddit("+".join(subreddits))
         sub_list = []
         try:
-            x = subreddit.hot(limit=20)
+            x = subreddit.hot(limit=50)
             async for y in x:
                 sub_list.append(y)
             final_choice = random.choice(sub_list)
