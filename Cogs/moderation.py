@@ -96,12 +96,11 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                                     f"to confirm hard-mute.",
                               description=f"**{final_otp}**", color=ctx.author.color)
         embed.set_footer(text="Timeout: 15 seconds")
-        embed_message = await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
         try:
             message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
             if not str(message_otp.content) == final_otp:
                 return await ctx.send("Incorrect OTP - Aborting...")
-            await embed_message.delete()
             await message_otp.add_reaction("✅")
         except asyncio.TimeoutError:
             return await ctx.send("Timed out - Aborting...")
@@ -117,9 +116,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         roles_embed = discord.Embed(
             title=f"{user.display_name} has these roles", color=discord.Color.random())
-        for role in user.roles:
-            roles_embed.add_field(
-                name="\ufeff", value=role.mention, inline=True)
+        roles_embed.description = "\n".join([role.mention for role in user.roles])
         roles_embed.set_footer(text="Trying to remove these roles now...")
         await ctx.send(embed=roles_embed)
 
@@ -156,7 +153,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                 # if they are unmuted, we dont want to unmute again
                 await Moderation.unhardmute_func(self, ctx, user)
         else:
-            await ctx.send(f"{user} has been hard-muted.\n"
+            await ctx.send(f"{user.display_name} has been hard-muted.\n"
                            f"If you want to un-hardmute the user, use the `{ctx.prefix}unhardmute` command.")
 
     @commands.command(name='unmute', description='Unmutes the user mentioned if muted previously.\n')
@@ -253,12 +250,11 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm ban.",
                               description=f"**{final_otp}**", color=ctx.author.color)
         embed.set_footer(text="Timeout: 15 seconds")
-        embed_message = await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
         try:
             message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
             if not str(message_otp.content) == final_otp:
                 return await ctx.send("Incorrect OTP - Aborting...")
-            await embed_message.delete()
             await message_otp.add_reaction("✅")
         except asyncio.TimeoutError:
             return await ctx.send("Timed out - Aborting...")
@@ -298,7 +294,8 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             return await ctx.send('You cannot kick yourself. Sorry lol')
 
         if misc_checks.is_client(self.bot, member):
-            return await ctx.send('I can\'t mute kick, sorry.')
+            return await ctx.send('I can\'t kick myself using this command. '
+                                  'You can use the `leave` command for me to leave the server.')
 
         otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
             0, 9), random.randint(0, 9), random.randint(0, 9)
@@ -324,7 +321,6 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             default_kickBan_reason = data.get(
                 'default_kick_ban_reason')  # get the default reason
             reason = default_kickBan_reason
-
         message_to_user = f'You have been kicked from **{ctx.guild.name}** for **{reason}**'
 
         try:
@@ -333,7 +329,6 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             await ctx.send(f'Count not send DM to {member}. Kicking anyway...')
 
         await member.kick(reason=reason)
-
         await ctx.send(f'**{member}** has been kicked for **{reason}**.')
 
     # unban user.
@@ -385,6 +380,24 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         else:
             return await ctx.send("Wrong format. use `User#1234` or the user's ID (17/18 digits long).")
+
+    @commands.command(name="leave", aliases=["leaveguild", "leaveserver"],
+                      description="The command to remove me from this server.")
+    @commands.has_permissions(kick_members=True)
+    async def leave_guild(self, ctx):
+        try:
+            await ctx.guild.owner.send(f"Hello, it seems I have been removed from {ctx.guild.name}.\n"
+                             f"Your server's config files will be deleted, "
+                             f"along with the mute files, and the custom prefix.\n"
+                             f"Thank you for having me in your server for this long.\n"
+                             f"Until next time!")
+        except:
+            pass
+        try:
+            await ctx.guild.leave()
+        except discord.Forbidden:
+            await ctx.send("I could not leave the server due to an unknown error. "
+                           "Please try again later or kick me manually.")
 
 
 def setup(bot):
