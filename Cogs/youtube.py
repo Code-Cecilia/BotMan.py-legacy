@@ -77,7 +77,7 @@ Both the activity's ID and the activity's name are accepted as valid arguments."
         except AttributeError:
             return await ctx.send("You need to be in a voice channel to start an activity.")
         except discordTogether.InvalidCustomID:
-            return await ctx.send("Invalid activity ID. Please try with a valid ID.")
+            return await ctx.send("Invalid activity ID. Please try with a valid ID or name.")
         except discordTogether.InvalidActivityChoice:
             return await ctx.send("Invalid activity name. Please try with a valid ID or name.")
         text = f"_{ctx.author.display_name}_, join the activity using this link!\n" \

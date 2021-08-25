@@ -69,13 +69,15 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
         f"""Example Usage: `{ctx.prefix}redditpost memes all nocontext` gets one post from the subreddits combined"""
         subreddits = list(subreddits)
         has_nsfw = False
-        for x in subreddits:
-            if x.lower() in [entry.lower() for entry in nsfw_subreddits_list]:
-                subreddits.remove(x)
+        for subreddit in subreddits:
+            if subreddit.lower() in [x for x in nsfw_subreddits_list] and not ctx.message.channel.is_nsfw():
+                subreddits.remove(subreddit)
                 has_nsfw = True
-        if has_nsfw:
+
+        if has_nsfw and not ctx.message.channel.is_nsfw():
             await ctx.send("You choices contain one or more nsfw subreddits. "
-                           "They have been removed from your choices list.")
+                           "They have been removed from your choices list.\n"
+                           "Please use this command in an nsfw channel to view nsfw content.")
         if len(subreddits) == 0:
             subreddits = ["all"]
             await ctx.send("Here's a random post from r/all")

@@ -71,7 +71,7 @@ class Info(commands.Cog,
             embed.add_field(name="Banner", value="Banner below!", inline=False)
             embed.set_image(url=ctx.guild.banner_url)
         embed.set_footer(
-            text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
+            text=f'Requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
         print(ctx.guild.features)
 
@@ -108,7 +108,7 @@ class Info(commands.Cog,
                         value=str(members_count), inline=True)
         embed.add_field(name='Mentionable', value=is_mentionable, inline=False)
         embed.set_footer(
-            text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
+            text=f'Requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
 
         await ctx.send(embed=embed)
 
@@ -143,7 +143,7 @@ class Info(commands.Cog,
             title=name, description=f'ID: {id}', color=color, timestamp=ctx.message.created_at)
         embed.set_thumbnail(url=avatar)
         embed.set_footer(
-            text=f'Command requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
+            text=f'Requested by {ctx.author.name}', icon_url=ctx.author.avatar_url)
         embed.add_field(name='Username',
                         value=f"{username}#{discriminator}", inline=True)
         embed.add_field(name='Is a Bot', value=bot_bool)
@@ -216,7 +216,7 @@ class Info(commands.Cog,
         embed.add_field(name='Time of creation',
                         value=creation_time, inline=True)
         embed.set_footer(
-            text=f'Command requested by {ctx.author}', icon_url=ctx.author.avatar_url)
+            text=f'Requested by {ctx.author}', icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 
 
