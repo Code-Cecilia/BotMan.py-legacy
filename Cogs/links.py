@@ -61,16 +61,15 @@ class Links(commands.Cog, description="A cog for storing, sending, and modifying
     @commands.command(name='linklist', aliases=['linkslist'], description='Lists all global and guild-specific links.')
     async def list_links(self, ctx):
         # add the file if not present
+        with open('./assets/global_links.json') as GlobalLinksJson:
+            links_list_global = json.load(GlobalLinksJson)
+            links_list_global_keys = links_list_global.keys()  # getting global links
         if os.path.exists(f'{self.linksPath}{ctx.guild.id}.json'):
-            with open('./assets/global_links.json') as GlobalLinksJson:
-                links_list_global = json.load(GlobalLinksJson)
-                links_list_global_keys = links_list_global.keys()  # getting global links
             with open(f'{self.linksPath}{ctx.guild.id}.json', 'r') as readFile:
                 guild_specific_links = json.load(readFile)
                 # getting guild-specific links
                 guild_specific_links_keys = guild_specific_links.keys()
         else:
-            links_list_global_keys = []
             guild_specific_links_keys = []
 
         global_list_embed = ""
