@@ -55,7 +55,6 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, UrbanDict
             sub_list.append(y)  # append to the subreddit list
         final_choice = random.choice(sub_list)
         author = final_choice.author
-        print(final_choice.url)
         like_ratio = float(final_choice.upvote_ratio) * 100
         embed = discord.Embed(title=final_choice.title,
                               color=discord.Color.random())
@@ -78,7 +77,6 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, UrbanDict
                 sub_list.append(y)
             final_choice = random.choice(sub_list)
             author = final_choice.author
-            print(final_choice.url)
             like_ratio = float(final_choice.upvote_ratio) * 100
 
             embed = discord.Embed(title=final_choice.title,
