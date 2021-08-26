@@ -121,7 +121,10 @@ class MyHelp(commands.MinimalHelpCommand):
         commands_embed_list = "\n".join([("%s%s" % (self.clean_prefix, command.name)) for command in filtered])
         if cog.description:
             embed.description = cog.description
-        embed.add_field(name="Commands", value=commands_embed_list, inline=False)
+        if not len(commands_embed_list) == 0:
+            embed.add_field(name="Commands", value=commands_embed_list, inline=False)
+        else:
+            embed.add_field(name="Commands", value="No Commands are present in this Cog.", inline=False)
         await channel.send(embed=embed)
 
     async def send_error_message(self, error):
