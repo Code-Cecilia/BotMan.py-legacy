@@ -24,18 +24,18 @@ reddit = asyncpraw.Reddit(client_id=client_id, client_secret=client_secret, user
                           user_agent="pythonpraw")
 
 
-class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, UrbanDict, MoneyExchangeAPI and more!\n'
+class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, UrbanDict, MoneyExchangeAPI and more!\n'
                                         'Basically gets data from the internet.'):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name='nocontext', description='Returns a random post\'t title from r/NoContext')
     async def NoContext(self, ctx):
-        subreddit = await reddit.subreddit("nocontext")
-        x = subreddit.hot(limit=20)
-        title_list = []
+        subreddit = await reddit.subreddit("nocontext")  # get the subreddit
+        x = subreddit.hot(limit=20)  # we need to limit the number of results for speed
+        title_list = []  # create empty array of post titles (the titles contain the text we need)
         async for y in x:
-            title_list.append(str(y.title))
+            title_list.append(str(y.title))  # append to the array
         choice = random.choice(title_list)
         embed = discord.Embed(title=choice, color=discord.Colour.random())
         await ctx.send(embed=embed)
@@ -43,16 +43,19 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
     @commands.command(name='meme', description='Sends a random meme from r/memes, and '
                                                'if "all" is passed in as an argument, a few more subreddits are used.')
     async def get_meme(self, ctx, arg=None):
-        if arg == "all":
+        if arg is None:
+            subreddit = await reddit.subreddit('memes')
+        elif arg == "all":
             subreddit = await reddit.subreddit('memes')
         else:
-            subreddit = await reddit.subreddit('memes+dankmemes+prequelmemes+otmemes+funny')
-        sub_list = []
+            subreddit = await reddit.subreddit('memes')
+        sub_list = []  # create empty array for the subreddits list
         x = subreddit.hot(limit=50)
         async for y in x:
-            sub_list.append(y)
+            sub_list.append(y)  # append to the subreddit list
         final_choice = random.choice(sub_list)
         author = final_choice.author
+        print(final_choice.url)
         like_ratio = float(final_choice.upvote_ratio) * 100
         embed = discord.Embed(title=final_choice.title,
                               color=discord.Color.random())
@@ -75,13 +78,20 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, PRSAW, Ur
                 sub_list.append(y)
             final_choice = random.choice(sub_list)
             author = final_choice.author
+            print(final_choice.url)
             like_ratio = float(final_choice.upvote_ratio) * 100
 
             embed = discord.Embed(title=final_choice.title,
                                   color=discord.Color.random())
-            embed.set_image(url=final_choice.url)
+            if final_choice.url.startswith("https://i"):
+                embed.set_image(url=final_choice.url)
+            elif final_choice.url.startswith("https://v"):
+                embed.description = f"__[Video Link]({final_choice.url})__"
+            else:
+                embed.description = f"__[Asset Link]({final_choice.url})__"
+                embed.set_image(url=final_choice.url)
             embed.set_footer(
-                text=f"By u/{author} | {int(like_ratio)}% upvoted | Subreddit: r/{final_choice.subreddit.display_name}")
+                text=f"By u/{author} | {int(like_ratio)}% upvoted | r/{final_choice.subreddit.display_name}")
         except Exception as e:
             return await ctx.send(f"An exception occured: **{type(e).__name__}**")
         await ctx.send(embed=embed)
