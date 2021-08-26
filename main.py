@@ -72,34 +72,33 @@ class MyHelp(commands.MinimalHelpCommand):
     async def send_bot_help(self, mapping):
         channel = self.get_destination()
         user = channel.guild.me
-        embed = discord.Embed(title=bot.description, colour=get_color.get_color(user))
+        embed = discord.Embed(title=bot.description, colour=discord.Color.blue())  # defining the embed
         embed.description = f"Use `{self.clean_prefix}help [command/category]` " \
-                            f"for more information on a command/category."
-        embed.set_thumbnail(url=bot.user.avatar_url)
+                            f"for more information on a command/category."  # setting description
+        embed.set_thumbnail(url=bot.user.avatar_url)  # setting thumbnail as bot's avatar
         for cog, commands_list in mapping.items():
             filtered = await self.filter_commands(commands_list, sort=True)
             command_signatures = [get_command_clean(c) for c in filtered]
             if command_signatures:
                 cog_name = getattr(cog, "qualified_name", "No Category")
                 embed.add_field(name=cog_name, value=", ".join([f"`{x}`" for x in command_signatures]), inline=False)
-        to_dict = embed.to_dict()
-        fields = to_dict.get("fields")
-        chunked_fields = list_funcs.chunks(fields, 10)
+                # adding fields. each cog is in one field
+        fields = embed.to_dict().get("fields")
+        chunked_fields = list_funcs.chunks(fields, 10)  # making chunks of 10 cogs rach
         items_to_add = [x for x in chunked_fields]
         menu = menus.MenuPages(EmbedPageSource(items_to_add, per_page=1))
-        await menu.start(self.context)
+        await menu.start(self.context)  # starting the reaction-scroll
 
     async def send_command_help(self, command):
         channel = self.get_destination()
-        user = channel.guild.me
         if command.cog is not None:
             cog_name = command.cog.qualified_name
             embed = discord.Embed(title=f"{get_command_clean(command)} - Extension of the {cog_name} cog"
-                                  , color=get_color.get_color(user))
-        else:
+                                  , color=discord.Color.blue())
+        else:  # if the command is not in a cog
             embed = discord.Embed(title=f"{self.get_command_signature(command)}"
-                                  , color=get_color.get_color(user))
-        embed.set_thumbnail(url=bot.user.avatar_url)
+                                  , color=discord.Color.blue())
+        embed.set_thumbnail(url=bot.user.avatar_url)  # setting the thumbnail as bot's avatar
         if command.description:
             embed.add_field(name="Description", value=command.description, inline=False)
         if command.help:
@@ -111,12 +110,11 @@ class MyHelp(commands.MinimalHelpCommand):
         await channel.send(embed=embed)
 
     async def send_cog_help(self, cog):
-        channel = self.get_destination()
-        user = channel.guild.me
+        channel = self.get_destination()  # getting a messageable
         commands_list = cog.get_commands()
         cog_title = cog.qualified_name
         filtered = await self.filter_commands(commands_list, sort=True)
-        embed = discord.Embed(title=f"Cog - {cog_title}", colour=get_color.get_color(user))
+        embed = discord.Embed(title=f"Cog - {cog_title}", colour=discord.Color.blue())
         embed.set_thumbnail(url=bot.user.avatar_url)
         commands_embed_list = "\n".join([("%s%s" % (self.clean_prefix, command.name)) for command in filtered])
         if cog.description:
@@ -149,6 +147,7 @@ bot.cwd = cwd
 @bot.event
 async def on_ready():
     print(f'{bot.user} is online!')
+    """This whole block of code is for the case where the "reboot" command was invoked. more details in owner_only.py"""
     if os.path.exists("./storage/reboot.json"):
         with open("./storage/reboot.json", "r") as readFile:
             channel_id = json.load(readFile)
@@ -183,8 +182,8 @@ async def vote_topgg(ctx):
 @slash.slash(name='countlines', description='Counts the number of lines of python code the bot currently has.')
 async def countlines_func(ctx):
     lines = count_lines.countlines('./')
-    final_str = random.choice(random_assets.countlines_responses).format(lines)
-    embed = discord.Embed(title=final_str, color=get_color.get_color(bot.user))
+    final_str = random.choice(random_assets.countlines_responses).format(lines)  # who doesn't like random responses?
+    embed = discord.Embed(title=final_str, color=get_color.get_color(bot.user))  # making the embed
     await ctx.send(embed=embed)
 
 
