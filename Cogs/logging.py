@@ -157,8 +157,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         if message_channel is None:
             return
         embed = discord.Embed(title=f"{member} has been unbanned", description=f"ID: {member.id}",
-                              color=get_color.get_color(
-                                  discord.Color.random()),
+                              color=discord.Color.random(),
                               timestamp=member.created_at)
         embed.set_thumbnail(url=member.avatar_url)
         embed.set_footer(text="Account created at")

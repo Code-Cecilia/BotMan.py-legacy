@@ -24,7 +24,7 @@ class Wikipedia(commands.Cog, description="WIP Wikipedia Cog"):
             if suggestion:
                 embed.description = f"**Suggested**: {suggestion}"
             embed.add_field(name="Results", value="\n".join([f"> {x}" for x in search_result]))
-            embed.set_footer(text=f"Search requested by {ctx.author}", icon_url=ctx.author.avatar_url)
+            embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar_url)
             await ctx.send(embed=embed)
 
     @commands.command(name="wiki", description="Wikipedia summary for a search term.")

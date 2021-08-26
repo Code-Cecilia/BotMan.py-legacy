@@ -7,10 +7,10 @@ def get_link(ctx, link_name):
         links_list_global = json.load(jsonFile)  # getting global links
 
     if not os.path.exists(f'./links/guild{ctx.guild.id}.json'):
-        with open(f'./links/guild{ctx.guild.id}.json', 'w') as writeFile:
-            print(f'./links/guild{ctx.guild.id}.json has been created')
+        with open(f'./links/{ctx.guild.id}.json', 'w') as writeFile:
+            print(f'./links/{ctx.guild.id}.json has been created')
             json.dump({}, writeFile)
-    with open(f'./links/guild{ctx.guild.id}.json', 'r') as readFile:
+    with open(f'./links/{ctx.guild.id}.json', 'r') as readFile:
         # getting guild-specific links
         guild_specific_links = json.load(readFile)
 

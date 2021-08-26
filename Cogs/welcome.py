@@ -43,35 +43,10 @@ class Welcome(commands.Cog):
             await guild.system_channel.send(embed=embed)
             embed.description = f"I am pleased to have been invited to {guild.name}, " \
                                 f"and I wanted to let you, the owner of the server, " \
-                                f"know a few things about me."
+                                f"get to know a few things about me."
             await guild.owner.send(embed=embed)
         except:
             pass
-
-    @commands.Cog.listener()
-    async def on_guild_remove(self, guild):
-        owner = guild.owner
-        try:
-            await owner.send(f"Hello, it seems I have been removed from {guild.name}.\n"
-                             f"Your server's config files will be deleted, "
-                             f"along with the mute files, and the custom prefix.\n"
-                             f"Thank you for having me in your server for this long.\n"
-                             f"Until next time!")
-        except:
-            pass
-        if os.path.exists(f'configs/guild{guild.id}.json'):
-            os.remove(f'./configs/guild{guild.id}.json')
-
-        if os.path.exists(f'./storage/mute_files/guild{guild.id}.json'):
-            os.remove(f'./storage/mute_files/guild{guild.id}.json')
-
-        with open('./storage/prefixes.json', 'r') as prefixFile:
-            data = json.load(prefixFile)
-        if str(guild.id) in data.keys():
-            data.pop(str(guild.id))
-
-        with open('./storage/prefixes.json', 'w') as prefixFile:
-            json.dump(data, prefixFile)
 
     @commands.Cog.listener()
     async def on_member_join(self, member):

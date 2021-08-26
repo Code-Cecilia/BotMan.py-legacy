@@ -22,7 +22,6 @@ class BotChat(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        # We're ready - let's load the bots
         if not os.path.exists(self.botBrain):
             # No brain, let's learn and create one
             files = os.listdir(self.botDir)
@@ -64,9 +63,11 @@ class BotChat(commands.Cog):
             return
 
         botchat_channel_id = self.botchat_channels.get(str(message.guild.id))
+        # getting the botchat channel from storage
         if botchat_channel_id is None:
             return
-        botchat_channel = self.bot.get_channel(botchat_channel_id)  # getting the botchat channel
+        botchat_channel = self.bot.get_channel(botchat_channel_id)
+        # getting the botchat channel
         if botchat_channel is None:
             return
         if message.channel == botchat_channel:

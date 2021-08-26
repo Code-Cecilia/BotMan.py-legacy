@@ -15,7 +15,7 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
     @commands.command(name='ping', description='Returns the latency in milliseconds.')
     async def ping_command(self, ctx):
         latency = float(self.bot.latency) * 1000
-        latency = round(latency, 2)
+        latency = round(latency, 2)  # convert to float with 2 decimal places
         await ctx.send(f'Pong! `Latency: {latency}ms`')
 
     @commands.command(name="vote", description="Vote for BotMan on top.gg!")
@@ -31,9 +31,9 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
     @commands.command(name='countlines', aliases=['countline'], description='Counts the number of lines of python code '
                                                                             'the bot currently has.')
     async def countlines_func(self, ctx):
-        lines = count_lines.countlines('./')
+        lines = count_lines.countlines('./')  # get lines
         final_str = random.choice(
-            random_assets.countlines_responses).format(lines)
+            random_assets.countlines_responses).format(lines)  # get response sentence
         embed = discord.Embed(
             title=final_str, color=get_color.get_color(self.bot.user))
         await ctx.send(embed=embed)
@@ -43,14 +43,14 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
     async def stats(self, ctx):
         dpyVersion = f"Version {discord.__version__}"
         serverCount = len(self.bot.guilds)
-        memberCount = len(set(self.bot.get_all_members()))
+        memberCount = len(set(self.bot.get_all_members()))  # returns a list, so we're getting the length of that list
         latency = float(self.bot.latency) * 1000
-        latency = f"{int(latency)} ms"
+        latency = f"{int(latency)} ms"  # integer is good enough in this case
         source = "__[Github](https://github.com/Code-Cecilia/BotMan.py)__"
         guren = f"__[Guren Ichinose](https://github.com/Code-Cecilia/Guren)__"
         now = time.monotonic()
         uptime_seconds = int(now - self.startTime)
-        m, s = divmod(uptime_seconds, 60)
+        m, s = divmod(uptime_seconds, 60)  # getting the uptime mins, secs, hrs, days
         h, m = divmod(m, 60)
         d, h = divmod(h, 24)
 

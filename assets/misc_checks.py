@@ -1,7 +1,5 @@
 import json
 
-import discord
-
 
 def check_muted_role(ctx):
     with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
@@ -19,14 +17,14 @@ def check_muted_role(ctx):
     return is_present
 
 
-def is_author(ctx, user: discord.Member):
+def is_author(ctx, user):
     if ctx.author.id == user.id:
         return True
     else:
         return False
 
 
-def is_client(client, user: discord.Member):
+def is_client(client, user):
     if client.user.id == user.id:
         return True
     else:

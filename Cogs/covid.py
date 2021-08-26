@@ -1,11 +1,10 @@
 import ast
 import datetime
 
-import aiohttp
 import discord
 from discord.ext import commands
 
-from assets import time_calc
+from assets import time_calc, aiohttp_assets
 
 
 class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a selected country\n"
@@ -21,9 +20,7 @@ class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a se
             track_url = "https://disease.sh/v3/covid-19/all"
         else:
             track_url = f"https://disease.sh/v3/covid-19/countries/{country}?strict=true"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(track_url) as response:
-                response_dict = (await response.content.read()).decode('utf-8')
+        response_dict = await aiohttp_assets.aiohttp_get(track_url)
         response_dict = ast.literal_eval(response_dict)
 
         if response_dict.get("message") == "Country not found or doesn't have any cases":

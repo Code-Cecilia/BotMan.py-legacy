@@ -1,14 +1,13 @@
 import asyncio
 import json
 import os
-import random
 import re
 
 import discord
 from discord.ext import commands
 from discord.utils import get
 
-from assets import time_calc, misc_checks
+from assets import time_calc, misc_checks, otp_assets
 
 
 class Moderation(commands.Cog, description="Moderation commands. Use with caution."):
@@ -31,13 +30,11 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         if misc_checks.is_client(self.bot, user):
             return await ctx.send('I can\'t mute myself, sorry.')
 
-        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
-            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
-                json.dump({}, createFile, indent=4)
-                print(f'Created file guild{ctx.guild.id}.json in configs...')
-
-        with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
-            data = json.load(jsonFile)
+        if os.path.exists(f'./configs/{ctx.guild.id}.json'):
+            with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
+                data = json.load(jsonFile)
+        else:
+            data = {}
         mute_role_id = data.get('mute_role')
 
         if mute_role_id is None:
@@ -52,14 +49,14 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
-            await ctx.send(f'{user} has been muted for {final_time_text}.')
+            await ctx.send(f'{user.display_name} has been muted for {final_time_text}.')
             # sleep for specified time, then remove the muted role
             await asyncio.sleep(time_calc.get_time(time_period))
             if mute_role in user.roles:
                 await user.remove_roles(mute_role)
-                await ctx.send(f'{user} has been unmuted.')
+                await ctx.send(f'{user.display_name} has been unmuted.')
         else:
-            await ctx.send(f'{user} has been muted.')
+            await ctx.send(f'{user.display_name} has been muted.')
 
     @commands.command(name='hardmute', description='Hard-mutes the person mentioned. '
                                                    'This means all roles are removed until the mute period is over. '
@@ -77,35 +74,22 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             return await ctx.send('You cannot mute yourself. Sorry lol')
         if misc_checks.is_client(self.bot, user):
             return await ctx.send('I can\'t mute myself, sorry.')
-        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
-            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
-                json.dump({}, createFile, indent=4)
-
-        with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
-            data = json.load(jsonFile)
+        if os.path.exists(f'./configs/{ctx.guild.id}.json'):
+            with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
+                data = json.load(jsonFile)
+        else:
+            data = {}
         mute_role_id = (data.get('mute_role'))
         if mute_role_id is None:
             return await ctx.send('It seems you have not set the mute role. '
                                   'Please ask a person with the `Manage Server` permission '
                                   'to set a role as the mute role, '
                                   'or make one by using the `setmuterole` or `createmuterole` commands.')
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
-            0, 9), random.randint(0, 9), random.randint(0, 9)
-        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
-        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below "
-                                    f"to confirm hard-mute.",
-                              description=f"**{final_otp}**", color=ctx.author.color)
-        embed.set_footer(text="Timeout: 15 seconds")
-        embed_message = await ctx.send(embed=embed)
-        try:
-            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
-            if not str(message_otp.content) == final_otp:
-                return await ctx.send("Incorrect OTP - Aborting...")
-            await embed_message.delete()
-            await message_otp.add_reaction("✅")
-        except asyncio.TimeoutError:
-            return await ctx.send("Timed out - Aborting...")
 
+        otp_success = await otp_assets.send_waitfor_otp(ctx, self.bot)
+        # random otp generator. if user enters correct otp, returns true. else, returns false
+        if not otp_success:
+            return
         mute_role = get(ctx.guild.roles, id=int(mute_role_id))
 
         await ctx.send("Adding the mute role now...")
@@ -113,13 +97,11 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             await user.add_roles(mute_role)
         except:
             return await ctx.send(
-                f"Could not add role {str(mute_role.name).replace('@', '')} to {user.mention}. Aborting...")
+                f"Could not add role {str(mute_role.name).replace('@', '')} to {user.display_name}. Aborting...")
 
         roles_embed = discord.Embed(
             title=f"{user.display_name} has these roles", color=discord.Color.random())
-        for role in user.roles:
-            roles_embed.add_field(
-                name="\ufeff", value=role.mention, inline=True)
+        roles_embed.description = "\n".join([role.mention for role in user.roles])
         roles_embed.set_footer(text="Trying to remove these roles now...")
         await ctx.send(embed=roles_embed)
 
@@ -148,7 +130,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                 await ctx.send(f"Could not remove role **{str(role.name).replace('@', '')}**. Continuing... ")
         if time_period is not None:
             final_time_text = time_calc.time_suffix(time_period)
-            await ctx.send(f"{user} has been hard-muted for {final_time_text}.\n"
+            await ctx.send(f"{user.display_name} has been hard-muted for {final_time_text}.\n"
                            f"If you want to un-hardmute them before the specified time, "
                            f"use the `{ctx.prefix}unhardmute` command.")
             await asyncio.sleep(time_calc.get_time(time_period))
@@ -156,22 +138,18 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                 # if they are unmuted, we dont want to unmute again
                 await Moderation.unhardmute_func(self, ctx, user)
         else:
-            await ctx.send(f"{user} has been hard-muted.\n"
+            await ctx.send(f"{user.display_name} has been hard-muted.\n"
                            f"If you want to un-hardmute the user, use the `{ctx.prefix}unhardmute` command.")
 
     @commands.command(name='unmute', description='Unmutes the user mentioned if muted previously.\n')
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def unmute_func(self, ctx, user: discord.Member):
-        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
-            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
-                json.dump({}, createFile, indent=4)
-                # create file if not present
-                print(f'Created file guild{ctx.guild.id}.json in configs...')
-
-        with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
-            data = json.load(jsonFile)
-
+        if os.path.exists(f'./configs/{ctx.guild.id}.json'):
+            with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
+                data = json.load(jsonFile)
+        else:
+            data = {}
         if data.get('mute_role') is None:
             return await ctx.send('It seems you have not set the mute role. '
                                   'Please ask a person with the `Manage Server` permission '
@@ -189,13 +167,13 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def unhardmute_func(self, ctx, user: discord.Member):
-        if not os.path.exists(f'./configs/guild{ctx.guild.id}.json'):
-            with open(f'./configs/guild{ctx.guild.id}.json', 'w') as createFile:
+        if not os.path.exists(f'./configs/{ctx.guild.id}.json'):
+            with open(f'./configs/{ctx.guild.id}.json', 'w') as createFile:
                 json.dump({}, createFile, indent=4)
                 # create file if not present
                 print(f'Created file guild{ctx.guild.id}.json in configs...')
 
-        with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
+        with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
             data = json.load(jsonFile)
 
         if data.get('mute_role') is None:
@@ -208,7 +186,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         mute_role = get(ctx.guild.roles, id=mute_role_id)
 
-        await ctx.send(f"Unmuting {user.mention} and re-adding roles...")
+        await ctx.send(f"Unmuting {user.display_name} and re-adding roles...")
 
         with open(f'./storage/mute_files/guild{ctx.guild.id}.json', 'r') as mute_file:
             data = json.load(mute_file)
@@ -239,7 +217,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
                                               'if no reason if given.')
     @commands.has_permissions(ban_members=True)
     @commands.guild_only()
-    async def ban(self, ctx, member: discord.Member, *, reason=None):
+    async def ban(self, ctx, member: discord.User, *, reason=None):
 
         if misc_checks.is_author(ctx, member):
             return await ctx.send('You cannot ban yourself. Sorry lol')
@@ -247,31 +225,19 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         if misc_checks.is_client(self.bot, member):
             return await ctx.send('I can\'t ban myself, sorry.')
 
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
-            0, 9), random.randint(0, 9), random.randint(0, 9)
-        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
-        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm ban.",
-                              description=f"**{final_otp}**", color=ctx.author.color)
-        embed.set_footer(text="Timeout: 15 seconds")
-        embed_message = await ctx.send(embed=embed)
-        try:
-            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
-            if not str(message_otp.content) == final_otp:
-                return await ctx.send("Incorrect OTP - Aborting...")
-            await embed_message.delete()
-            await message_otp.add_reaction("✅")
-        except asyncio.TimeoutError:
-            return await ctx.send("Timed out - Aborting...")
+        otp_success = await otp_assets.send_waitfor_otp(ctx, self.bot)
+        if not otp_success:
+            return
 
         if reason is not None:
             try:
-                with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
+                with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
                     data = json.load(jsonFile)
             except:
                 data = {}
             default_kickBan_reason = data.get(
                 'default_kick_ban_reason')  # get the default reason
-            reason = default_kickBan_reason
+            reason = default_kickBan_reason if default_kickBan_reason else "Being a jerk"
 
         message_to_user = f'You have been banned from **{ctx.guild.name}** for **{reason}**'
 
@@ -280,7 +246,7 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
         except:
             await ctx.send(f'Count not send DM to {member}. Banning anyway...')
         try:
-            await member.ban(reason=reason)
+            await ctx.guild.ban(member, reason=reason)
         except Exception as e:
             return await ctx.send(f"Failed to ban. reason: `{type(e).__name__}`")
         await ctx.send(f'**{member}** has been banned for **{reason}**.')
@@ -298,33 +264,23 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             return await ctx.send('You cannot kick yourself. Sorry lol')
 
         if misc_checks.is_client(self.bot, member):
-            return await ctx.send('I can\'t mute kick, sorry.')
+            return await ctx.send('I can\'t kick myself using this command. '
+                                  'You can use the `leave` command for me to leave the server.')
 
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
-            0, 9), random.randint(0, 9), random.randint(0, 9)
-        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
-        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm kick.",
-                              description=f"**{final_otp}**", color=ctx.author.color)
-        embed.set_footer(text="Timeout: 15 seconds")
-        await ctx.send(embed=embed)
-        try:
-            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
-            if not str(message_otp.content) == final_otp:
-                return await ctx.send("Incorrect OTP - Aborting...")
-            await message_otp.add_reaction("✅")
-        except asyncio.TimeoutError:
-            return await ctx.send("Timed out - Aborting...")
+        otp_success = await otp_assets.send_waitfor_otp(ctx, self.bot)
+        # random otp generator. if user enters correct otp, returns true. else, returns false
+        if not otp_success:
+            return
 
         if reason is None:
             try:
-                with open(f'./configs/guild{ctx.guild.id}.json', 'r') as jsonFile:
+                with open(f'./configs/{ctx.guild.id}.json', 'r') as jsonFile:
                     data = json.load(jsonFile)
             except:
                 data = {}
             default_kickBan_reason = data.get(
                 'default_kick_ban_reason')  # get the default reason
-            reason = default_kickBan_reason
-
+            reason = default_kickBan_reason if default_kickBan_reason else "Being a jerk"
         message_to_user = f'You have been kicked from **{ctx.guild.name}** for **{reason}**'
 
         try:
@@ -333,7 +289,6 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
             await ctx.send(f'Count not send DM to {member}. Kicking anyway...')
 
         await member.kick(reason=reason)
-
         await ctx.send(f'**{member}** has been kicked for **{reason}**.')
 
     # unban user.
@@ -345,21 +300,10 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
     @commands.guild_only()
     async def unban(self, ctx, *, member):
 
-        otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
-            0, 9), random.randint(0, 9), random.randint(0, 9)
-        final_otp = f"{otp1}{otp2}{otp3}{otp4}"
-        embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm unban.",
-                              description=f"**{final_otp}**", color=ctx.author.color)
-        embed.set_footer(text="Timeout: 15 seconds")
-        embed_message = await ctx.send(embed=embed)
-        try:
-            message_otp = await self.bot.wait_for("message", check=lambda message: message.author == ctx.author, timeout=15)
-            if not str(message_otp.content) == final_otp:
-                return await ctx.send("Incorrect OTP - Aborting...")
-            await embed_message.delete()
-            await message_otp.add_reaction("✅")
-        except asyncio.TimeoutError:
-            return await ctx.send("Timed out - Aborting...")
+        otp_success = await otp_assets.send_waitfor_otp(ctx, self.bot)
+        # random otp generator. if user enters correct otp, returns true. else, returns false
+        if not otp_success:
+            return
 
         banned_users = await ctx.guild.bans()
         regex_user_disc = r"^.+#\d{4}$"  # matching by User#1234
@@ -385,6 +329,24 @@ class Moderation(commands.Cog, description="Moderation commands. Use with cautio
 
         else:
             return await ctx.send("Wrong format. use `User#1234` or the user's ID (17/18 digits long).")
+
+    @commands.command(name="leave", aliases=["leaveguild", "leaveserver"],
+                      description="The command to remove me from this server.")
+    @commands.has_permissions(kick_members=True)
+    async def leave_guild(self, ctx):
+        try:
+            await ctx.guild.owner.send(f"Hello, it seems I have been removed from {ctx.guild.name}.\n"
+                                       f"Your server's config files will be deleted, "
+                                       f"along with the mute files, and the custom prefix.\n"
+                                       f"Thank you for having me in your server for this long.\n"
+                                       f"Until next time!")
+        except:
+            pass
+        try:
+            await ctx.guild.leave()
+        except discord.Forbidden:
+            await ctx.send("I could not leave the server due to an unknown error. "
+                           "Please try again later or kick me manually.")
 
 
 def setup(bot):
