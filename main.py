@@ -209,8 +209,9 @@ if __name__ == '__main__':
             try:
                 bot.load_extension(f"Cogs.{file[:-3]}")  # loading the cogs
                 print(f'        |--- Success')
-            except:
+            except Exception as e:
                 print(f'        |--- Failed')  # if failed, print as failed
+                print(f'        | Reason: {str(e)}')
                 # append the file to the list of cogs which failed to load
                 failed_modules.append(file)
     if len(failed_modules) != 0:
