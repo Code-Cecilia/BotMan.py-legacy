@@ -61,7 +61,8 @@ class BotChat(commands.Cog):
 
         if message.author == self.bot.user:  # ignore if author of message is the bot user
             return
-
+        if message.guild is None:  # for direct messages
+            return
         botchat_channel_id = self.botchat_channels.get(str(message.guild.id))
         # getting the botchat channel from storage
         if botchat_channel_id is None:

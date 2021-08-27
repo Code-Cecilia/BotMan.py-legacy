@@ -70,8 +70,6 @@ class MyHelp(commands.MinimalHelpCommand):
         return '%s%s' % (self.clean_prefix, command.qualified_name)
 
     async def send_bot_help(self, mapping):
-        channel = self.get_destination()
-        user = channel.guild.me
         embed = discord.Embed(title=bot.description, colour=discord.Color.blue())  # defining the embed
         embed.description = f"Use `{self.clean_prefix}help [command/category]` " \
                             f"for more information on a command/category."  # setting description
@@ -127,8 +125,7 @@ class MyHelp(commands.MinimalHelpCommand):
 
     async def send_error_message(self, error):
         channel = self.get_destination()
-        user = channel.guild.me
-        embed = discord.Embed(title="Error", description=error, colour=get_color.get_color(user))
+        embed = discord.Embed(title="Error", description=error, colour=discord.Color.blue())
         await channel.send(embed=embed)
 
 

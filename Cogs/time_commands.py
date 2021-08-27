@@ -1,15 +1,16 @@
 import ast
 import asyncio
 import json
-import discord
-from discord.ext import commands
-import aiohttp
 import os
 import re
 
+import aiohttp
+import discord
+from discord.ext import commands
+
 from assets import time_operations, time_custom, list_funcs
 
-time_link = 'http://worldtimeapi.org/api/timezone/'
+time_link = 'https://worldtimeapi.org/api/timezone/'
 
 
 class Time(commands.Cog):
@@ -158,17 +159,14 @@ class Time(commands.Cog):
         chunk_list = list(list_funcs.chunks(response_list, 24))
 
         try:
-            await author.send('Here\'s a list of timezones to choose from.')
-            await ctx.message.add_reaction("📭")
+            await author.send('**__Here\'s a list of timezones to choose from.__**')
+            await ctx.message.add_reaction("📬")
         except:
             return await ctx.send('Could not send PM to you. '
                                   'Please check your settings to allow me to send messages to you.')
         for i in chunk_list:
-            embed = discord.Embed(
-                title="List of Available Timezones", color=discord.Color.random())
-            for j in i:
-                embed.add_field(name=j, value="\uFEFF", inline=True)
-            await author.send(embed=embed)
+            to_send = "\n".join(i)
+            await author.send(f'```{to_send}```')
             await asyncio.sleep(1)
 
     @commands.command(name="timeinfo", description="Gets a list of time information for a specific location.\n"
