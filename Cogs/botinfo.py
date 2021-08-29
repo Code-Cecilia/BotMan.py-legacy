@@ -2,6 +2,7 @@ import random
 import time
 
 import discord
+import speedtest
 from discord.ext import commands
 
 from assets import count_lines, get_color, random_assets
@@ -11,6 +12,8 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
     def __init__(self, bot):
         self.bot = bot
         self.startTime = time.monotonic()
+        self.speedtest = speedtest.Speedtest()
+        self.last_speedtest_dict = {}
 
     @commands.command(name='ping', description='Returns the latency in milliseconds.')
     async def ping_command(self, ctx):
@@ -94,6 +97,42 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
                               color=get_color.get_color(self.bot.user))
         embed.set_footer(text=random.choice(random_assets.uptime_footers))
         await ctx.send(embed=embed)
+
+    @commands.command(name="speedtest", aliases=["speed", "spid"], description="Checks the internet speed of my host.")
+    @commands.is_owner()
+    async def speedtest(self, ctx, *args):
+        """Use the `last` argument to view results of last test."""
+        embed = discord.Embed(title="Speed Test", color=get_color.get_color(ctx.author))
+        if "last" not in [x.lower() for x in args]:  # show last test results if "last" argument is specified
+            embed.description = "Testing download..."
+            # edit the embed with progress
+            message = await ctx.send(embed=embed)  # send the message
+            self.speedtest.download()  # this is gonna take a while
+            embed.description = "Testing Upload..."  # change the description
+            await message.edit(embed=embed)  # edit the embed
+            self.speedtest.upload()  # this is also going to take a while
+            result_dict = self.speedtest.results.dict()
+            self.last_speedtest_dict = result_dict
+            # setting the result dict to be used again if the "last" argument is used
+            await message.delete()  # delete the progress message
+        else:
+            result_dict = self.last_speedtest_dict
+            if result_dict == {}:  # if no speed tests were conducted.
+                return await ctx.send("No speed tests were conducted since I woke up.")
+            embed.title = "Last Test Result"
+
+        download = round((result_dict.get("download") / 1000000), 2)
+        upload = round((result_dict.get("upload") / 1000000), 2)
+        ping = round(result_dict.get("ping"), 2)
+        server_region, server_name = result_dict.get("server").get("name"), result_dict.get("server").get("sponsor")
+        embed.description = f"Region: **{server_region}** | Server: **{server_name}**"
+        embed.add_field(name="Ping", value=f"{ping}ms", inline=True)
+        embed.add_field(name="Download", value=f"{download} Mbps", inline=True)
+        embed.add_field(name="Upload", value=f"{upload} Mbps", inline=True)
+        sent, recieved = int(result_dict.get("bytes_sent")) / 1000000, int(result_dict.get("bytes_received")) / 1000000
+        embed.set_footer(text=f"Sent: {int(sent)}MB | Recieved:  {int(recieved)}MB")
+
+        await ctx.send(embed=embed)  # send embed with results
 
 
 def setup(bot):
