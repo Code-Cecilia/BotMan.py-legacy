@@ -144,13 +144,14 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         memstats = psutil.virtual_memory()
         memUsedGB = "{0:.1f}".format(((memstats.used / 1024) / 1024) / 1024)  # Thanks CorpNewt
         memTotalGB = "{0:.1f}".format(((memstats.total / 1024) / 1024) / 1024)
+        processor = str(system.processor) if str(system.processor) != "" else "N/A"
         embed = discord.Embed(title=f"Host Name: {system.node}",
                               description=f"Platform: {system.system} | Version: {system.version}",
                               color=get_color.get_color(ctx.guild.me))
         embed.add_field(name="Release", value=system.release, inline=True)
         embed.add_field(name="Machine Type", value=system.machine, inline=True)
         embed.add_field(name="Threads", value=str(os.cpu_count()), inline=True)
-        embed.add_field(name="CPU", value=system.processor, inline=False)
+        embed.add_field(name="CPU", value=processor, inline=False)
         embed.add_field(name="CPU Frequency", value=f"{int(list(psutil.cpu_freq())[0])} MHz", inline=True)
         embed.add_field(name="CPU Usage", value=f"{cpu_usage}%", inline=True)
         embed.add_field(name="RAM Usage", value=f"{memUsedGB} GB of {memTotalGB} GB ({memstats.percent}%)", inline=True)
