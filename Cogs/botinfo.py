@@ -1,7 +1,10 @@
+import os
+import platform
 import random
 import time
 
 import discord
+import psutil
 import speedtest
 from discord.ext import commands
 
@@ -130,9 +133,29 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         embed.add_field(name="Download", value=f"{download} Mbps", inline=True)
         embed.add_field(name="Upload", value=f"{upload} Mbps", inline=True)
         sent, recieved = int(result_dict.get("bytes_sent")) / 1000000, int(result_dict.get("bytes_received")) / 1000000
-        embed.set_footer(text=f"Sent: {int(sent)}MB | Recieved:  {int(recieved)}MB")
+        embed.set_footer(text=f"Sent: {int(sent)}MB | Received:  {int(recieved)}MB")
 
         await ctx.send(embed=embed)  # send embed with results
+
+    @commands.command(name="hostinfo", description="Returns information about my host.")
+    async def hostinfo(self, ctx):
+        system = platform.uname()
+        cpu_usage = psutil.cpu_percent()
+        memstats = psutil.virtual_memory()
+        memUsedGB = "{0:.1f}".format(((memstats.used / 1024) / 1024) / 1024)  # Thanks CorpNewt
+        memTotalGB = "{0:.1f}".format(((memstats.total / 1024) / 1024) / 1024)
+        embed = discord.Embed(title=f"Host Name: {system.node}",
+                              description=f"Platform: {system.system} | Version: {system.version}",
+                              color=get_color.get_color(ctx.guild.me))
+        embed.add_field(name="Release", value=system.release, inline=True)
+        embed.add_field(name="Machine Type", value=system.machine, inline=True)
+        embed.add_field(name="Threads", value=str(os.cpu_count()), inline=True)
+        embed.add_field(name="CPU", value=system.processor, inline=False)
+        embed.add_field(name="CPU Frequency", value=f"{int(list(psutil.cpu_freq())[0])} MHz", inline=True)
+        embed.add_field(name="CPU Usage", value=f"{cpu_usage}%", inline=True)
+        embed.add_field(name="RAM Usage", value=f"{memUsedGB} GB of {memTotalGB} GB ({memstats.percent}%)", inline=True)
+
+        await ctx.send(embed=embed)
 
 
 def setup(bot):

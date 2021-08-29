@@ -14,3 +14,4 @@ git+https://github.com/Rapptz/discord-ext-menus
 python-aiml
 discord-together
 speedtest-cli
+psutil
