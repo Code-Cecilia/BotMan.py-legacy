@@ -9,7 +9,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 
-from assets import time_calc, get_color, random_assets, aiohttp_assets
+from assets import time_calc, get_color, random_assets, aiohttp_assets, otp_assets
 
 
 class Misc(commands.Cog, description="A category for miscellaneous stuff, of course."):
@@ -64,8 +64,7 @@ class Misc(commands.Cog, description="A category for miscellaneous stuff, of cou
 
     @commands.command(name="spongebob", aliases=["timecard"], description="Returns an image, the spongebob style.")
     async def get_spongebob_timecard(self, ctx, *, text=None):
-        one_time_int = "".join([str(random.randint(0, 9)), str(random.randint(0, 9)),
-                                str(random.randint(0, 9)), str(random.randint(0, 9))])
+        one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         async with ctx.typing():
             if text is None:

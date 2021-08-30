@@ -4,10 +4,15 @@ import random
 import discord
 
 
+def get_otp(digits=4):
+    otp = ""
+    for x in range(digits):
+        otp += random.randint(0, 9)
+    return otp
+
+
 async def send_waitfor_otp(ctx, bot):
-    otp1, otp2, otp3, otp4 = random.randint(0, 9), random.randint(
-        0, 9), random.randint(0, 9), random.randint(0, 9)
-    final_otp = f"{otp1}{otp2}{otp3}{otp4}"
+    final_otp = get_otp()
     embed = discord.Embed(title=f"{ctx.author.display_name}, please enter the OTP given below to confirm this action.",
                           description=f"**{final_otp}**", color=ctx.author.color)
     embed.set_footer(text="Timeout: 15 seconds")

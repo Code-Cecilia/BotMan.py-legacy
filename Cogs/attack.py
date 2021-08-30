@@ -6,7 +6,7 @@ import random
 import discord
 from discord.ext import commands
 
-from assets import aiohttp_assets, get_color
+from assets import aiohttp_assets, get_color, otp_assets
 from assets import random_assets as rand_ass
 
 
@@ -54,8 +54,7 @@ class Attack(commands.Cog):
                 writeFile.write(binary_data)
             file = discord.File(f"./storage/spank{one_time_int}.png", filename=f"spank{one_time_int}.png")
 
-            embed = discord.Embed(title=f"{ctx.author.display_name}, You just spanked {member.name}!",
-                                  color=get_color.get_color(member))
+            embed = discord.Embed(title=f"Get spanked, {member.display_name}!", color=get_color.get_color(member))
             embed.set_image(url=f"attachment://spank{one_time_int}.png")
             await ctx.reply(file=file, embed=embed)
         await asyncio.sleep(1)
@@ -63,8 +62,7 @@ class Attack(commands.Cog):
 
     @commands.command(name="hitler", description="Breaking news! [user] is worse than Hitler!")
     async def hitler(self, ctx, member: discord.Member = None):
-        one_time_int = "".join([str(random.randint(0, 9)), str(random.randint(0, 9)),
-                                str(random.randint(0, 9)), str(random.randint(0, 9))])
+        one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         if member is None:
             member = ctx.author
@@ -84,16 +82,13 @@ class Attack(commands.Cog):
         await asyncio.sleep(1)
         os.remove(f"./storage/hitler{one_time_int}.png")
 
-    @commands.command(name="grab", description="Enter an image URL with a face, get a grabbing image.")
-    async def grab(self, ctx, image_url=None):
-        one_time_int = "".join([str(random.randint(0, 9)), str(random.randint(0, 9)),
-                                str(random.randint(0, 9)), str(random.randint(0, 9))])
+    @commands.command(name="grab", description="Make a user's pfp grab you!")
+    async def grab(self, ctx, user: discord.Member = None):
+        one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
-        if image_url is None:
-            if not ctx.message.attachments:
-                return await ctx.send("Please attach an image or provide an image URL for this command to work.")
-            image_url = ctx.message.attachments[0]
-        grab_url = f"{self.grab_url}{image_url}"
+        if user is None:
+            user = ctx.author
+        grab_url = f"{self.grab_url}{user.avatar_url}"
         async with ctx.typing():
             binary_data = await aiohttp_assets.aiohttp_get_binary(grab_url)
             try:
@@ -114,40 +109,39 @@ class Attack(commands.Cog):
 
     @commands.command(name="trigger", description="Trigger a user! Get a \"Triggered!\" image!")
     async def trigger(self, ctx, member: discord.Member = None):
-        one_time_int = "".join([str(random.randint(0, 9)), str(random.randint(0, 9)),
-                                str(random.randint(0, 9)), str(random.randint(0, 9))])
+        one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         if member is None:
             member = ctx.author
         grab_url = f"{self.trigger_url}{member.avatar_url}"
         async with ctx.typing():
             binary_data = await aiohttp_assets.aiohttp_get_binary(grab_url)
-            with open(f"./storage/trigger{one_time_int}.png", "wb") as writeFile:
+            with open(f"./storage/trigger{one_time_int}.gif", "wb") as writeFile:
                 writeFile.write(binary_data)
-            file = discord.File(f"./storage/trigger{one_time_int}.png", filename=f"trigger{one_time_int}.png")
+            file = discord.File(f"./storage/trigger{one_time_int}.gif", filename=f"trigger{one_time_int}.gif")
 
             embed = discord.Embed(color=get_color.get_color(ctx.author))
-            embed.set_image(url=f"attachment://trigger{one_time_int}.png")
+            embed.set_image(url=f"attachment://trigger{one_time_int}.gif")
             await ctx.reply(file=file, embed=embed)
         await asyncio.sleep(1)
-        os.remove(f"./storage/trigger{one_time_int}.png")
+        os.remove(f"./storage/trigger{one_time_int}.gif")
 
     @commands.command(name="delete", description="Delete a member. Begone, filthy mortal!")
-    async def delete_user(self, ctx, user: discord.Member = None):
+    async def delete_user(self, ctx, user: discord.Member = None, dark=None):
         if user is None:
             user = ctx.author
 
-        one_time_int = "".join([str(random.randint(0, 9)), str(random.randint(0, 9)),
-                                str(random.randint(0, 9)), str(random.randint(0, 9))])
-        #  random 4 digit int so multiple requests dont overwrite the file
-        dark = random.choice(["true", "false"])
-        grab_url = f"{self.delete_url}{user.avatar_url}?darkmode={dark}"
+        one_time_int = otp_assets.get_otp(digits=4)
+        if dark == "dark":
+            grab_url = f"{self.delete_url}{user.avatar_url}&darkmode={dark}"
+        else:
+            grab_url = f"{self.delete_url}{user.avatar_url}"
+        print(grab_url)
         async with ctx.typing():
             binary_data = await aiohttp_assets.aiohttp_get_binary(grab_url)
             with open(f"./storage/delete{one_time_int}.png", "wb") as writeFile:
                 writeFile.write(binary_data)
             file = discord.File(f"./storage/delete{one_time_int}.png", filename=f"delete{one_time_int}.png")
-
             embed = discord.Embed(color=get_color.get_color(user))
             embed.set_image(url=f"attachment://delete{one_time_int}.png")
             await ctx.reply(file=file, embed=embed)
