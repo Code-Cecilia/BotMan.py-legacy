@@ -11,14 +11,14 @@ class Info(commands.Cog,
 
     @commands.command(name='userid', description='Returns the User\'s ID mentioned. '
                                                  'Returns author\'s ID if no argument is given.')
-    async def userid(self, ctx, target: discord.Member = None):
-        if target:
-            await ctx.reply(target.id)
+    async def userid(self, ctx, *, user: discord.Member = None):
+        if user:
+            await ctx.reply(user.id)
         else:
             await ctx.reply(ctx.author.id)
 
     @commands.command(name='avatar', description='Returns the avatar/pfp of the user mentioned.')
-    async def get_avatar(self, ctx, user: discord.Member = None):
+    async def get_avatar(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author
         embed = discord.Embed(
@@ -90,7 +90,7 @@ class Info(commands.Cog,
 
     @commands.command(name='roleinfo', description='Returns basic information about the role mentioned as argument.')
     @commands.guild_only()
-    async def role_info(self, ctx, role: discord.Role):
+    async def role_info(self, ctx, *, role: discord.Role):
         role_name = role.name
         role_id = role.id
         role_creation_date, role_creation_time = time_calc.parse_utc(
@@ -115,7 +115,7 @@ class Info(commands.Cog,
     @commands.command(name='userinfo', aliases=['user', 'whois'],
                       description='Returns basic information about the user mentioned as argument.')
     @commands.guild_only()
-    async def user_info(self, ctx, user: discord.Member = None):
+    async def user_info(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author
         name = user.display_name
@@ -189,7 +189,7 @@ class Info(commands.Cog,
                 pass
 
     @commands.command(name='emojiinfo', description='Returns information about the emoji, passed as argument')
-    async def emoji_info(self, ctx, emoji: discord.Emoji):
+    async def emoji_info(self, ctx, *, emoji: discord.Emoji):
         emoji_actual = await ctx.guild.fetch_emoji(int(emoji.id))
         emoji = ctx.author if not emoji else emoji
         emoji_name = emoji.name

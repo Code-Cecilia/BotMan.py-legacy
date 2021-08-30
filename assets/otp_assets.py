@@ -7,7 +7,7 @@ import discord
 def get_otp(digits=4):
     otp = ""
     for x in range(digits):
-        otp += random.randint(0, 9)
+        otp += str(random.randint(0, 9))
     return otp
 
 

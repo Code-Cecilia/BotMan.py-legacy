@@ -1,7 +1,6 @@
 import ast
 import asyncio
 import os
-import random
 
 import discord
 from discord.ext import commands
@@ -21,25 +20,24 @@ class Attack(commands.Cog):
         self.delete_url = "https://api.devs-hub.xyz/delete?image="
 
     @commands.command(name='eat', description='Eat a member, install fear!')
-    async def eat_func_actual(self, ctx, user: discord.Member):
+    async def eat_func_actual(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.eat_func(ctx.author, user, self.bot))
 
     @commands.command(name='drink', description='Beware, you might spill the user you\'re trying to drink.')
-    async def drink_func(self, ctx, user: discord.Member):
+    async def drink_func(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.drink_func(ctx.author, user, self.bot))
 
     @commands.command(name='hug', description='Try hugging yourself.')
-    async def hug_func(self, ctx, user: discord.Member):
+    async def hug_func(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.hug_func(ctx.author, user, self.bot))
 
     @commands.command(name='pet', description='Pets whoever you mention. Exceptions may exist.')
-    async def pet_func(self, ctx, user: discord.Member):
+    async def pet_func(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.pet_func(ctx.author, user, self.bot))
 
     @commands.command(name="spank", description="Spank a user.")
-    async def spank(self, ctx, member: discord.Member = None):
-        one_time_int = "".join([str(random.randint(0, 9)), str(random.randint(0, 9)),
-                                str(random.randint(0, 9)), str(random.randint(0, 9))])
+    async def spank(self, ctx, *, member: discord.Member):
+        one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         if member is None:
             member = ctx.author
@@ -61,7 +59,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/spank{one_time_int}.png")
 
     @commands.command(name="hitler", description="Breaking news! [user] is worse than Hitler!")
-    async def hitler(self, ctx, member: discord.Member = None):
+    async def hitler(self, ctx, *, member: discord.Member = None):
         one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         if member is None:
@@ -83,7 +81,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/hitler{one_time_int}.png")
 
     @commands.command(name="grab", description="Make a user's pfp grab you!")
-    async def grab(self, ctx, user: discord.Member = None):
+    async def grab(self, ctx, *, user: discord.Member = None):
         one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         if user is None:
@@ -108,7 +106,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/grab{one_time_int}.png")
 
     @commands.command(name="trigger", description="Trigger a user! Get a \"Triggered!\" image!")
-    async def trigger(self, ctx, member: discord.Member = None):
+    async def trigger(self, ctx, *, member: discord.Member = None):
         one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         if member is None:
@@ -127,7 +125,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/trigger{one_time_int}.gif")
 
     @commands.command(name="delete", description="Delete a member. Begone, filthy mortal!")
-    async def delete_user(self, ctx, user: discord.Member = None, dark=None):
+    async def delete_user(self, ctx, *, user: discord.Member = None, dark=None):
         if user is None:
             user = ctx.author
 

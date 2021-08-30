@@ -89,8 +89,7 @@ class Misc(commands.Cog, description="A category for miscellaneous stuff, of cou
     async def rainbow_pfp(self, ctx, member: discord.Member = None):
         if member is None:
             member = ctx.author
-        one_time_int = "".join([str(random.randint(0, 9)), str(random.randint(0, 9)),
-                                str(random.randint(0, 9)), str(random.randint(0, 9))])
+        one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
         async with ctx.typing():
             image_url = f"{self.rainbow_url}{member.avatar_url}"

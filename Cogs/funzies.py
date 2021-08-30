@@ -119,7 +119,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         await ctx.send(embed=embed)
 
     @commands.command(name="cookie", aliases=["biscuit", "feed"], description="Feed a fellow member a cookie!")
-    async def cookie(self, ctx, user: discord.Member):
+    async def cookie(self, ctx, *, user: discord.Member):
 
         if misc_checks.is_author(ctx, user):
             return await ctx.send(f"_{ctx.author.display_name}_, You give yourself a cookie. "

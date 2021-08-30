@@ -58,7 +58,7 @@ class Links(commands.Cog, description="A cog for storing, sending, and modifying
             json.dump(data, jsonFile)
         await ctx.send(f'{link_name} removed from the link list.')
 
-    @commands.command(name='linklist', aliases=['linkslist'], description='Lists all global and guild-specific links.')
+    @commands.command(name='linklist', aliases=['linkslist', "links"], description='Lists all global and guild-specific links.')
     async def list_links(self, ctx):
         # add the file if not present
         with open('./assets/global_links.json') as GlobalLinksJson:

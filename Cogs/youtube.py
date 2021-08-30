@@ -10,7 +10,7 @@ class DiscordTogether(commands.Cog,
         self.bot = bot
         self.togetherControl = D_Together(bot)
 
-    @commands.command(name="startyoutube", aliases=["ytstart", "startyt", "youtubetogether"])
+    @commands.command(name="startyoutube", aliases=["ytstart", "startyt", "youtubetogether", "yttogether", "youtube"])
     async def start_youtube_activity(self, ctx):
         """Starts a Youtube Together activity in the voice channel you are in"""
         try:
