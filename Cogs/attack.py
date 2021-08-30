@@ -125,7 +125,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/trigger{one_time_int}.gif")
 
     @commands.command(name="delete", description="Delete a member. Begone, filthy mortal!")
-    async def delete_user(self, ctx, *, user: discord.Member = None, dark=None):
+    async def delete_user(self, ctx, user: discord.Member = None, dark=None):
         if user is None:
             user = ctx.author
 
