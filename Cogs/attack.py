@@ -18,6 +18,7 @@ class Attack(commands.Cog):
         self.grab_url = "https://api.devs-hub.xyz/grab?image="
         self.trigger_url = "https://api.devs-hub.xyz/trigger?image="
         self.delete_url = "https://api.devs-hub.xyz/delete?image="
+        self.wasted_url = "https://api.devs-hub.xyz/wasted?image="
 
     @commands.command(name='eat', description='Eat a member, install fear!')
     async def eat_func_actual(self, ctx, *, user: discord.Member):
@@ -134,7 +135,6 @@ class Attack(commands.Cog):
             grab_url = f"{self.delete_url}{user.avatar_url}&darkmode={dark}"
         else:
             grab_url = f"{self.delete_url}{user.avatar_url}"
-        print(grab_url)
         async with ctx.typing():
             binary_data = await aiohttp_assets.aiohttp_get_binary(grab_url)
             with open(f"./storage/delete{one_time_int}.png", "wb") as writeFile:
@@ -145,6 +145,23 @@ class Attack(commands.Cog):
             await ctx.reply(file=file, embed=embed)
         await asyncio.sleep(1)
         os.remove(f"./storage/delete{one_time_int}.png")
+
+    @commands.command(name="wasted", aliases=["gta"], description="A user's pfp, but with the GTA \"Wasted\" overlay")
+    async def wasted(self, ctx, *, user: discord.Member = None):
+        if user is None:
+            user = ctx.author
+        url = f"{self.wasted_url}{user.avatar_url}"
+        one_time_int = otp_assets.get_otp(digits=4)
+        async with ctx.typing():
+            binary_data = await aiohttp_assets.aiohttp_get_binary(url)
+            with open(f"./storage/wasted{one_time_int}.png", "wb") as writeFile:
+                writeFile.write(binary_data)
+            file = discord.File(f"./storage/wasted{one_time_int}.png", filename=f"wasted{one_time_int}.png")
+            embed = discord.Embed(color=get_color.get_color(user), title=f"{user.display_name}, you died.")
+            embed.set_image(url=f"attachment://wasted{one_time_int}.png")
+            await ctx.reply(file=file, embed=embed)
+        await asyncio.sleep(1)
+        os.remove(f"./storage/wasted{one_time_int}.png")
 
 
 def setup(bot):
