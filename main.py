@@ -156,6 +156,9 @@ async def on_ready():
             embed.description = failed_modules_string
             await channel.send(embed=embed)
         os.remove("./storage/reboot.json")
+    commands = len(bot.commands)
+    cogs = len(bot.cogs)
+    print(f"{commands} commands loaded in {cogs} cogs.")
 
 # slash commands
 slash = discord_slash.SlashCommand(client=bot, sync_commands=True)

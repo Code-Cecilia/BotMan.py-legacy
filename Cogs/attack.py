@@ -19,6 +19,7 @@ class Attack(commands.Cog):
         self.trigger_url = "https://api.devs-hub.xyz/trigger?image="
         self.delete_url = "https://api.devs-hub.xyz/delete?image="
         self.wasted_url = "https://api.devs-hub.xyz/wasted?image="
+        self.beautiful_url = "https://api.devs-hub.xyz/beautiful?image="
 
     @commands.command(name='eat', description='Eat a member, install fear!')
     async def eat_func_actual(self, ctx, *, user: discord.Member):
@@ -162,6 +163,23 @@ class Attack(commands.Cog):
             await ctx.reply(file=file, embed=embed)
         await asyncio.sleep(1)
         os.remove(f"./storage/wasted{one_time_int}.png")
+
+    @commands.command(name="beautiful", description="compliment a user for their beauty.")
+    async def beautiful(self, ctx, *, user: discord.Member = None):
+        if user is None:
+            user = ctx.author
+        url = f"{self.beautiful_url}{user.avatar_url}"
+        one_time_int = otp_assets.get_otp(digits=4)
+        async with ctx.typing():
+            binary_data = await aiohttp_assets.aiohttp_get_binary(url)
+            with open(f"./storage/beautiful{one_time_int}.png", "wb") as writeFile:
+                writeFile.write(binary_data)
+            file = discord.File(f"./storage/beautiful{one_time_int}.png", filename=f"beautiful{one_time_int}.png")
+            embed = discord.Embed(color=get_color.get_color(user), title=f"{user.display_name}, you're beautiful.")
+            embed.set_image(url=f"attachment://beautiful{one_time_int}.png")
+            await ctx.reply(file=file, embed=embed)
+        await asyncio.sleep(1)
+        os.remove(f"./storage/beautiful{one_time_int}.png")
 
 
 def setup(bot):
