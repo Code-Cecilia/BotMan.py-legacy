@@ -18,6 +18,7 @@ class Info(commands.Cog,
             await ctx.reply(ctx.author.id)
 
     @commands.command(name='avatar', description='Returns the avatar/pfp of the user mentioned.')
+    @commands.guild_only()
     async def get_avatar(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author
@@ -189,6 +190,7 @@ class Info(commands.Cog,
                 pass
 
     @commands.command(name='emojiinfo', description='Returns information about the emoji, passed as argument')
+    @commands.guild_only()
     async def emoji_info(self, ctx, *, emoji: discord.Emoji):
         emoji_actual = await ctx.guild.fetch_emoji(int(emoji.id))
         emoji = ctx.author if not emoji else emoji

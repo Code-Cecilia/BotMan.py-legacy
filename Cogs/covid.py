@@ -7,8 +7,7 @@ from discord.ext import commands
 from assets import time_calc, aiohttp_assets
 
 
-class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a selected country\n"
-                                      "Powered by __[Disease.sh](https://disease.sh/)__"):
+class Covid(commands.Cog, description="Get Covid-19 stats worldwide, or for a specific country"):
 
     def __init__(self, bot):
         self.bot = bot

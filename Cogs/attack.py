@@ -22,22 +22,27 @@ class Attack(commands.Cog):
         self.beautiful_url = "https://api.devs-hub.xyz/beautiful?image="
 
     @commands.command(name='eat', description='Eat a member, install fear!')
+    @commands.guild_only()
     async def eat_func_actual(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.eat_func(ctx.author, user, self.bot))
 
     @commands.command(name='drink', description='Beware, you might spill the user you\'re trying to drink.')
+    @commands.guild_only()
     async def drink_func(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.drink_func(ctx.author, user, self.bot))
 
     @commands.command(name='hug', description='Try hugging yourself.')
+    @commands.guild_only()
     async def hug_func(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.hug_func(ctx.author, user, self.bot))
 
     @commands.command(name='pet', description='Pets whoever you mention. Exceptions may exist.')
+    @commands.guild_only()
     async def pet_func(self, ctx, *, user: discord.Member):
         await ctx.send(rand_ass.pet_func(ctx.author, user, self.bot))
 
     @commands.command(name="spank", description="Spank a user.")
+    @commands.guild_only()
     async def spank(self, ctx, *, member: discord.Member):
         one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
@@ -61,6 +66,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/spank{one_time_int}.png")
 
     @commands.command(name="hitler", description="Breaking news! [user] is worse than Hitler!")
+    @commands.guild_only()
     async def hitler(self, ctx, *, member: discord.Member = None):
         one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
@@ -83,6 +89,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/hitler{one_time_int}.png")
 
     @commands.command(name="grab", description="Make a user's pfp grab you!")
+    @commands.guild_only()
     async def grab(self, ctx, *, user: discord.Member = None):
         one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
@@ -108,6 +115,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/grab{one_time_int}.png")
 
     @commands.command(name="trigger", description="Trigger a user! Get a \"Triggered!\" image!")
+    @commands.guild_only()
     async def trigger(self, ctx, *, member: discord.Member = None):
         one_time_int = otp_assets.get_otp(digits=4)
         #  random 4 digit int so multiple requests dont overwrite the file
@@ -127,6 +135,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/trigger{one_time_int}.gif")
 
     @commands.command(name="delete", description="Delete a member. Begone, filthy mortal!")
+    @commands.guild_only()
     async def delete_user(self, ctx, user: discord.Member = None, dark=None):
         if user is None:
             user = ctx.author
@@ -148,6 +157,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/delete{one_time_int}.png")
 
     @commands.command(name="wasted", aliases=["gta"], description="A user's pfp, but with the GTA \"Wasted\" overlay")
+    @commands.guild_only()
     async def wasted(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author
@@ -165,6 +175,7 @@ class Attack(commands.Cog):
         os.remove(f"./storage/wasted{one_time_int}.png")
 
     @commands.command(name="beautiful", description="compliment a user for their beauty.")
+    @commands.guild_only()
     async def beautiful(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author

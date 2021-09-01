@@ -14,6 +14,7 @@ class Links(commands.Cog, description="A cog for storing, sending, and modifying
         self.linksPath = "./links/"
 
     @commands.command(name='link', description='Sends a value to the corresponding link name, given as argument.\n')
+    @commands.guild_only()
     async def get_links(self, ctx, link_name):
         link_value = get_link.get_link(ctx, link_name)
         link_final_return = f"__**{link_name}**__\n{link_value}"
@@ -23,6 +24,7 @@ class Links(commands.Cog, description="A cog for storing, sending, and modifying
     @commands.command(name='addlink', description='Add a guild-only link,'
                                                   ' which can be accessed anywhere in this server.')
     @commands.has_permissions(administrator=True)
+    @commands.guild_only()
     async def add_link(self, ctx, link_name, *, link_or_text):
         # add the file if not present
         if not os.path.exists(f'{self.linksPath}{ctx.guild.id}.json'):
@@ -40,6 +42,7 @@ class Links(commands.Cog, description="A cog for storing, sending, and modifying
         await Links.get_links(self, ctx, link_name)
 
     @commands.command(name='remlink', description='Removed the guild-only link whose name is mentioned as argument')
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def remove_link(self, ctx, link_name):
         # add the file if not present
@@ -59,6 +62,7 @@ class Links(commands.Cog, description="A cog for storing, sending, and modifying
         await ctx.send(f'{link_name} removed from the link list.')
 
     @commands.command(name='linklist', aliases=['linkslist', "links"], description='Lists all global and guild-specific links.')
+    @commands.guild_only()
     async def list_links(self, ctx):
         # add the file if not present
         with open('./assets/global_links.json') as GlobalLinksJson:

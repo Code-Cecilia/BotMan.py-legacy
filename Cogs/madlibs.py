@@ -21,6 +21,7 @@ class MadLibs(commands.Cog, description="A category for Mad Libs.\n"
     @commands.command(name="setmadlibschannel", aliases=["madlibschannel"],
                       description="Sets the channels for playing MadLibs.")
     @commands.has_permissions(manage_guild=True)
+    @commands.guild_only()
     async def set_madlibs_channel(self, ctx, channel: discord.TextChannel = None):
         """You will not be able to play madlibs in any other channel, as it'll clog the chat with tons of messages
 Do not enter the "channel" argument to clear the madlibs channel entry from my database."""

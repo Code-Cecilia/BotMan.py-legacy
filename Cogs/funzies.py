@@ -35,6 +35,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
     @commands.command(name='sendemoji', description='Sends the emoji, and that\'s it.\n'
                                                     'It can send animated emojis too!\n'
                                                     'Note: Only guild-only emojis are taken into account.')
+    @commands.guild_only()
     async def emoji_command(self, ctx, emoji_name):
         for x in ctx.guild.emojis:
             if emoji_name == x.name:
@@ -59,6 +60,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         await ctx.message.delete()
 
     @commands.command(name='lastlenny', description='Last Lenny user is returned')
+    @commands.guild_only()
     async def lastlenny(self, ctx):
         last_user_id = self.last_lenny
         user = self.bot.get_user(last_user_id)
@@ -119,6 +121,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         await ctx.send(embed=embed)
 
     @commands.command(name="cookie", aliases=["biscuit", "feed"], description="Feed a fellow member a cookie!")
+    @commands.guild_only()
     async def cookie(self, ctx, *, user: discord.Member):
 
         if misc_checks.is_author(ctx, user):
@@ -160,6 +163,7 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
 
     @commands.command(name="cookies", aliases=["howmanycookiesdoihave", "howmanycookies"],
                       description="Returns how many cookies the user has.")
+    @commands.guild_only()
     async def no_of_cookies(self, ctx, *, user: discord.Member = None):
         if user is None:
             user = ctx.author

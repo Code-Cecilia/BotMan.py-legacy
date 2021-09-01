@@ -29,7 +29,7 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         embed = discord.Embed(title=f"{ctx.author.display_name}, you can vote for me here!",
                               description="__[Link to my (very own) page!]("
                                           "https://top.gg/bot/845225811152732179/vote)__",
-                              color=discord.Color.random())
+                              color=discord.Color.blue())
         embed.set_footer(
             text=f"It's the gesture that counts first, so thanks a lot, {ctx.author.name}!")
         await ctx.send(embed=embed)
@@ -61,7 +61,7 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
         d, h = divmod(h, 24)
 
         embed = discord.Embed(title=f'{self.bot.user.name} Stats', description='\uFEFF',
-                              colour=get_color.get_color(self.bot.user),
+                              color=get_color.get_color(ctx.guild.me),
                               timestamp=ctx.message.created_at)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(name='Discord.Py', value=dpyVersion, inline=True)
@@ -105,7 +105,7 @@ class BotInfo(commands.Cog, description="Information on various aspects of the b
     @commands.is_owner()
     async def speedtest(self, ctx, *args):
         """Use the `last` argument to view results of last test."""
-        embed = discord.Embed(title="Speed Test", color=get_color.get_color(ctx.author))
+        embed = discord.Embed(title="Speed Test", color=get_color.get_color(ctx.guild.me))
         if "last" not in [x.lower() for x in args]:  # show last test results if "last" argument is specified
             embed.description = "Testing download..."
             # edit the embed with progress
