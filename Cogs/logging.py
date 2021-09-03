@@ -6,8 +6,6 @@ import discord
 from discord.errors import HTTPException
 from discord.ext import commands
 
-from assets import get_color
-
 
 class Logging(commands.Cog, description="Keep a track of what members do in your server with this category."):
     def __init__(self, bot):
@@ -38,7 +36,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
             return
         message_link = f"https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id}"
         embed = discord.Embed(title=f"Message edited in {before.channel.name}",
-                              color=get_color.get_color(before.author), timestamp=after.created_at)
+                              color=before.author.color, timestamp=after.created_at)
         embed.add_field(name="Before", value=before.content, inline=False)
         embed.add_field(name="After", value=after.content, inline=False)
         embed.add_field(
@@ -61,7 +59,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         if message_channel is None:
             return
         embed = discord.Embed(title=f"Message deleted in {message.channel.name}",
-                              color=get_color.get_color(message.author), timestamp=message.created_at)
+                              color=message.author.color, timestamp=message.created_at)
         embed.add_field(name="Content", value=message.content, inline=False)
         embed.set_footer(text=f"Author  •  {message.author}  |  Created")
         embed.set_thumbnail(url=message.author.avatar_url)
@@ -120,7 +118,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         # nickname change
         if not before.nick == after.nick:
             embed = discord.Embed(title=f"{before}'s nickname has been updated", description=f"ID: {before.id}",
-                                  color=get_color.get_color(after), timestamp=before.created_at)
+                                  color=after.color, timestamp=before.created_at)
 
             embed.add_field(
                 name="Before", value=before.display_name, inline=False)
@@ -157,7 +155,7 @@ class Logging(commands.Cog, description="Keep a track of what members do in your
         if message_channel is None:
             return
         embed = discord.Embed(title=f"{member} has been unbanned", description=f"ID: {member.id}",
-                              color=discord.Color.random(),
+                              color=discord.Color.green(),
                               timestamp=member.created_at)
         embed.set_thumbnail(url=member.avatar_url)
         embed.set_footer(text="Account created at")
