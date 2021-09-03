@@ -28,6 +28,21 @@ def search_artist(search_term: str):
     return name, artist_id, artist_url, picture, genres, followers
 
 
+def artist_results(search_term: str):
+    result_dict = {}
+    results = spotify.search(q=f"artist:{search_term}", type="artist")
+    items = results['artists']['items']
+    if len(items) == 0:
+        raise ValueError
+    for x in range(len(items)):
+        name = items[x].get("name")
+        artist_url = items[x].get("external_urls").get("spotify")
+        result_dict[name] = artist_url
+    top_artist = {"name": items[0].get("name"), "url": items[0].get("external_urls").get("spotify"),
+                  "picture": items[0].get("images")[0].get("url")}
+
+    return result_dict, top_artist
+
 def get_artist_top_track(artist_id: str):
     artist_top_songs = spotify.artist_top_tracks(artist_id)
     artist_top_songs = artist_top_songs.get("tracks")[0]
@@ -37,6 +52,18 @@ def get_artist_top_track(artist_id: str):
     return track_name, track_url
 
 
+def get_artist_tracks(artist_id: str):
+    artist_top_songs = spotify.artist_top_tracks(artist_id)
+    result_dict = {}
+    for x in range(len(artist_top_songs)):
+        artist_top_songs = artist_top_songs.get("tracks")[x]
+
+        track_name = (artist_top_songs.get("album").get("name"))
+        track_url = (artist_top_songs.get("external_urls").get("spotify"))
+        result_dict[track_name] = track_url
+    return result_dict
+
+
 def get_related_artist(artist_id: str):
     artists = spotify.artist_related_artists(artist_id=artist_id)
     return_list = []
@@ -44,4 +71,3 @@ def get_related_artist(artist_id: str):
         return_list.append({x.get("name"): x.get("external_urls").get("spotify")})
 
     return return_list
-
