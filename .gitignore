@@ -39,6 +39,9 @@ storage/mute_files
 storage/time_files
 storage/cookie
 storage/tempText
+storage/modlogs_channels.json
+storage/prefixes.json
+storage/mute_file_iter.json
 
 links
 configs
