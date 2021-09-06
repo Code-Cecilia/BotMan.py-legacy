@@ -3,6 +3,7 @@ import json
 import os
 import random
 
+import aiohttp
 import discord.errors
 from discord.ext import commands
 
@@ -55,6 +56,10 @@ class Errors(commands.Cog):
         elif isinstance(error, commands.CheckFailure):
             await ctx.message.add_reaction("‼️".strip())
             await ctx.send("You lack the necessary permissions to use this command.")
+        elif isinstance(error, aiohttp.ServerDisconnectedError):
+            await ctx.send("The API I use was disconnected. Please try again.")
+        elif isinstance(error, aiohttp.ServerTimeoutError):
+            await ctx.send("Timed out. Please try again later.")
         elif isinstance(error, asyncio.TimeoutError):
             pass
         else:
