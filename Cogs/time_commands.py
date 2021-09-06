@@ -205,7 +205,7 @@ class Time(commands.Cog):
         embed.add_field(name="Day of the week", value=day_of_week, inline=True)
         embed.add_field(name="Day of the year", value=day_of_year, inline=True)
         embed.set_thumbnail(
-            url="https://cdn.discordapp.com/attachments/250869033669230592/869049832071888916/tenor.gif")
+            url="https://cdn.discordapp.com/attachments/716649261449740329/884317624090116096/giphy-downsized-large.gif")
         embed.set_footer(text=f"UTC format: {utc_datetime}")
 
         await ctx.send(embed=embed)
