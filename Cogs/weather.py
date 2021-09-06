@@ -13,6 +13,24 @@ def get_time_info(user_id: int):
         return timezone
 
 
+def get_embed_from_weather_dict(result: dict):
+    longitude = result.get("coord").get('lon')
+    latitude = result.get("coord").get('lat')
+
+    weather = result.get("weather")[0].get("main")
+    icon = result.get("weather")[0].get("icon")
+    actual_temp = int(result.get("main").get("temp") - 273.15)
+    feels_like = int(result.get("main").get("feels_like") - 273.15)
+    temp_min, temp_max = int(result.get("main").get("temp_min") - 273.15), \
+                         int(result.get("main").get("temp_max") - 273.15)
+    humidity = result.get("main").get("humidity")
+
+    country_code = result.get("sys").get("country")
+    name = result.get("name")
+
+    return name, latitude, longitude, icon, weather, actual_temp, feels_like, temp_min, temp_max, humidity, country_code
+
+
 class Weather(commands.Cog):
 
     def __init__(self, bot):
@@ -49,18 +67,12 @@ class Weather(commands.Cog):
         if str(result.get("cod")) == "404":
             return await ctx.send("The city was not found. "
                                   "Please update your city using the `setweatherlocation` command")
-        coordinates = result.get("coord")
-        weather, icon = result.get("weather")[0].get("main"), result.get("weather")[0].get("icon")
-        actual_temp = int(result.get("main").get("temp") - 273.15)
-        feels_like = int(result.get("main").get("feels_like") - 273.15)
-        temp_min, temp_max = int(result.get("main").get("temp_min") - 273.15), \
-                             int(result.get("main").get("temp_max") - 273.15)
-        humidity = result.get("main").get("humidity")
+        name, latitude, longitude, icon, weather, \
+            actual_temp, feels_like, temp_min, temp_max, \
+            humidity, country_code = get_embed_from_weather_dict(result)
 
-        city_details = result.get("sys")
-        name = result.get("name")
         embed = discord.Embed(title=f"{name}, where {user.display_name} is",
-                              description=f"{coordinates.get('lon')}_N_, {coordinates.get('lat')}_E_",
+                              description=f"{longitude}_N_, {latitude}_E_",
                               color=get_color.get_color(user))
         embed.add_field(name="Weather", value=weather, inline=True)
         embed.add_field(name="Temperature", value=f"Actual: **{actual_temp}°C**\n"
@@ -68,7 +80,7 @@ class Weather(commands.Cog):
         embed.add_field(name="Min/Max", value=f"Min: **{temp_min}°C**\n"
                                               f"Max: **{temp_max}°C**", inline=True)
         embed.add_field(name="Humidity", value=f"{humidity}%", inline=True)
-        embed.add_field(name="Country Code", value=city_details.get("country"))
+        embed.add_field(name="Country Code", value=country_code)
         if icon:
             embed.set_thumbnail(url=self.weather_icon_url.format(code=icon))
         if gotten_from_tz:
@@ -87,6 +99,32 @@ class Weather(commands.Cog):
         with open("./storage/weather.json", "w") as writeFile:
             json.dump(self.weatherData, writeFile)
         await message.edit(content=f"Location set to **{result.get('name')}** successfully!")
+
+    @commands.command(name="locationweather", aliases=["lweather", "weatherl"],
+                      description="Gets weather information for a specific city.")
+    async def weather_from_city(self, ctx, city):
+        message = await ctx.send(f"Gathering weather info for **{city}**...")
+        result = await aiohttp_assets.aiohttp_get(url=self.weather_url.format(cityName=city, apiKey=self.apikey))
+        result = json.loads(result)
+        if result.get("message") is not None:
+            return await message.edit(content=f"The API I use encountered an error: **{result.get('message')}**")
+        name, latitude, longitude, icon, weather, \
+            actual_temp, feels_like, temp_min, temp_max, \
+            humidity, country_code = get_embed_from_weather_dict(result)
+
+        embed = discord.Embed(title=f"{name}'s weather info",
+                              description=f"{longitude}_N_, {latitude}_E_",
+                              color=get_color.get_color(ctx.author))
+        embed.add_field(name="Weather", value=weather, inline=True)
+        embed.add_field(name="Temperature", value=f"Actual: **{actual_temp}°C**\n"
+                                                  f"Feels Like: **{feels_like}°C**", inline=True)
+        embed.add_field(name="Min/Max", value=f"Min: **{temp_min}°C**\n"
+                                              f"Max: **{temp_max}°C**", inline=True)
+        embed.add_field(name="Humidity", value=f"{humidity}%", inline=True)
+        embed.add_field(name="Country Code", value=country_code)
+        if icon:
+            embed.set_thumbnail(url=self.weather_icon_url.format(code=icon))
+        await message.edit(embed=embed, content=None)
 
 
 def setup(bot):
