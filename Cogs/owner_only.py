@@ -113,12 +113,16 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
             print(sys.argv)
             print(sys.path)
             with open("./storage/update.txt", "w") as output:
-                subprocess.run("git pull", stdout=output)
+                subprocess.call(["git", "pull"], stdout=output)
             with open("./storage/update.txt", "r") as output:
                 file = discord.File(output)
         await ctx.send(content="Done! Output in text file", file=file)
-        os.remove("./storage/update.txt")
-    
+        await asyncio.sleep(1)
+        try:
+            os.remove("./storage/update.txt")
+        except:
+            pass
+
 
 def setup(bot):
     bot.add_cog(OwnerOnly(bot))
