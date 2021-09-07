@@ -60,6 +60,8 @@ class Errors(commands.Cog):
             await ctx.send("The API I use was disconnected. Please try again.")
         elif isinstance(error, aiohttp.ServerTimeoutError):
             await ctx.send("Timed out. Please try again later.")
+        elif isinstance(error, aiohttp.ClientConnectionError):
+            await ctx.send("Could not get response! The API I use may be down.")
         elif isinstance(error, asyncio.TimeoutError):
             pass
         else:
