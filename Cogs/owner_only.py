@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import subprocess
 import sys
 import traceback
 
@@ -75,7 +76,7 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                         name=f"Failed to reload: `{ext}`", value=desired_trace, inline=False)
             await ctx.send(embed=embed)
 
-    @commands.command(name='load', description='lLoads a cog. Mention the python file\'s name as `cog_file_name`')
+    @commands.command(name='load', description='Loads a cog. Mention the python file\'s name as `cog_file_name`')
     @commands.is_owner()
     async def load_cog(self, ctx, cog_file_name):
         embed = discord.Embed(title=f"Loading Cog {cog_file_name}.py!", color=discord.Color.random(),
@@ -105,6 +106,19 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                     name=f"Failed to unload: `{cog_file_name}.py`", value=str(e), inline=False)
             await ctx.send(embed=embed)
 
+    @commands.command(name="update")
+    @commands.guild_only()
+    async def update(self, ctx):
+        async with ctx.typing():
+            print(sys.argv)
+            print(sys.path)
+            with open("./storage/update.txt", "w") as output:
+                subprocess.run("git pull", stdout=output)
+            with open("./storage/update.txt", "r") as output:
+                file = discord.File(output)
+        await ctx.send(content="Done! Output in text file", file=file)
+        os.remove("./storage/update.txt")
+    
 
 def setup(bot):
     bot.add_cog(OwnerOnly(bot))
