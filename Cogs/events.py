@@ -5,6 +5,7 @@ import random
 
 import aiohttp
 import discord.errors
+import requests
 from discord.ext import commands
 
 reactions_random = ['👋', '♥', '⚡']
@@ -62,6 +63,8 @@ class Errors(commands.Cog):
             await ctx.send("Timed out. Please try again later.")
         elif isinstance(error, aiohttp.ClientConnectionError):
             await ctx.send("Could not get response! The API I use may be down.")
+        elif isinstance(error, requests.ReadTimeout):
+            await ctx.send("Timed out. Please try again.")
         elif isinstance(error, asyncio.TimeoutError):
             pass
         else:

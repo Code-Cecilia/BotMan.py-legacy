@@ -43,6 +43,7 @@ def artist_results(search_term: str):
 
     return result_dict, top_artist
 
+
 def get_artist_top_track(artist_id: str):
     artist_top_songs = spotify.artist_top_tracks(artist_id)
     artist_top_songs = artist_top_songs.get("tracks")[0]
@@ -71,3 +72,25 @@ def get_related_artist(artist_id: str):
         return_list.append({x.get("name"): x.get("external_urls").get("spotify")})
 
     return return_list
+
+
+def search_album(search_term: str):
+    result = spotify.search(q=search_term, type="album")
+    result = result.get("albums")
+    albums_list = list(result.get("items"))
+    if len(albums_list) == 0:
+        raise ValueError
+    album_info = albums_list[0]
+    artist_dict = {}
+    for artist in album_info.get("artists"):
+        artist_name = artist.get("name")
+        spot_url = artist.get("external_urls").get("spotify")
+        artist_dict[artist_name] = spot_url
+    album_url = album_info.get("external_urls").get("spotify")
+    album_name = album_info.get("name")
+    release_date = album_info.get("release_date")
+    total_tracks = album_info.get("total_tracks")
+    markets = len(album_info.get("available_markets"))
+    thumbnail = album_info.get("images")[0].get("url")
+    album_id = album_info.get("id")
+    return album_name, album_url, album_id, artist_dict, total_tracks, release_date, markets, thumbnail

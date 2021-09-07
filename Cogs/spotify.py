@@ -96,6 +96,27 @@ class Spotify(commands.Cog, description="A category for viewing information rela
         embed.set_thumbnail(url=top_artist.get("picture"))
         await ctx.send(embed=embed)
 
+    @commands.command(name="album")
+    async def album_info(self, ctx, *, search_term: commands.clean_content):
+        try:
+            album_name, album_url, album_id, artist_dict, \
+                total_tracks, release_date, markets, thumbnail = spotify_search.search_album(str(search_term))
+        except ValueError:
+            return await ctx.send(f"Uh-oh! Looks like **{search_term}** isn't a valid album!")
+        artists = "**Artists**\n"
+        for name, url in artist_dict.items():
+            artists += f"__[{name}]({url})__, "
+        artists = artists[:-2]  # remove last comma
+        embed = discord.Embed(title=f"Found Album - {album_name}", description=artists,
+                              color=get_color.get_color(ctx.author))
+        embed.add_field(name="Album URL", value=f"__[Link]({album_url})__", inline=True)
+        embed.add_field(name="Release Date", value=release_date, inline=True)
+        embed.add_field(name="Total Tracks", value=total_tracks, inline=True)
+        embed.add_field(name="Availability", value=f"{markets} countries", inline=True)
+        embed.set_footer(text=f"Album ID: {album_id}")
+        embed.set_thumbnail(url=thumbnail)
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Spotify(bot))
