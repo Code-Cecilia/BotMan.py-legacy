@@ -20,13 +20,13 @@ Don't use my code without giving credit. You are free to host it and fork it you
  - Fill in Spotify Application Details
  - Get the API key from RSA
  - Get the currency API key from ExchangeRatesAPI
+ - Get weather API Key from OpenWeatherMap
  - Fill in details in `config.json` and `reddit_details.json`
  - Actually run the bot
 
-Download the repo as zip or do the following below in a terminal window:
+Download the repo as zip or do the following below in a terminal window (You need git for this):
 
 ```bash
-sudo apt-get install git
 git clone https://github.com/Code-Cecilia/BotMan.py
 ``` 
 `cd` into the project's directory and run this command
@@ -70,16 +70,26 @@ You can get an API key [Here](https://exchangeratesapi.io/).
 
 When you get the API key, copy and paste it into the `currency_api_key` entry in the `config.json` file.
 
+# Getting the weather API Key from OpenWeatherMap
+
+OpenWeatherMap has a free plan with ample amount of calls per month. You can get an API Key [here](https://openweathermap.org/price).
+
+![free plan](./images/weather_api_plan.png)
+
+After getting the API key, paste it in the `weather_api_key` entry in `config.json`
+
+
 
 A properly set-up config.json looks something like this
 
-```javascript
+```json
 {
   "prefix": "bm-",
   "token": "ODQ4NTI5xxxxx._cvTBeEHbk1z6iTtCHY92TFN5DU",
   "owner_id": "775176626773950474",
   "rsa_api_key": "XXXXXXXXXX",
-  "currency_api_key": "XXXXXXXXXX"
+  "currency_api_key": "XXXXXXXXXX",
+  "weather_api_key": "abc1234xyz"
 }
 ```
 
@@ -134,15 +144,14 @@ Fill in the details for your reddit application in `reddit_details.json`.
 
 A properly set-up `reddit_details.json` looks something like this.
 
-```javascript
+```json
 {
   "client_id" : "E3RXXXXXXXjlKzOg",
   "client_secret": "nEdXXXXXXXXXS_9tBYyo1Q",
-  "username": "PrawBot12345",
-  "password": "Praw1234"
+  "username": "myRedditUsername",
+  "password": "myPassword"
 }
 ```
-(don't worry, the password is wrong)
 
 # Setting up Spotify Credentials
 
@@ -162,7 +171,7 @@ Copy the Client ID and Client Secret and paste them in their respective fields i
 
 A fully configured `spotify_details.json` looks something like this
 
-```javascript
+```json
 {
   "client_id": "b0d95fb2d92241d690c109314c09dd8d",
   "client_secret": "c7b628b7b52a47f29bb82adfa1049a11"
@@ -185,7 +194,7 @@ If you're going to host your bot on repl.it, these steps can be followed for fea
 
 # owner_id = int(details_data['owner_id'])
 
-replit = True   # change this to False or True depending on what you need
+replit = True   # change this to False or True depending on your need
 
 # intents = discord.Intents.default()
 # continuing lines
@@ -219,8 +228,7 @@ Good question.
 
 Free Repls shut down (More like sleep) after 60 minutes of inactivity. So we ping the bot every [x] minutes to prevent the bot from shutting down.
 
-That's pretty much it.
- You can select an alert email while making the UptimeRobot Monitor to notify you if the bot goes offline, but I don't really know how far it works, since I haven't tried it yet.
+That's pretty much it. You can select an alert email while making the UptimeRobot Monitor to notify you if the bot goes offline, but I don't really know how far it works, since I haven't tried it yet.
 
 # Running the bot
 
@@ -244,6 +252,5 @@ python3 main.py
 
 [Discord.py](https://github.com/Rapptz/discord.py) for obvious reasons
 
-[abhinavs](https://github.com/abhinavs/moonwalk) for the GitHub Pages theme
 
 And a **LOT** of friends who helped make this bot what it is today. Thanks, guys!
