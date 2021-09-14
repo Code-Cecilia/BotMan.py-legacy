@@ -3,12 +3,27 @@ import json
 import os
 import random
 
+import aiohttp
 import discord
 from discord.ext import commands
 
 from assets import misc_checks
 from assets import random_assets as rand_ass
 from assets import refine_text
+from assets.get_color import get_color
+
+
+async def get_joke(categories: list = None, blacklist: list = None):
+    categories_str = "+".join(categories) if categories else "any"
+    blacklist_str = "+".join(blacklist) if blacklist else None
+    url = f"https://v2.jokeapi.dev/joke/{categories_str}"
+    if blacklist_str:
+        url += f"?blacklistFlags={blacklist_str}"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            response = (await response.content.read()).decode("utf8")
+    response = json.loads(response)
+    return response
 
 
 class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
@@ -16,6 +31,8 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         self.bot = bot
         self.hello_last = None
         self.last_lenny = None
+        self.joke_available_flags = ["nsfw", "religious", "political", "racist", "sexist", "explicit"]
+        self.joke_categories = ["Any", "Misc", "Programming", "Dark", "Pun", "Spooky", "Christmas"]
 
     @commands.command(name='fart', description='Does this really need a description?')
     async def fart_func(self, ctx):
@@ -200,6 +217,43 @@ class Funzies(commands.Cog, description='Fun commands for everyone to try out'):
         random.shuffle(message)
         final_str = "".join(message)
         await ctx.send(final_str)
+
+    @commands.command(name="joke", description="Tells you a joke.")
+    async def joke(self, ctx, *categories):
+        categories = list(categories)
+        removed_categories = False
+        for x in categories:
+            if x.title() not in self.joke_categories:
+                categories.remove(x)
+                removed_categories = True
+        if removed_categories:
+            await ctx.send("One or more categories you entered were not recognized. Ignoring...")
+
+        blacklist_flags = []
+        if not ctx.message.channel.is_nsfw():
+            blacklist_flags = ["nsfw", "racist"]
+
+        async with ctx.typing():
+            response = await get_joke(categories=list(categories), blacklist=blacklist_flags)
+
+        if response.get("error"):
+            return await ctx.send(f"The API I use encountered an error - **{response.get('message')}**")
+
+        category = response.get("category")
+        joke = response.get("joke")
+        if joke is None:
+            setup, delivery = response.get("setup"), response.get("delivery")
+            joke = f"{setup}\n_{delivery}_"
+
+        embed = discord.Embed(title=f"Joke Type - {category}", description=joke, color=get_color(ctx.author))
+        await ctx.send(embed=embed)
+
+    @commands.command(name="jokecategories", aliases=["joke_categories", "jokecategory"],
+                      description="Lists the currently available Joke categories")
+    async def send_joke_category(self, ctx):
+        categories_str = "\n".join(self.joke_categories)
+        embed = discord.Embed(title="Joke Categories", description=categories_str, color=get_color(ctx.author))
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
