@@ -95,8 +95,15 @@ class Translate(commands.Cog, description='A set of commands that uses the googl
                       description="Detects the language from a sentence given as argument.")
     async def detect_lang(self, ctx, *, sentence):
         result = self.translator.detect(sentence)
-        confidence = (round(result.confidence * 100))
-        lang_name = self.lang_dict.get(result.lang).title()
+        lang_name = result.lang
+        lang_confidence = result.confidence
+
+        if isinstance(result.confidence, list):
+            lang_name = result.lang[0]
+            lang_confidence = result.confidence[0]
+
+        confidence = (round(lang_confidence * 100))
+        lang_name = self.lang_dict.get(lang_name).title()
 
         embed = discord.Embed(title=f'Detected language! - {lang_name}', description=f"Text entered: **{sentence}**",
                               color=discord.Color.random())
