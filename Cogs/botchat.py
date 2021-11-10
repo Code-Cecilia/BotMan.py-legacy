@@ -1,9 +1,6 @@
 import json
 import os
-from urllib.parse import quote
-
 import aiml
-import aiohttp
 import discord
 from discord.ext import commands
 
@@ -29,18 +26,6 @@ class BotChat(commands.Cog):
             self.botchat_mode = json.load(botchatModeFile)
         with open('config.json', 'r') as configFile:
             self.api_key = json.load(configFile).get('rsa_api_key')
-
-    async def get_rsa_response(self, message):
-        async with aiohttp.ClientSession(headers={"Authorization": self.api_key}) as session:
-            response = await session.get(
-                f"https://api.pgamerx.com/v5/ai?server=main&message={message}&bot_name={quote(self.botName)}"
-                f"&bot_gender={quote(self.botGender)}&bot_master={quote(self.ownerName)}"
-                f"&bot_birth_date={quote(self.botBirthDate)}&bot_email={quote(self.botEmail)}")
-        response = (await response.content.read()).decode("utf8")
-        if response == "Message/Server is missing":
-            raise ValueError
-        response = json.loads(response)
-        return response[0].get("response")
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -91,59 +76,15 @@ class BotChat(commands.Cog):
         # getting the botchat channel
         if botchat_channel is None or message.author == self.bot.user or not message.channel == botchat_channel:
             return
-
-        if str(self.botchat_mode.get(str(message.guild.id))).lower() != "rsa":
-            message_refined = refine_text.remove_mentions(
-                str(message.content))  # remove everyone and here mentions
-            response = self.chatBot.respond(message_refined)
-            await botchat_channel.send(response)  # sending the response
-        #  rsa code down
-        else:
-
-            message_refined = refine_text.remove_mentions(
-                str(message.content))  # remove everyone and here mentions
-            response = await BotChat.get_rsa_response(self, message=message_refined)
-            await botchat_channel.send(response)  # sending the response
+        message_refined = refine_text.remove_mentions(str(message.content))  # remove everyone and here mentions
+        response = self.chatBot.respond(message_refined)
+        await botchat_channel.send(response)  # sending the response
 
     @commands.command(name='chat', aliases=['botchat'], description='One-time chat command.')
     async def one_time_chat(self, ctx, *, message: commands.clean_content(fix_channel_mentions=True, use_nicknames=True,
                                                                           remove_markdown=True)):
         response = self.chatBot.respond(message)
         await ctx.send(response)  # sending the response
-
-    @commands.command(name="botchatmode", aliases=["chatmode"],
-                      description="Set the mode for BotChat - AIML(faster but dumber) or RSA(slower but smarter)")
-    @commands.guild_only()
-    @commands.has_permissions(manage_guild=True)
-    async def set_botchat_mode(self, ctx, mode: str = None):
-        mode_from_storage = self.botchat_mode.get(str(ctx.guild.id))
-        if mode_from_storage is None:
-            mode_from_storage = "aiml"
-        if mode is None or mode.lower() not in ["aiml", "rsa"]:
-            return await ctx.send("Options: `aiml`, `rsa`\n"
-                                  "AIML is faster, but dumber. "
-                                  "RSA is slower because it uses an API, but it's considerably smarter.\n"
-                                  f"Use `{ctx.prefix}botchatmode RSA` or `{ctx.prefix}botchatmode AIML`.")
-        if str(mode) == str(mode_from_storage):
-            return await ctx.send(f"The mode you selected, **{mode}**, is the one being used.")
-        self.botchat_mode[str(ctx.guild.id)] = mode
-        with open("./storage/botchat_mode.json", "w") as botchatModeFile:
-            json.dump(self.botchat_mode, botchatModeFile)
-        await ctx.send(f"BotChat mode set to **{mode.upper()}** successfully.")
-
-    @commands.command(name='chat_api', aliases=['botchat_api', 'apichat', 'chatapi'],
-                      description='One-time chat command. Gets response from the RSA')
-    async def one_time_chat(self, ctx, *, message: commands.clean_content(fix_channel_mentions=True, use_nicknames=True,
-                                                                          remove_markdown=True)):
-        response = await BotChat.get_rsa_response(self, message=message)
-        await ctx.send(response)  # sending the response
-
-    @commands.command(name='chat', aliases=['botchat_aiml', 'aimlchat', 'chataiml'],
-                      description='One-time chat command. Gets response from AIML')
-    async def chat_aiml(self, ctx, *, message: commands.clean_content(fix_channel_mentions=True, use_nicknames=True,
-                                                                      remove_markdown=True)):
-        response = self.chatBot.respond(message)
-        await ctx.send(response)
 
 
 def setup(bot):
