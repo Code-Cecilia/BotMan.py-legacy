@@ -138,7 +138,6 @@ class Spotify(commands.Cog, description="A category for viewing information rela
         embed.add_field(name="Availability", value=f"{markets} {'countries' if int(markets) != 1 else 'country'}",
                         inline=True)
         embed.set_footer(text=f"Track ID: {track_id}")
-        print(thumbnail)
         embed.set_thumbnail(url=thumbnail)
         await ctx.send(embed=embed)
 
