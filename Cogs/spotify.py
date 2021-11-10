@@ -77,6 +77,7 @@ class Spotify(commands.Cog, description="A category for viewing information rela
     @commands.command(name="artistsearch", aliases=["searchartist"],
                       description="Returns search results for an artist name")
     async def artist_search(self, ctx, *, artist_name):
+        """Returns information about a Spotify artist. This is not a music player command."""
         try:
             result_dict, top_artist = spotify_search.artist_results(artist_name)
         except ValueError:  # raise ValueError implemented in the function
@@ -98,6 +99,7 @@ class Spotify(commands.Cog, description="A category for viewing information rela
 
     @commands.command(name="album")
     async def album_info(self, ctx, *, search_term: commands.clean_content):
+        """Returns information about a Spotify album. This is not a music player command."""
         try:
             album_name, album_url, album_id, artist_dict, \
                 total_tracks, release_date, markets, thumbnail = spotify_search.search_album(str(search_term))
@@ -112,8 +114,31 @@ class Spotify(commands.Cog, description="A category for viewing information rela
         embed.add_field(name="Album URL", value=f"__[Link]({album_url})__", inline=True)
         embed.add_field(name="Release Date", value=release_date, inline=True)
         embed.add_field(name="Total Tracks", value=total_tracks, inline=True)
-        embed.add_field(name="Availability", value=f"{markets} countries", inline=True)
+        embed.add_field(name="Availability", value=f"{markets} {'countries' if int(markets) != 1 else 'country'}", inline=True)
         embed.set_footer(text=f"Album ID: {album_id}")
+        embed.set_thumbnail(url=thumbnail)
+        await ctx.send(embed=embed)
+
+    @commands.command(name="track", aliases=["trackinfo"])
+    async def track_info(self, ctx, *, search_term: commands.clean_content):
+        """Returns information about a Spotify track. This is not a music player command."""
+        try:
+            track_name, track_url, track_id, artist_dict, \
+            thumbnail, release_date, markets = spotify_search.search_track(str(search_term))
+        except ValueError:
+            return await ctx.send(f"Uh-oh! Looks like **{search_term}** isn't a valid track!")
+        artists = "**Artists**\n"
+        for name, url in artist_dict.items():
+            artists += f"__[{name}]({url})__, "
+        artists = artists[:-2]  # remove last comma
+        embed = discord.Embed(title=f"Found Track - {track_name}", description=artists,
+                              color=get_color.get_color(ctx.author))
+        embed.add_field(name="Track URL", value=f"__[Link]({track_url})__", inline=True)
+        embed.add_field(name="Release Date", value=release_date, inline=True)
+        embed.add_field(name="Availability", value=f"{markets} {'countries' if int(markets) != 1 else 'country'}",
+                        inline=True)
+        embed.set_footer(text=f"Track ID: {track_id}")
+        print(thumbnail)
         embed.set_thumbnail(url=thumbnail)
         await ctx.send(embed=embed)
 

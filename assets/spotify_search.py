@@ -94,3 +94,25 @@ def search_album(search_term: str):
     thumbnail = album_info.get("images")[0].get("url")
     album_id = album_info.get("id")
     return album_name, album_url, album_id, artist_dict, total_tracks, release_date, markets, thumbnail
+
+
+def search_track(search_term: str):
+    result = spotify.search(q=search_term, type="track", limit=1)
+    result = result.get("tracks")
+    tracks_list = list(result.get("items"))
+    if len(tracks_list) == 0:
+        raise ValueError
+    track_info = tracks_list[0]
+    artist_dict = {}
+    for artist in track_info.get("artists"):
+        artist_name = artist.get("name")
+        spot_url = artist.get("external_urls").get("spotify")
+        artist_dict[artist_name] = spot_url
+    track_url = track_info.get("external_urls").get("spotify")
+    track_name = track_info.get("name")
+    track_id = track_info.get("id")
+    icon_url = track_info["album"]["images"][0]["url"]
+    release_date = track_info["album"]["release_date"]
+    available_markets = len(track_info.get("available_markets"))
+
+    return track_name, track_url, track_id, artist_dict, icon_url, release_date, available_markets
