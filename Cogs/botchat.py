@@ -65,6 +65,8 @@ class BotChat(commands.Cog):
     @commands.Cog.listener()
     @commands.guild_only()
     async def on_message(self, message):
+        if message.author.bot:
+            return
         try:
             botchat_channel_id = self.botchat_channels.get(str(message.guild.id))
         # getting the botchat channel from storage
@@ -76,8 +78,7 @@ class BotChat(commands.Cog):
         # getting the botchat channel
         if botchat_channel is None or message.author == self.bot.user or not message.channel == botchat_channel:
             return
-        message_refined = refine_text.remove_mentions(str(message.content))  # remove everyone and here mentions
-        response = self.chatBot.respond(message_refined)
+        response = self.chatBot.respond(message.content.replace("@", "`@`"))
         await botchat_channel.send(response)  # sending the response
 
     @commands.command(name='chat', aliases=['botchat'], description='One-time chat command.')
