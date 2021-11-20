@@ -124,7 +124,7 @@ class Spotify(commands.Cog, description="A category for viewing information rela
         """Returns information about a Spotify track. This is not a music player command."""
         try:
             track_name, track_url, track_id, artist_dict, \
-            thumbnail, release_date, markets = spotify_search.search_track(str(search_term))
+            thumbnail, release_date, markets, popularity = spotify_search.search_track(str(search_term))
         except ValueError:
             return await ctx.send(f"Uh-oh! Looks like **{search_term}** isn't a valid track!")
         artists = "**Artists**\n"
@@ -137,6 +137,7 @@ class Spotify(commands.Cog, description="A category for viewing information rela
         embed.add_field(name="Release Date", value=release_date, inline=True)
         embed.add_field(name="Availability", value=f"{markets} {'countries' if int(markets) != 1 else 'country'}",
                         inline=True)
+        embed.add_field(name="Popularity", value=f"{popularity}%", inline=True)
         embed.set_footer(text=f"Track ID: {track_id}")
         embed.set_thumbnail(url=thumbnail)
         await ctx.send(embed=embed)

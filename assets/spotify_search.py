@@ -114,5 +114,6 @@ def search_track(search_term: str):
     icon_url = track_info["album"]["images"][0]["url"]
     release_date = track_info["album"]["release_date"]
     available_markets = len(track_info.get("available_markets"))
+    popularity = track_info.get("popularity")
 
-    return track_name, track_url, track_id, artist_dict, icon_url, release_date, available_markets
+    return track_name, track_url, track_id, artist_dict, icon_url, release_date, available_markets, popularity
