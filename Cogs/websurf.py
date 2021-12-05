@@ -32,7 +32,7 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, UrbanDict
         self.bot = bot
 
     @commands.command(name='nocontext', description='Returns a random post\'t title from r/NoContext')
-    async def NoContext(self, ctx):
+    async def no_context(self, ctx):
         subreddit = await reddit.subreddit("nocontext")  # get the subreddit
         x = subreddit.hot(limit=20)  # we need to limit the number of results for speed
         title_list = []  # create empty array of post titles (the titles contain the text we need)
@@ -179,6 +179,33 @@ class WebSurf(commands.Cog, description='Fun commands using AsyncPraw, UrbanDict
         tinyurl_link = await tinyurl.get_tinyurl(lmgtfy_link)
         await ctx.send(f"_{ctx.author.display_name}_, here is the google search you asked for.\n"
                        f"<{tinyurl_link}>")
+
+    @commands.command(name="tinyurl", aliases=["tiny"], description="URL shortening command.")
+    async def tinyurl_command(self, ctx, *, url):
+        if not url.startswith("http"):
+            url = f"https://{url}"
+        message = await ctx.send(f"Shortening **{url}**...\n")
+        try:
+            tinyurl_link = await tinyurl.get_tinyurl(url)
+        except Exception as e:
+            return await message.edit(content=f"Could not shorten URL.\n{e if len(str(e)) < 1024 else str(e)[:1024]}")
+        await message.edit(content=f"Here is the shortened URL for **{url}**.\n{tinyurl_link}")
+
+    @commands.command(name="wallpaper", aliases=["wall"], description="Fetches wallpaper from r/wallpaper")
+    async def wallpaper_command(self, ctx):
+        await ctx.invoke(self.get_reddit_post, "wallpaper")
+
+    @commands.command(name="showerthought", aliases=["shower"], description="Fetches showerthought from r/showerthoughts")
+    async def showerthought_command(self, ctx):
+        subreddit = await reddit.subreddit("showerthoughts")  # get the subreddit
+        x = subreddit.hot(limit=10)  # get the top 10 hot posts
+        title_list = []
+        async for y in x:
+            title_list.append(str(y.title))
+        choice = random.choice(title_list)
+        embed = discord.Embed(title=choice, color=discord.Colour.random())
+        embed.set_footer(text="Powered by r/showerthoughts")
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
