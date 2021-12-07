@@ -4,5 +4,7 @@
   "owner_id": "Owner ID here",
   "rsa_api_key": "RSA API key here",
   "currency_api_key": "Currency API key here",
-  "weather_api_key": "Weather API Key here"
+  "weather_api_key": "Weather API Key here",
+  "imgflip_username": "Enter Imgflip username here",
+  "imgflip_password": "Enter Imgflip password here"
 }
