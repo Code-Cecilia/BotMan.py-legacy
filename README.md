@@ -21,6 +21,7 @@ Don't use my code without giving credit. You are free to host it and fork it you
  - Get the API key from RSA
  - Get the currency API key from ExchangeRatesAPI
  - Get weather API Key from OpenWeatherMap
+ - Make an Imgflip account
  - Fill in details in `config.json` and `reddit_details.json`
  - Actually run the bot
 
@@ -78,6 +79,12 @@ OpenWeatherMap has a free plan with ample amount of calls per month. You can get
 
 After getting the API key, paste it in the `weather_api_key` entry in `config.json`
 
+# Making an Imgflip account
+
+Go to imgflip.com and make an account. Take note of your username and password and fill it in `config.json`.
+This information is used for the `memegen` command in the Memes Cog.
+
+-------------------
 
 
 A properly set-up config.json looks something like this
@@ -89,7 +96,9 @@ A properly set-up config.json looks something like this
   "owner_id": "775176626773950474",
   "rsa_api_key": "XXXXXXXXXX",
   "currency_api_key": "XXXXXXXXXX",
-  "weather_api_key": "abc1234xyz"
+  "weather_api_key": "abc1234xyz",
+  "imgflip_username": "username",
+  "imgflip_password": "password"
 }
 ```
 
