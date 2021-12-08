@@ -16,7 +16,7 @@ with open('config.json', 'r') as detailsFile:
     token = details_data['token']
     owner_id = int(details_data['owner_id'])
 
-replit = True
+replit = False
 
 status_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
