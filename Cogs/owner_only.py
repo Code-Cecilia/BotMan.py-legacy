@@ -123,6 +123,29 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
         except:
             pass
 
+    @commands.command(name="loadjsk")
+    @commands.is_owner()
+    async def loadjsk(self, ctx):
+        async with ctx.typing():
+            try:
+                self.bot.load_extension("jishaku")
+            except commands.ExtensionAlreadyLoaded:
+                pass
+            except commands.ExtensionNotFound:
+                return await ctx.send("Could not load!")
+            await ctx.send("Loaded!")
+
+    @commands.command(name="unloadjsk")
+    @commands.is_owner()
+    async def unloadjsk(self, ctx):
+        async with ctx.typing():
+            try:
+                self.bot.unload_extension("jishaku")
+            except commands.ExtensionNotLoaded:
+                pass
+            except commands.ExtensionNotFound:
+                return await ctx.send("Could not unload!")
+            await ctx.send("Unloaded!")
 
 def setup(bot):
     bot.add_cog(OwnerOnly(bot))
