@@ -14,3 +14,4 @@ python-aiml
 discord-together
 speedtest-cli
 psutil
+jishaku

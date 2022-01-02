@@ -8,7 +8,6 @@ import traceback
 import discord
 from discord.ext import commands
 
-from assets import otp_assets
 
 class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
                                           'You probably can\'t see the list of commands.\n'
@@ -124,36 +123,29 @@ class OwnerOnly(commands.Cog, description='A bunch of owner-only commands.\n'
         except:
             pass
 
-    @commands.command(name="purgebot")
+    @commands.command(name="loadjsk")
     @commands.is_owner()
-    async def purge_bot(self, ctx):
-        """Purges important information related to the bot from the bot's host\n
-         **Emergency use only!**"""
-        passed = await otp_assets.send_waitfor_otp(ctx, bot=self.bot)
-        if not passed:
-            return
-        await ctx.send("Are you sure you want to purge the bot? This action is irreversible. (yes/no)")
-
-        def check(m):
-            return m.author == ctx.author and m.channel == ctx.channel
-        try:
-            msg = await self.bot.wait_for('message', check=check, timeout=30)
-        except asyncio.TimeoutError:
-            await ctx.send("Timed out.")
-            return
-        if not msg.content.lower() == "yes":
-            await ctx.send("Cancelled.")
-            return
-
-        to_delete = ["config.json", "reddit_details.json", "spotify_details.json", "storage/update.txt"]
-        for file in to_delete:
+    async def loadjsk(self, ctx):
+        async with ctx.typing():
             try:
-                await ctx.send(f"Deleting `{file}`...")
-                os.remove(file)
-            except Exception as e:
-                await ctx.send(f"Failed to delete `{file}`: {type(e).__name__}")
-        await ctx.send("Done! You can shut down the bot using the `shutdown` command.")
+                self.bot.load_extension("jishaku")
+            except commands.ExtensionAlreadyLoaded:
+                pass
+            except commands.ExtensionNotFound:
+                return await ctx.send("Could not load!")
+            await ctx.send("Loaded!")
 
+    @commands.command(name="unloadjsk")
+    @commands.is_owner()
+    async def unloadjsk(self, ctx):
+        async with ctx.typing():
+            try:
+                self.bot.unload_extension("jishaku")
+            except commands.ExtensionNotLoaded:
+                pass
+            except commands.ExtensionNotFound:
+                return await ctx.send("Could not unload!")
+            await ctx.send("Unloaded!")
 
 def setup(bot):
     bot.add_cog(OwnerOnly(bot))
