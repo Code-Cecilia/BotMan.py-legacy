@@ -1,4 +1,5 @@
 # A Discord bot made with 💖and a bit of Python along the way.
+## Archived in favour of [Rewrite using PyCord](https://github.com/Code-Cecilia/BotMan.py)
 
 ![BotMan Wallpaer Logo thing](./images/botman_logo.png)
 ###### If for some reason you wanted a low-effort BotMan wallpaper, you're welcome.
